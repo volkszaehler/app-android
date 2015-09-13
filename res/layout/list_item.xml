@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp" >
+
+    <TextView
+        android:id="@+id/channelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/channelDescription"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/channelValue"
+        android:paddingBottom="2dip"
+        android:paddingTop="6dip"
+        android:text="channelName "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#acacac"
+        android:textStyle="bold" />
+
+     <TextView
+        android:id="@+id/channelDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/channelName"
+        android:paddingBottom="2dip"
+        android:text="channelDescription "
+        android:textColor="#acacac" />
+
+    <TextView
+        android:id="@+id/channelValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/channelDescription"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/channelName"
+        android:gravity="right|center_vertical"
+        android:text="channelValue "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#5d5d5d"
+        android:textStyle="bold" />
+ 
+</RelativeLayout>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_element"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#222222"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|top"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Details"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/minWertID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/minWertText"
+			android:layout_margin="3dp"/>
+
+            <TextView
+                android:id="@+id/minWertIDValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/maxWertID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/maxWertText"
+                android:layout_margin="3dp" />
+
+            <TextView
+                android:id="@+id/maxWertIDValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:layout_margin="3dp"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/avWertID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/avWertText" 
+                android:layout_margin="3dp"/>
+
+            <TextView
+                android:id="@+id/avWertIDValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:layout_margin="3dp"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lastWertID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lastWertText" 
+                android:layout_margin="3dp"/>
+
+            <TextView
+                android:id="@+id/lastWertIDValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:layout_margin="3dp"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/rowWertID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rowsWertText"
+                android:layout_margin="3dp" />
+
+            <TextView
+                android:id="@+id/rowWertIDValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/conWertID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/conWertText"
+                android:layout_margin="3dp" />
+
+            <TextView
+                android:id="@+id/conWertIDValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/costWertID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/costWertText"
+                android:layout_margin="3dp" />
+
+            <TextView
+                android:id="@+id/costWertIDValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:layout_margin="3dp"/>
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal|bottom"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/end_data_send_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Close" />
+    </LinearLayout>
+
+</LinearLayout>

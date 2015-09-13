@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VolkszaehlerApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_VolkszaehlerURL">Please add URL to Volkszaehler installation</string>
+    <string name="volkszaehlerURL">http://demo.volkszaehler.org/middleware.php</string>
+    <string name="volkszaehlerURLTitle">URL to Volkszaehler installation</string>
+    <string name="volkszaehlerURLDefault">http://demo.volkszaehler.org/middleware.php</string>
+    <string name="volkszaehlerURLSummary">This is the URL to the Volkszaehler Installation</string>
+    <string name="PrefChannels">Channels</string>
+    <string name="VolkszaehlerCat_titleURL">Volkszaehler URL</string>
+    <string name="PrefChannelsSummary">The Channels get from the Volkszaehler installation</string>
+    <string name="knownChannels">List of known Channels</string>
+    <string name="getChannelsButtonSummary">Click to get the channels list.</string>
+    <string name="getChannelsText">Get Channels</string>
+    <string name="VolkszaehlerCat_titleButton">ReLoad Channels</string>
+    <string name="CallData">Requesting data from Volkszaehler...</string>
+    <string name="buttonRefresh">ReLoad</string>
+    <string name="ChannelDetailHeader">Channel Details</string>
+    <string name="ListViewEmpty">No Channels found, set up Channels by adding Volkszaehler URL and then \'Get Channels\' in the Settings.</string>
+    <string name="textViewDescriptionTitle">Description</string>
+    <string name="UUIDTitle">UUID</string>
+    <string name="TypeTitle">Type</string>
+    <string name="CostTitle">Cost</string>
+    <string name="textViewDateTitle">Value from</string>
+    <string name="Error">Error</string>
+    <string name="Close">Close</string>
+    <string name="no_Channelinformation_found">No Channelinformation found. Please check settings.</string>
+    <string name="please_wait">Please wait... up to 1 minute</string>
+    <string name="basicAuthenticationSummary">Basic Authentication Information</string>
+    <string name="basicAuthentication">Login Information for Basic Authentication</string>
+    <string name="usernameSummary">Enter Username</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="Chart">Chart</string>
+    <string name="passwordSumary">Enter Password</string>
+    <string name="ChartDay">Last 24 Hours</string>
+    <string name="ChartHour">Last hour</string>
+    <string name="buttonLast">&lt;&lt;</string>
+    <string name="buttonZoomIn">Zoom +</string>
+    <string name="buttonNext">&gt;&gt;</string>
+    <string name="buttonZoomOut">Zoom -</string>
+    <string name="VolkszaehlerCat_titleChartSettings">Chart Settings</string>
+    <string name="ZeroBasedYAxisTitle">Zero based Y-Axis</string>
+    <string name="ZeroBasedYAxisSummary">Set Zero based y-Axis</string>
+    <string name="no_ChannelsSelected">No values received. Are there channels selected in Preferences?</string>
+    <string name="ChartMonth">Last 4 Weeks</string>
+    
+    <string name="ChartWeek">Last 7 Days</string><string name="buttonDate">Date</string>
+    <string name="minWertText">Min.</string>
+    <string name="maxWertText">Max.</string>
+    <string name="avWertText">Average</string>
+    <string name="conWertText">Consumption</string>
+    <string name="rowsWertText">Rows</string>
+    <string name="costWertText">Costs</string>
+    <string name="lastWertText">Last Value</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="from">from</string>
+    <string name="Details">Details</string>
+    <string name="group">(Group)</string>
+    <string name="belongsTo">(belongs to</string>
+    <string name="to">to</string>
+    <string name="autoReloadSummary">Automatic Reload when showing List</string>
+    <string name="autoReloadTitle">Automatic Reload</string>
+    <string name="ChildrenTitle">included Channels</string>
+    <string name="VolkszaehlerCat_titleReloadSettings">Reload Settings</string>
+    <string name="FromGreaterTo">\'From\' must not be later than \'To\'!</string>
+    <string name="From"> From</string>
+    <string name="To"> To</string>
+    <string name="SelectDateAndTime">Select Start and End Time</string>
+    <string name="Select">Select</string>
+
+</resources>

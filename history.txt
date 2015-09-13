@@ -1,0 +1,21 @@
+Version history:
+
+Version 0.8.1
+New
+ - Group support
+ - Several lines in one chart (when using groups)
+ - Start and end date/time can be set to define a range to display in chart
+ - Automatic reload can be configured
+ 
+ Changed
+ - Chart info now when clicking on the graph line
+
+Fixed
+ - Single touch in chart doesn't cause zoom anymore, 50px move is necessary to zoom
+ - "About" is now translated in German version
+ - from/to translated below chart
+ - some small fixes
+
+Version 0.8.0
+ - initial BETA version
+ 
