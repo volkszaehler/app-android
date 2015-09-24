@@ -3,7 +3,7 @@ Volkszaehler frontend for Android
 
 English below
 
-Wie lade ich die VolkszählerApp in AndroidStudio?
+Wie lade ich die VolkszählerApp in AndroidStudio?<BR>
 1. Öffne AndroidStudio und "Checkout Project from Version Control"
 2. Wähle "GitHub", trage das Github-Repository ein, z.B. https://github.com/volkszaehler/app-android sowie den lokalen Pfad und Namen, dann klick "Clone".
 3. Eventuell erscheint eine Nachricht "Unregistered VCS root detected". In dem Fall "Configure" klicken, das gerade geklonte Projekt markieren und auf das grüne "+" (Plus) und dann "OK" klicken.
