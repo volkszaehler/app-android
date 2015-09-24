@@ -1,5 +1,5 @@
 # app-android
-Volkszaehler frontend for Android 
+Volkszaehler frontend for Android
 
 English below
 
