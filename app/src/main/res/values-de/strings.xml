@@ -6,7 +6,7 @@
     <string name="add_VolkszaehlerURL">Bitte URL zur Volkszählerinstallation hinzufügen</string>
     <string name="volkszaehlerURL">http://demo.volkszaehler.org/middleware.php</string>
     <string name="volkszaehlerURLTitle">URL zur Volkszählerinstallation</string>
-    <string name="volkszaehlerURLDefault">http://demo.volkszaehler.org/middleware.php3</string>
+    <string name="volkszaehlerURLDefault">http://demo.volkszaehler.org/middleware.php</string>
     <string name="volkszaehlerURLSummary">URL zur Volkszählerinstallation</string>
     <string name="PrefChannels">Kanäle</string>
     <string name="VolkszaehlerCat_titleURL">Volkszähler URL</string>
@@ -15,7 +15,7 @@
     <string name="getChannelsButtonSummary">Klicken um Kanäle abzurufen</string>
     <string name="getChannelsText">Kanäle abrufen</string>
     <string name="VolkszaehlerCat_titleButton">Kanäle neuladen</string>
-    <string name="CallData">Rufe Daten von der Volkszählerinstallation ab...</string>
+    <string name="CallData">Rufe Daten von der Volkszählerinstallation ab…</string>
     <string name="buttonRefresh">NeuLaden</string>
     <string name="ChannelDetailHeader">Kanaldetails</string>
     <string name="ListViewEmpty">Keine Kanäle gefunden, Kanäle abrufen durch Hinzufügen der Volkszähler-URL und Klicken auf\'Kanäle abrufen\' in den Einstellungen.</string>
@@ -27,7 +27,7 @@
     <string name="Error">Fehler</string>
     <string name="Close">Schließen</string>
     <string name="no_Channelinformation_found">Keine Kanalinformation gefunden. Bitte Einstellungen überprüfen.</string>
-    <string name="please_wait">Bitte warten... bis zu 1 Minute</string>
+    <string name="please_wait">Bitte warten… bis zu 1 Minute</string>
     <string name="basicAuthenticationSummary">Basic Authentication Information</string>
     <string name="basicAuthentication">Login-Information für Basic Authentication</string>
     <string name="usernameSummary">Nutzername eingeben, leer lassen wenn nicht benötigt</string>
@@ -69,5 +69,6 @@
     <string name="To"> Bis</string>
     <string name="SelectDateAndTime">Start und Endzeit auswählen</string>
     <string name="Select">Auswählen</string>
+    <string name="title_activity_date_time_selector">Datum/Zeit auswählen</string>
 
 </resources>

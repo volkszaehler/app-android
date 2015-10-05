@@ -15,7 +15,7 @@
     <string name="getChannelsButtonSummary">Click to get the channels list.</string>
     <string name="getChannelsText">Get Channels</string>
     <string name="VolkszaehlerCat_titleButton">ReLoad Channels</string>
-    <string name="CallData">Requesting data from Volkszaehler...</string>
+    <string name="CallData">Requesting data from Volkszaehler…</string>
     <string name="buttonRefresh">ReLoad</string>
     <string name="ChannelDetailHeader">Channel Details</string>
     <string name="ListViewEmpty">No Channels found, set up Channels by adding Volkszaehler URL and then \'Get Channels\' in the Settings.</string>
@@ -27,7 +27,7 @@
     <string name="Error">Error</string>
     <string name="Close">Close</string>
     <string name="no_Channelinformation_found">No Channelinformation found. Please check settings.</string>
-    <string name="please_wait">Please wait... up to 1 minute</string>
+    <string name="please_wait">Please wait… up to 1 minute</string>
     <string name="basicAuthenticationSummary">Basic Authentication Information</string>
     <string name="basicAuthentication">Login Information for Basic Authentication</string>
     <string name="usernameSummary">Enter Username</string>
@@ -71,5 +71,6 @@
     <string name="To"> To</string>
     <string name="SelectDateAndTime">Select Start and End Time</string>
     <string name="Select">Select</string>
+    <string name="title_activity_date_time_selector">Date/Time Selector</string>
 
 </resources>

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -33,18 +32,17 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class MainActivity<ViewGroup> extends ListActivity {
-    public static Context myContext;
-    String jsonStr = "";
+    private static Context myContext;
+    private String jsonStr = "";
 
-    Button refreshButton;
+    private Button refreshButton;
     private ProgressDialog pDialog;
-    ListView lv = null;
-    SimpleAdapter adapter = null;
-    boolean bAutoReload = false;
-    String channelsToRequest = "";
+    private SimpleAdapter adapter = null;
+    private boolean bAutoReload = false;
+    private String channelsToRequest = "";
 
     // Hashmaps for ListView
-    ArrayList<HashMap<String, String>> channelValueList = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> channelValueList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
 
         myContext = this;
         addListenerOnButton();
-        lv = getListView();
+        ListView lv = getListView();
         lv.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap<String, String> map = channelValueList.get(position);
@@ -107,18 +105,13 @@ public class MainActivity<ViewGroup> extends ListActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        bAutoReload = (boolean) sharedPref.getBoolean("autoReload", false);
+        bAutoReload = sharedPref.getBoolean("autoReload", false);
         if (bAutoReload) {
             refreshButton.performClick();
         } else if (!jsonStr.equals("")) {
             channelValueList.clear();
             new GetJSONData().execute(channelsToRequest);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -142,20 +135,14 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 startActivityForResult(new Intent(this, Preferences.class), 1);
                 return (true);
             case R.id.about:
-                if (itemId == R.id.action_settings) {
-                    startActivity(new Intent(this, Preferences.class));
-                    return (true);
-                }
                 String app_ver = "";
                 try {
                     app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
                 } catch (NameNotFoundException e) {
 
                 }
-                if (itemId == R.id.about) {
-                    new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
-                    return (true);
-                }
+                new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
+                return (true);
 
             default:
                 break;
@@ -184,7 +171,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
         protected Void doInBackground(String... arg0) {
             try {
 
-                JSONArray werte = null;
+                JSONArray werte;
                 SharedPreferences prefs = getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE);
                 String JSONChannels = prefs.getString("JSONChannels", "");
                 // are there really channels in the Prefs?
@@ -198,16 +185,16 @@ public class MainActivity<ViewGroup> extends ListActivity {
 
                 // workaround removing empty string
                 String[] channelsAusParameterMitLeerstring = arg0[0].split("&uuid\\[\\]=");
-                ArrayList<String> allUUIDs = new ArrayList<String>();
-                for (int k = 0; k < channelsAusParameterMitLeerstring.length; k++) {
-                    if (channelsAusParameterMitLeerstring[k].equals("")) {
+                ArrayList<String> allUUIDs = new ArrayList<>();
+                for (String aChannelsAusParameterMitLeerstring : channelsAusParameterMitLeerstring) {
+                    if (aChannelsAusParameterMitLeerstring.equals("")) {
                         // empty element
                         continue;
                     }
                     // add all checked channels
-                    allUUIDs.add(channelsAusParameterMitLeerstring[k]);
+                    allUUIDs.add(aChannelsAusParameterMitLeerstring);
                     // check for childs if above is a group
-                    String childUUIDs = Tools.getPropertyOfChannel(myContext, channelsAusParameterMitLeerstring[k], Tools.TAG_CHUILDUUIDS);
+                    String childUUIDs = Tools.getPropertyOfChannel(myContext, aChannelsAusParameterMitLeerstring, Tools.TAG_CHUILDUUIDS);
                     if (null != childUUIDs && !"".equals(childUUIDs)) {
                         if (childUUIDs.contains("|")) {
                             String[] children = (childUUIDs.split("\\|"));
@@ -315,6 +302,10 @@ public class MainActivity<ViewGroup> extends ListActivity {
                             String rows = c.has(Tools.TAG_ROWS) ? c.getString(Tools.TAG_ROWS) : "";
                             if (c.has(Tools.TAG_TUPLES)) {
                                 JSONArray tuples = c.getJSONArray(Tools.TAG_TUPLES);
+                                if(tuples.length()<1)
+                                {
+                                    continue;
+                                }
                                 // only one tuple (in URL), otherwise loop here
                                 JSONArray tupleWert = tuples.getJSONArray(0);
                                 tuplesZeit = tupleWert.getString(0);
@@ -323,7 +314,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
 
                             int listSize = channelValueList.size();
                             // add values to existing Channels in List
-                            String unit = "";
+                            String unit;
                             for (int j = 0; j < listSize; j++) {
                                 HashMap<String, String> currentChannelFromList = channelValueList.get(j);
                                 if (currentChannelFromList.containsValue(id)) {
@@ -347,10 +338,6 @@ public class MainActivity<ViewGroup> extends ListActivity {
                         }
                     }
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                JSONFehler = true;
-                fehlerAusgabe = e.getMessage();
             } catch (Exception e) {
                 e.printStackTrace();
                 JSONFehler = true;

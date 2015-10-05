@@ -31,27 +31,20 @@ import org.apache.http.util.EntityUtils;
 
 import android.util.Base64;
 
-public class ServiceHandler {
+class ServiceHandler {
 
-    static String response = null;
     public final static int GET = 1;
-    public final static int POST = 2;
+    private final static int POST = 2;
 
     public ServiceHandler() {
 
     }
 
-    /**
-     * Making service call
-     *
-     * @url - url to make request
-     * @method - http request method
-     */
     public String makeServiceCall(String url, int method) {
         return this.makeServiceCall(url, method, null);
     }
 
-    public HttpClient getNewHttpClient(String url) {
+    private HttpClient getNewHttpClient(String url) {
         try {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
@@ -90,15 +83,16 @@ public class ServiceHandler {
      * @method - http request method
      * @params - http request params
      */
-    public String makeServiceCall(String url, int method, List<NameValuePair> params) {
+    private String makeServiceCall(String url, int method, List<NameValuePair> params) {
         return this.makeServiceCall(url, method, null, null, null);
     }
 
     public String makeServiceCall(String url, int method, List<NameValuePair> params, String uname, String pwd) {
+        String response;
         try {
             // http client
             HttpClient httpClient = getNewHttpClient(url);
-            HttpEntity httpEntity = null;
+            HttpEntity httpEntity;
             HttpResponse httpResponse = null;
 
             // Checking http request method type

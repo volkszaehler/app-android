@@ -2,8 +2,6 @@ package org.volkszaehler.volkszaehlerapp;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import org.achartengine.ChartFactory;
@@ -19,7 +17,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -39,63 +36,44 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
-public class ChartDetails extends Activity {
+
+public class ChartDetails extends Activity  {
 
     private ProgressDialog pDialog;
-    private static String url = "http://demo.volkszaehler.org/middleware.php/entity.json";
-    private static String uname;
-    private static String pwd;
-    boolean bZeroBased = false;
 
     private PopupWindow pw;
 
-    LinearLayout lLayout;
+    private final XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
-    private XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-
-    private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+    private final XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
 
     private GraphicalView mChartView;
 
-    JSONArray tuples = null;
-
     // int mColor = Color.BLUE;
-    String mUUID = "";
-    String jsonStr = "";
+    private String mUUID = "";
+    private String jsonStr = "";
 
-    double xmin = 0;
-    double xmax = 0;
-    double from = 0;
-    double to = 0;
-    double keepFrom = 0;
-    double keepTo = 0;
-    long millisNow = 0;
+    private double xmin = 0;
+    private double xmax = 0;
+    private double from = 0;
+    private double to = 0;
+    private double keepFrom = 0;
+    private double keepTo = 0;
+    private long millisNow = 0;
     // double mCost = 0;
-    double minY = Double.MAX_VALUE;
-    double minX = 0;
-    double maxX = 0;
+    private double minY = Double.MAX_VALUE;
+    private double minX = 0;
+    private double maxX = 0;
     // String mTitle = "";
-    String unit = "";
+    private String unit = "";
 
-    java.text.DateFormat dateFormat = null;
-    java.text.DateFormat timeFormat = null;
-    Context myContext = null;
-
-    Dialog picker;
-    Button select;
-    Button set;
-    TimePicker timepFrom;
-    DatePicker datepFrom;
-    TimePicker timepTo;
-    DatePicker datepTo;
-    Integer hourFrom, minuteFrom, monthFrom, dayFrom, yearFrom;
-    Integer hourTo, minuteTo, monthTo, dayTo, yearTo;
+    private java.text.DateFormat dateFormat = null;
+    private java.text.DateFormat timeFormat = null;
+    private Context myContext = null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,72 +90,32 @@ public class ChartDetails extends Activity {
 
 
         }
-        select = (Button) findViewById(R.id.buttonDate);
-        //time = (TextView)findViewById(R.id.textTime);
-        //date = (TextView)findViewById(R.id.textDate);
+        Button select = (Button) findViewById(R.id.buttonDate);
+
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO Auto-generated method stub
-                picker = new Dialog(view.getContext());
-                picker.setContentView(R.layout.picker_fragment);
-                picker.setTitle(getString(R.string.SelectDateAndTime));
-                datepFrom = (DatePicker) picker.findViewById(R.id.datePickerFrom);
-                //datep.setX(-60);
-                timepFrom = (TimePicker) picker.findViewById(R.id.timePickerFrom);
-                timepFrom.setIs24HourView(true);
-                datepTo = (DatePicker) picker.findViewById(R.id.datePickerTo);
-                //datep.setX(-60);
-                timepTo = (TimePicker) picker.findViewById(R.id.timePickerTo);
-                timepTo.setIs24HourView(true);
-                //timep.setX(30);
-                set = (Button) picker.findViewById(R.id.btnSet);
-                set.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // TODO Auto-generated method stub
-                        monthFrom = datepFrom.getMonth();
-                        dayFrom = datepFrom.getDayOfMonth();
-                        yearFrom = datepFrom.getYear();
-                        hourFrom = timepFrom.getCurrentHour();
-                        minuteFrom = timepFrom.getCurrentMinute();
-                        //Date fromDate = new Date(yearFrom, monthFrom, dayFrom, hourFrom, minuteFrom);
-                        Calendar fromDate = new GregorianCalendar(yearFrom, monthFrom, dayFrom, hourFrom, minuteFrom);
-                        from = fromDate.getTimeInMillis();
-                        monthTo = datepTo.getMonth();
-                        dayTo = datepTo.getDayOfMonth();
-                        yearTo = datepTo.getYear();
-                        hourTo = timepTo.getCurrentHour();
-                        minuteTo = timepTo.getCurrentMinute();
-                        Calendar toDate = new GregorianCalendar(yearTo, monthTo, dayTo, hourTo, minuteTo);
-                        to = toDate.getTimeInMillis();
-                        if (from > to) {
-                            new AlertDialog.Builder(ChartDetails.this).setTitle(getString(R.string.Error)).setMessage(getString(R.string.FromGreaterTo)).setNeutralButton(getString(R.string.Close), null).show();
-                        } else {
-                            new GetChannelsDetails().execute();
-                        }
-                        //time.setText("Time is "+hour+":" +minute);
-                        //date.setText("The date is "+day+"/"+month+"/"+year);
-                        picker.dismiss();
-                    }
-                });
-                picker.show();
+                Intent dateTimeSelector = new Intent(ChartDetails.this, DateTimeSelector.class);
+                dateTimeSelector.putExtra("From", (long) from);
+                dateTimeSelector.putExtra("To", (long) to);
+                dateTimeSelector.putExtra("MUUID", mUUID);
+                startActivity(dateTimeSelector);
             }
         });
+
+
 
         Intent inte = this.getIntent();
 
         mUUID = inte.getStringExtra("MUUID");
-        // mCost = inte.getDoubleExtra("MCOST", 0);
 
         unit = Tools.getUnit(myContext, null, mUUID);
 
-        // mTitle = inte.getStringExtra("MyTitle");
         // from/to only the first time from intent, next time controlled by
         // buttons
         if (from == 0) {
-            from = (long) (inte.getLongExtra("From", 0));
-            to = (long) (inte.getLongExtra("To", 0));
+            from = inte.getLongExtra("From", 0);
+            to = inte.getLongExtra("To", 0);
         }
 
         dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
@@ -185,8 +123,7 @@ public class ChartDetails extends Activity {
 
         new GetChannelsDetails().execute();
     }
-
-    ArrayList<String> uUIDSOfaddedCharts = new ArrayList<String>();
+            private final ArrayList<String> uUIDSOfaddedCharts = new ArrayList<>();
 
     private void prepareChart(String uUID) {
         TimeSeries mCurrentSeries = Tools.getTimeSeries(myContext, uUID);
@@ -201,7 +138,7 @@ public class ChartDetails extends Activity {
         maxX = mCurrentSeries.getMaxX();
         dataset.addSeries(mCurrentSeries);
         uUIDSOfaddedCharts.add(uUID);
-        int mColor = 0;
+        int mColor;
         try {
             mColor = Color.parseColor(Tools.getPropertyOfChannel(myContext, uUID, Tools.TAG_COLOR).toUpperCase(Locale.getDefault()));
         } catch (Exception e) {
@@ -213,7 +150,7 @@ public class ChartDetails extends Activity {
         mRenderer.addSeriesRenderer(renderer);
     }
 
-    public void prepareData() {
+    private void prepareData() {
         dataset.clear();
         mRenderer.removeAllRenderers();
 
@@ -254,7 +191,7 @@ public class ChartDetails extends Activity {
         mRenderer.setClickEnabled(true);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ChartDetails.this);
-        bZeroBased = (boolean) sharedPref.getBoolean("ZeroBasedYAxis", false);
+        boolean bZeroBased = sharedPref.getBoolean("ZeroBasedYAxis", false);
         if (bZeroBased && minY > 0) {
             mRenderer.setYAxisMin(0);
         } else {
@@ -269,12 +206,11 @@ public class ChartDetails extends Activity {
 
     }
 
-    float eventX = 0;
-    float eventXTouchDown = 0;
+    private float eventXTouchDown = 0;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        eventX = event.getX();
+        float eventX = event.getX();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -311,12 +247,8 @@ public class ChartDetails extends Activity {
         return true;
     }
 
-    protected void onResume() {
-        super.onResume();
-    }
-
     private void createChart() {
-        lLayout = (LinearLayout) findViewById(R.id.chart);
+        LinearLayout lLayout = (LinearLayout) findViewById(R.id.chart);
         if (mChartView == null) {
             prepareData();
             mChartView = ChartFactory.getTimeChartView(this, dataset, mRenderer, dateFormat.toString());
@@ -387,7 +319,7 @@ public class ChartDetails extends Activity {
         new GetChannelsDetails().execute();
     }
 
-    public void getCurrentlyDisplayedRange() {
+    private void getCurrentlyDisplayedRange() {
         millisNow = System.currentTimeMillis();
         xmin = mRenderer.getXAxisMin();
         xmax = mRenderer.getXAxisMax();
@@ -400,7 +332,7 @@ public class ChartDetails extends Activity {
         }
     }
 
-    public void buttonShowInfoHandler(View view, String UUID) {
+    private void buttonShowInfoHandler(View view, String UUID) {
         try {
             // We need to get the instance of the LayoutInflater, use the
             // context of this activity
@@ -431,7 +363,7 @@ public class ChartDetails extends Activity {
         }
     }
 
-    public OnClickListener cancel_button_click_listener = new OnClickListener() {
+    private final OnClickListener cancel_button_click_listener = new OnClickListener() {
         public void onClick(View v) {
             pw.dismiss();
         }
@@ -463,7 +395,7 @@ public class ChartDetails extends Activity {
                 // Creating service handler class instance
                 ServiceHandler sh = new ServiceHandler();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ChartDetails.this);
-                url = sharedPref.getString("volkszaehlerURL", "");
+                String url = sharedPref.getString("volkszaehlerURL", "");
 
                 DecimalFormat f = new DecimalFormat("#0");
 
@@ -494,8 +426,8 @@ public class ChartDetails extends Activity {
                 url = url + "/data.json?from=" + f.format(from) + "&to=" + f.format(to) + "&tuples=1000" + uRLUUIDs + urlExtension;
                 Log.d("url", "ist: " + url);
 
-                uname = sharedPref.getString("username", "");
-                pwd = sharedPref.getString("password", "");
+                String uname = sharedPref.getString("username", "");
+                String pwd = sharedPref.getString("password", "");
 
                 // Making a request to url and getting response
                 if (uname.equals("")) {
@@ -512,7 +444,7 @@ public class ChartDetails extends Activity {
                 } else {
 
                     // store all data stuff in a shared preference
-                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannelsData", jsonStr.toString()).commit();
+                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannelsData", jsonStr).commit();
 
                     JSONObject jsonObj;
                     try {
@@ -521,7 +453,7 @@ public class ChartDetails extends Activity {
                         for (int l = 0; l < werte.length(); l++) {
                             JSONObject c = werte.getJSONObject(l);
                             if (c.has(Tools.TAG_TUPLES)) {
-                                tuples = c.getJSONArray(Tools.TAG_TUPLES);
+                                JSONArray tuples = c.getJSONArray(Tools.TAG_TUPLES);
                                 // at least one with tuples
                                 JSONFehler = false;
                                 break;
@@ -580,20 +512,14 @@ public class ChartDetails extends Activity {
                 startActivity(new Intent(this, Preferences.class));
                 return (true);
             case R.id.about:
-                if (itemId == R.id.action_settings) {
-                    startActivity(new Intent(this, Preferences.class));
-                    return (true);
-                }
                 String app_ver = "";
                 try {
                     app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
                 } catch (NameNotFoundException e) {
 
                 }
-                if (itemId == R.id.about) {
-                    new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
-                    return (true);
-                }
+                new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
+                return (true);
 
             default:
                 break;

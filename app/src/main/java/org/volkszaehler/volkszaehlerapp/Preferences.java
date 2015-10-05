@@ -3,8 +3,6 @@ package org.volkszaehler.volkszaehlerapp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.json.JSONArray;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -20,7 +18,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class Preferences extends PreferenceActivity {
-    boolean newChannels = false;
+    private boolean newChannels = false;
     private ProgressDialog pDialog;
 
     // URL to get contacts JSON
@@ -28,7 +26,7 @@ public class Preferences extends PreferenceActivity {
     private static String uname;
     private static String pwd;
 
-    ArrayList<HashMap<String, String>> channelList = new ArrayList<HashMap<String, String>>();
+    private ArrayList<HashMap<String, String>> channelList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstancesState) {
@@ -36,7 +34,7 @@ public class Preferences extends PreferenceActivity {
         addPreferencesFromResource(R.xml.volkszaehler_preferences);
 
         // Preference button = (Preference)findPreference("");
-        Preference button = (Preference) getPreferenceManager().findPreference("getChannelsButton");
+        Preference button = getPreferenceManager().findPreference("getChannelsButton");
         if (button != null) {
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -155,11 +153,13 @@ public class Preferences extends PreferenceActivity {
             String urlDef = url + "/capabilities/definitions/entities.json";
 
             url = url + "/entity.json";
-            String jsonStr = "";
-            String jsonStrDef = "";
+            String jsonStr;
+            String jsonStrDef;
 
             uname = sharedPref.getString("username", "");
             pwd = sharedPref.getString("password", "");
+            Log.d("ServiceHandler", "url: " + url);
+            Log.d("ServiceHandler", "urlDef: " + urlDef);
 
             // Making a request to url and getting response
             if (uname.equals("")) {
@@ -176,7 +176,7 @@ public class Preferences extends PreferenceActivity {
                 } else {
                     newChannels = true;
                     // store all channel stuff in a shared preference
-                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannels", jsonStr.toString()).commit();
+                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannels", jsonStr).commit();
 
                 }
                 if (!jsonStrDef.startsWith("{\"version\":\"0.3\",\"capabilities")) {
@@ -184,7 +184,7 @@ public class Preferences extends PreferenceActivity {
                     fehlerAusgabe2 = jsonStrDef;
                 } else {
                     // store all definitions stuff in a shared preference
-                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONDefinitions", jsonStrDef.toString()).commit();
+                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONDefinitions", jsonStrDef).commit();
 
                 }
             } else {
