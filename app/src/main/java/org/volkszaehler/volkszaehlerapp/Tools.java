@@ -17,39 +17,38 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-public class Tools {
+class Tools {
 
-    protected static final String TAG_ENTITIES = "entities";
-    protected static final String TAG_UUID = "uuid";
-    protected static final String TAG_TYPE = "type";
+    private static final String TAG_ENTITIES = "entities";
+    static final String TAG_UUID = "uuid";
+    static final String TAG_TYPE = "type";
     protected static final String TAG_VERSION = "version";
-    protected static final String TAG_ACTIVE = "active";
-    protected static final String TAG_COLOR = "color";
-    protected static final String TAG_COST = "cost";
-    protected static final String TAG_FILLSTYLE = "fillstyle";
-    protected static final String TAG_PUBLIC = "public";
-    protected static final String TAG_STYLE = "style";
-    protected static final String TAG_TITLE = "title";
-    protected static final String TAG_YAXIS = "yaxis";
-    protected static final String TAG_DESCRIPTION = "description";
-    protected static final String TAG_CHILDREN = "children";
-    protected static final String TAG_CHUILDUUIDS = "childUUIDs";
-    protected static final String TAG_DATA = "data";
-    protected static final String TAG_TUPLES = "tuples";
-    protected static final String TAG_BELONGSTOGROUP = "belongsToGroup";
-    protected static final String TAG_MIN = "min";
-    protected static final String TAG_MAX = "max";
-    protected static final String TAG_AVERAGE = "average";
-    protected static final String TAG_CONSUMPTION = "consumption";
-    protected static final String TAG_ROWS = "rows";
-    protected static final String TAG_FROM = "from";
-    protected static final String TAG_TO = "to";
+    private static final String TAG_ACTIVE = "active";
+    static final String TAG_COLOR = "color";
+    static final String TAG_COST = "cost";
+    private static final String TAG_FILLSTYLE = "fillstyle";
+    private static final String TAG_PUBLIC = "public";
+    private static final String TAG_STYLE = "style";
+    static final String TAG_TITLE = "title";
+    private static final String TAG_YAXIS = "yaxis";
+    static final String TAG_DESCRIPTION = "description";
+    private static final String TAG_CHILDREN = "children";
+    static final String TAG_CHUILDUUIDS = "childUUIDs";
+    static final String TAG_DATA = "data";
+    static final String TAG_TUPLES = "tuples";
+    static final String TAG_BELONGSTOGROUP = "belongsToGroup";
+    static final String TAG_MIN = "min";
+    static final String TAG_MAX = "max";
+    static final String TAG_AVERAGE = "average";
+    static final String TAG_CONSUMPTION = "consumption";
+    static final String TAG_ROWS = "rows";
+    static final String TAG_FROM = "from";
+    static final String TAG_TO = "to";
 
     private static String unit = "";
 
     private static SharedPreferences getPrefs(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE);
-        return prefs;
+        return context.getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE);
     }
 
     public static String getUnit(Context context, String type, String uuid) {
@@ -97,43 +96,17 @@ public class Tools {
         for (HashMap<String, String> channelMap : getChannelsFromJSONStringEntities(sJSONChannels)) {
 
             if (uuid.equals(channelMap.get(TAG_UUID))) {
-                String cType = channelMap.containsKey(property) ? channelMap.get(property) : "";
-                return cType;
+                return channelMap.containsKey(property) ? channelMap.get(property) : "";
             }
         }
-        // if (!"".equals(sJSONChannels)) {
-        //
-        // try {
-        // JSONObject jsonchannelObj = new JSONObject(sJSONChannels);
-        // String currentChannel = "";
-        // // Getting JSON Array node
-        // JSONArray channels = jsonchannelObj.getJSONArray(TAG_ENTITIES);
-        // // looping through All channels
-        // for (int iChannels = 0; iChannels < channels.length(); iChannels++) {
-        // // single channel
-        // JSONObject cChannel = channels.getJSONObject(iChannels);
-        // currentChannel = cChannel.getString(TAG_UUID);
-        // if (uuid.equals(currentChannel)) {
-        // String cType = cChannel.has(property) ? cChannel.getString(property)
-        // : "";
-        // return cType;
-        // }
-        // }
-        //
-        // } catch (JSONException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // }
-
         return null;
     }
 
     // changes normal charts into Step charts by adding points
-    public static JSONArray createStepfromLine(JSONArray jsonArray) {
+    private static JSONArray createStepfromLine(JSONArray jsonArray) {
         JSONArray newJSONArray = new JSONArray();
-        JSONArray tupleWert = null;
-        JSONArray nextTupleWert = null;
+        JSONArray tupleWert;
+        JSONArray nextTupleWert;
 
         try {
             for (int j = 0; j < jsonArray.length(); j++) {
@@ -182,20 +155,19 @@ public class Tools {
         // each point has ... ms
         double ratio = timeRange / pointRange;
         // gives the new start ms, 20 is the left margin
-        double newMs = Math.round((ratio * (xValue - 20))) + startX;
 
-        return newMs;
+        return Math.round((ratio * (xValue - 20))) + startX;
     }
 
     public static ArrayList<HashMap<String, String>> getChannelsFromJSONStringEntities(String jSONStringEntities) {
-        ArrayList<HashMap<String, String>> channelMapList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> channelMapList = new ArrayList<>();
 
         try {
             JSONObject jsonObj = new JSONObject(jSONStringEntities);
 
             // Getting JSON Array node
             JSONArray channels = jsonObj.getJSONArray(TAG_ENTITIES);
-            boolean isDrin = false;
+            boolean isDrin;
             // looping through All channels
             for (int i = 0; i < channels.length(); i++) {
                 JSONObject channel = channels.getJSONObject(i);
@@ -243,7 +215,7 @@ public class Tools {
         String fillstyle = c.has(TAG_FILLSTYLE) ? c.getString(TAG_FILLSTYLE) : "";
 
         // tmp hashmap for single channel
-        HashMap<String, String> channel = new HashMap<String, String>();
+        HashMap<String, String> channel = new HashMap<>();
 
         // adding each child node to HashMap key => value
         channel.put(TAG_TITLE, title);
@@ -263,13 +235,13 @@ public class Tools {
     private static void getGroupChannels(JSONObject channel, HashMap<String, String> channelMap, ArrayList<HashMap<String, String>> channelMapList) throws JSONException {
 
         JSONArray children = channel.getJSONArray(TAG_CHILDREN);
-        boolean isDrin = false;
-        HashMap<String, String> existingChannel = new HashMap<String, String>();
+        boolean isDrin;
+        HashMap<String, String> existingChannel = new HashMap<>();
         for (int j = 0; j < children.length(); j++) {
             JSONObject childs = children.getJSONObject(j);
             HashMap<String, String> child = getChannelValues(childs, true);
             child.put("belongsToGroup", channelMap.get(TAG_UUID));
-            String childUUIDs = "";
+            String childUUIDs;
             // every group should know it's childs
             if (channelMap.containsKey(TAG_CHUILDUUIDS)) {
                 childUUIDs = channelMap.get(TAG_CHUILDUUIDS) + "|" + child.get(TAG_UUID);
@@ -298,7 +270,7 @@ public class Tools {
 
     }
 
-    protected static TimeSeries getTimeSeries(Context context, String sUUID) {
+    static TimeSeries getTimeSeries(Context context, String sUUID) {
         SharedPreferences prefs = getPrefs(context);
         String sJSONChannelsData = prefs.getString("JSONChannelsData", "");
         TimeSeries mCurrentSeries = new TimeSeries(getPropertyOfChannel(context, sUUID, TAG_TITLE));
@@ -306,7 +278,7 @@ public class Tools {
         try {
             JSONObject jsonObj = new JSONObject(sJSONChannelsData);
             JSONArray werte = jsonObj.getJSONArray(TAG_DATA);
-            JSONObject jSONObj = null;
+            JSONObject jSONObj;
             for (int i = 0; i < werte.length(); i++) {
                 jSONObj = werte.getJSONObject(i);
                 if (jSONObj.get(TAG_UUID).equals(sUUID)) {
@@ -333,31 +305,36 @@ public class Tools {
         return mCurrentSeries;
     }
 
-    protected static String getDataOfChannel(Context context, String uuid, String property) {
+    static String getDataOfChannel(Context context, String uuid, String property) {
         SharedPreferences prefs = getPrefs(context);
         String sJSONChannelsData = prefs.getString("JSONChannelsData", "");
         Log.d("sJSONChannelsData: ", sJSONChannelsData);
         String Wert = "";
 
         try {
-            JSONObject jSONObj = new JSONObject();
+            JSONObject jSONObj;
             JSONObject jsonObj = new JSONObject(sJSONChannelsData);
             JSONArray werte = jsonObj.getJSONArray(TAG_DATA);
             for (int i = 0; i < werte.length(); i++) {
                 jSONObj = werte.getJSONObject(i);
                 if (jSONObj.get(TAG_UUID).equals(uuid)) {
                     try {
-                        if (property.equals(TAG_MIN)) {
-                            Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN).get(1)).toString() : "doof";
-                        } else if (property.equals(TAG_MAX)) {
-                            Wert = jSONObj.has(TAG_MAX) ? (jSONObj.getJSONArray(TAG_MAX).get(1)).toString() : "";
-                        } else if (property.equals("letzter")) {
-                            if (jSONObj.has(TAG_TUPLES)) {
-                                JSONArray jArray = (JSONArray) jSONObj.getJSONArray(TAG_TUPLES).get(jSONObj.getJSONArray(TAG_TUPLES).length() - 1);
-                                Wert = jArray.getString(1);
-                            }
-                        } else {
-                            Wert = jSONObj.has(property) ? jSONObj.getString(property) : "";
+                        switch (property) {
+                            case TAG_MIN:
+                                Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN).get(1)).toString() : "doof";
+                                break;
+                            case TAG_MAX:
+                                Wert = jSONObj.has(TAG_MAX) ? (jSONObj.getJSONArray(TAG_MAX).get(1)).toString() : "";
+                                break;
+                            case "letzter":
+                                if (jSONObj.has(TAG_TUPLES)) {
+                                    JSONArray jArray = (JSONArray) jSONObj.getJSONArray(TAG_TUPLES).get(jSONObj.getJSONArray(TAG_TUPLES).length() - 1);
+                                    Wert = jArray.getString(1);
+                                }
+                                break;
+                            default:
+                                Wert = jSONObj.has(property) ? jSONObj.getString(property) : "";
+                                break;
                         }
                     } catch (Exception e) {
                         Log.d("Exception", e.getMessage());

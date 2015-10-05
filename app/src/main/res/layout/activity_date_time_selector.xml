@@ -3,7 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -16,25 +17,24 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <DatePicker
-            android:id="@+id/datePickerFrom"
-            android:layout_width="wrap_content"
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginTop="-30dp"
-            android:calendarViewShown="false"
-            android:clipToPadding="false"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/fromDatePicker"
+            android:focusable="false"
+            />
 
-        <TimePicker
-            android:id="@+id/timePickerFrom"
-            android:layout_width="wrap_content"
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginTop="-30dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/fromTimePicker"
+            android:focusable="false"
+             />
+
     </LinearLayout>
 
     <TextView
@@ -48,25 +48,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <DatePicker
-            android:id="@+id/datePickerTo"
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginTop="-30dp"
-            android:calendarViewShown="false"
-            android:clipToPadding="false"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/toDatePicker"
+            android:focusable="false"
+             />
 
-        <TimePicker
-            android:id="@+id/timePickerTo"
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginTop="-30dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/toTimePicker"
+            android:focusable="false"
+            />
     </LinearLayout>
 
     <Button
