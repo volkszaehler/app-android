@@ -10,3 +10,8 @@ VolkszählerApp (Android) Version 0.8.2
 - Die URL zur Middleware lautet z.B. http://raspberrypi/middleware.php. D.h. die middelware.php befindet sich im Rootordner der Installation.
 
 Das ganze soll selbsterklärend sein, falls nicht, kann hier noch eine Anleitung rein bzw. die App verbessert werden.
+
+Tips zum Clonen von Github in AndroidStudio:
+Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use default gradle wrapper (not configured for the current project)" nicht möglich ist, dann
+- das Projekt nochmal normal als "Open an existing Android Studio project" öffnen und im "Gradle Sync" Dialog einfach OK klicken
+- Wenn nötig unter Settings => Version Control das "Unregistered Root" auswählen und auf das grüne "+" klicken, fertig
