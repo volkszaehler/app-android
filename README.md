@@ -1,7 +1,7 @@
 # app-android
 Volkszaehler frontend for Android 
 
-VolkszählerApp (Android) Version 0.8.1 BETA
+VolkszählerApp (Android) Version 0.8.2
 
 - sie kann die Channels abrufen und die letzten Werte anzeigen
 - ein paar Details zu jedem Channel anzeigen
