@@ -48,7 +48,9 @@ public class Preferences extends PreferenceActivity {
                     url = prefs.getString("volkszaehlerURL", "");
                     uname = prefs.getString("username", "");
                     pwd = prefs.getString("password", "");
-                    boolean zeroBased = prefs.getBoolean("ZeroBasedYAxis", false);
+                    boolean bZeroBased = prefs.getBoolean("ZeroBasedYAxis", false);
+                    boolean bAutoReload = prefs.getBoolean("autoReload", false);
+
 
                     // remove all
                     prefs.edit().clear().commit();
@@ -56,7 +58,8 @@ public class Preferences extends PreferenceActivity {
                     prefs.edit().putString("volkszaehlerURL", url).commit();
                     prefs.edit().putString("username", uname).commit();
                     prefs.edit().putString("password", pwd).commit();
-                    prefs.edit().putBoolean("ZeroBasedYAxis", zeroBased).commit();
+                    prefs.edit().putBoolean("ZeroBasedYAxis", bZeroBased).commit();
+                    prefs.edit().putBoolean("ZeroBasedYAxis", bAutoReload).commit();
                     // call Channels from VZ installation
                     new GetChannels().execute();
                     return true;
@@ -76,9 +79,9 @@ public class Preferences extends PreferenceActivity {
     }
 
     private void addPreferenceChannels() {
-        SharedPreferences prefs = getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE);
-        String JSONChannels = prefs.getString("JSONChannels", "");
-        Log.d("JSONChannels", JSONChannels);
+        SharedPreferences prefs = getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
+        String JSONChannels = prefs.getString(Tools.JSON_CHANNELS, "");
+        Log.d(Tools.JSON_CHANNELS, JSONChannels);
         if (JSONChannels.equals("")) {
             return;
         }
@@ -176,7 +179,7 @@ public class Preferences extends PreferenceActivity {
                 } else {
                     newChannels = true;
                     // store all channel stuff in a shared preference
-                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannels", jsonStr).commit();
+                    getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
 
                 }
                 if (!jsonStrDef.startsWith("{\"version\":\"0.3\",\"capabilities")) {
@@ -184,7 +187,7 @@ public class Preferences extends PreferenceActivity {
                     fehlerAusgabe2 = jsonStrDef;
                 } else {
                     // store all definitions stuff in a shared preference
-                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONDefinitions", jsonStrDef).commit();
+                    getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, jsonStrDef).commit();
 
                 }
             } else {

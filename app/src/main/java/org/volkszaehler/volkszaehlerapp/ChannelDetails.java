@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ChannelDetails extends Activity {
 
@@ -184,6 +185,30 @@ public class ChannelDetails extends Activity {
             case R.id.action_settings:
                 startActivity(new Intent(this, Preferences.class));
                 return (true);
+            case R.id.backup_settings:
+                boolean saved = Tools.saveFile(getApplicationContext());
+                if(saved)
+                {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.notsaved , Toast.LENGTH_SHORT).show();
+                }
+                return (true);
+            case R.id.restore_settings:
+
+                boolean restored = Tools.loadFile(getApplicationContext());
+                if(restored)
+                {
+                    Toast.makeText(this, R.string.restored , Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.notrestored , Toast.LENGTH_SHORT).show();
+                }
+                return (true);
+
 
             case R.id.about:
                 String app_ver = "";
