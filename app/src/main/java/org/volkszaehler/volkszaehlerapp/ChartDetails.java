@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class ChartDetails extends Activity  {
@@ -354,8 +355,8 @@ public class ChartDetails extends Activity  {
 
             String consumptionWert = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_CONSUMPTION);
             if (!"".equals(consumptionWert)) {
-                ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(consumptionWert + " " + unit + "/h");
-                ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " �");
+                ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(consumptionWert + " " + unit + "h");
+                ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) / 1000 * Double.valueOf(consumptionWert)) + " €");
             }
 
         } catch (Exception e) {
@@ -511,6 +512,30 @@ public class ChartDetails extends Activity  {
             case R.id.action_settings:
                 startActivity(new Intent(this, Preferences.class));
                 return (true);
+            case R.id.backup_settings:
+                boolean saved = Tools.saveFile(getApplicationContext());
+                if(saved)
+                {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.notsaved , Toast.LENGTH_SHORT).show();
+                }
+                return (true);
+            case R.id.restore_settings:
+
+                boolean restored = Tools.loadFile(getApplicationContext());
+                if(restored)
+                {
+                    Toast.makeText(this, R.string.restored , Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.notrestored , Toast.LENGTH_SHORT).show();
+                }
+                return (true);
+
             case R.id.about:
                 String app_ver = "";
                 try {

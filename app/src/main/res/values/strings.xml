@@ -72,5 +72,11 @@
     <string name="SelectDateAndTime">Select Start and End Time</string>
     <string name="Select">Select</string>
     <string name="title_activity_date_time_selector">Date/Time Selector</string>
+    <string name="restore_setting">Restore Settings</string>
+    <string name="backup_setting">Backup Settings</string>
+    <string name="saved">Settings saved.</string>
+    <string name="notsaved">Error saving settings!</string>
+    <string name="restored">Settings restored.</string>
+    <string name="notrestored">Error restoring settings!</string>
 
 </resources>

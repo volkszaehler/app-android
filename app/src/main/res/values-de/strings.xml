@@ -70,5 +70,11 @@
     <string name="SelectDateAndTime">Start und Endzeit auswählen</string>
     <string name="Select">Auswählen</string>
     <string name="title_activity_date_time_selector">Datum/Zeit auswählen</string>
+    <string name="backup_setting">Einstellungen sichern</string>
+    <string name="restore_setting">Einstellungen wiederherstellen</string>
+    <string name="saved">Einstellungen gespeichert.</string>
+    <string name="notsaved">Fehler beim Speichern der Einstellungen!</string>
+    <string name="restored">Einstellungen wiederhergestellt.</string>
+    <string name="notrestored">Fehler bein Wiederherstellen der Einstellungen!</string>
 
 </resources>

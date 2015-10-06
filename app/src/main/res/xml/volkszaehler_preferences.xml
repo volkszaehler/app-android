@@ -8,7 +8,8 @@
             android:key="volkszaehlerURL"
             android:singleLine="true"
             android:summary="@string/volkszaehlerURLSummary"
-            android:title="@string/volkszaehlerURLTitle" >
+            android:title="@string/volkszaehlerURLTitle"
+            android:inputType="textUri">
         </EditTextPreference>
     </PreferenceCategory>
     <PreferenceCategory
