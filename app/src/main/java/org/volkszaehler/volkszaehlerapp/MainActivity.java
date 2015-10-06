@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity<ViewGroup> extends ListActivity {
     private static Context myContext;
@@ -133,6 +134,29 @@ public class MainActivity<ViewGroup> extends ListActivity {
         switch (itemId) {
             case R.id.action_settings:
                 startActivityForResult(new Intent(this, Preferences.class), 1);
+                return (true);
+            case R.id.backup_settings:
+                boolean saved = Tools.saveFile(getApplicationContext());
+                if(saved)
+                {
+                    Toast.makeText(this, R.string.saved , Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.notsaved , Toast.LENGTH_SHORT).show();
+                }
+                return (true);
+            case R.id.restore_settings:
+
+                boolean restored = Tools.loadFile(getApplicationContext());
+                if(restored)
+                {
+                    Toast.makeText(this, R.string.restored , Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.notrestored , Toast.LENGTH_SHORT).show();
+                }
                 return (true);
             case R.id.about:
                 String app_ver = "";
