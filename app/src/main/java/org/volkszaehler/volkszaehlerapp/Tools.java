@@ -328,7 +328,7 @@ class Tools {
                     try {
                         switch (property) {
                             case TAG_MIN:
-                                Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN).get(1)).toString() : "doof";
+                                Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN).get(1)).toString() : "";
                                 break;
                             case TAG_MAX:
                                 Wert = jSONObj.has(TAG_MAX) ? (jSONObj.getJSONArray(TAG_MAX).get(1)).toString() : "";
