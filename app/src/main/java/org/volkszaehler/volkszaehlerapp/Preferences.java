@@ -81,7 +81,7 @@ public class Preferences extends PreferenceActivity {
     private void addPreferenceChannels() {
         SharedPreferences prefs = getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
         String JSONChannels = prefs.getString(Tools.JSON_CHANNELS, "");
-        Log.d(Tools.JSON_CHANNELS, JSONChannels);
+        Log.d("Preferences", "JSONChannels" + JSONChannels);
         if (JSONChannels.equals("")) {
             return;
         }
@@ -125,7 +125,7 @@ public class Preferences extends PreferenceActivity {
         }
         channelList = Tools.getChannelsFromJSONStringEntities(jsonStr);
         // channelList = Tools.removeExistingChannel(channelList);
-        Log.d("channelList", "" + channelList);
+        Log.d("Preferences", "channelList" + channelList);
     }
 
     private class GetChannels extends AsyncTask<Void, Void, String> {
@@ -161,8 +161,8 @@ public class Preferences extends PreferenceActivity {
 
             uname = sharedPref.getString("username", "");
             pwd = sharedPref.getString("password", "");
-            Log.d("ServiceHandler", "url: " + url);
-            Log.d("ServiceHandler", "urlDef: " + urlDef);
+            Log.d("Preferences", "url: " + url);
+            Log.d("Preferences", "urlDef: " + urlDef);
 
             // Making a request to url and getting response
             if (uname.equals("")) {
@@ -178,20 +178,21 @@ public class Preferences extends PreferenceActivity {
                     fehlerAusgabe = jsonStr;
                 } else {
                     newChannels = true;
+                    Log.d("Preferences", "jsonStr: " + jsonStr);
                     // store all channel stuff in a shared preference
                     getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
-
                 }
                 if (!jsonStrDef.startsWith("{\"version\":\"0.3\",\"capabilities")) {
                     JSONFehler2 = true;
                     fehlerAusgabe2 = jsonStrDef;
                 } else {
+                    Log.d("Preferences", "jsonStrDef: " + jsonStrDef);
                     // store all definitions stuff in a shared preference
                     getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, jsonStrDef).commit();
 
                 }
             } else {
-                Log.e("ServiceHandler", "Couldn't get any data from the url");
+                Log.e("Preferences", "Couldn't get any data from the url");
             }
 
             return null;

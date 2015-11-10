@@ -163,7 +163,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 try {
                     app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
                 } catch (NameNotFoundException e) {
-
+                    Log.e("ChannelDetails","strange VersionName");
                 }
                 new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
                 return (true);
@@ -205,7 +205,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     return null;
                 }
                 String uRLUUIDs = arg0[0];
-                Log.d("uRLUUIDs", "vorher: " + uRLUUIDs);
+                Log.d("MainActivity", "uRLUUIDs first: " + uRLUUIDs);
 
                 // workaround removing empty string
                 String[] channelsAusParameterMitLeerstring = arg0[0].split("&uuid\\[\\]=");
@@ -228,7 +228,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                                 if (!allUUIDs.contains(child)) {
                                     allUUIDs.add(child);
                                     uRLUUIDs = uRLUUIDs + "&uuid[]=" + child;
-                                    Log.d("uRLUUIDs", "in Loop: " + uRLUUIDs);
+                                    Log.d("MainActivity", " uRLUUIDs in Loop: " + uRLUUIDs);
                                 }
                             }
                         }
@@ -237,7 +237,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                             if (!allUUIDs.contains(childUUIDs)) {
                                 allUUIDs.add(childUUIDs);
                                 uRLUUIDs = uRLUUIDs + "&uuid[]=" + childUUIDs;
-                                Log.d("uRLUUIDs", "nur ein Child: " + uRLUUIDs);
+                                Log.d("MainActivity", "uRLUUIDs only one Child: " + uRLUUIDs);
                             }
                         }
                     }
@@ -267,7 +267,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     long plus1second = millisNow + 1000;
                     url = url + "/data.json?from=" + millisNow + "&to=" + plus1second + "&tuples=1" + uRLUUIDs;
 
-                    Log.d("url mainActivity: ", url);
+                    Log.d("MainActivity: ", "url: " + url);
 
                     String uname = sharedPref.getString("username", "");
                     String pwd = sharedPref.getString("password", "");
@@ -278,7 +278,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     } else {
                         jsonStr = sh.makeServiceCall(url, ServiceHandler.GET, null, uname, pwd);
                     }
-                    Log.d("response: ", jsonStr);
+                    Log.d("MainActivity", "response: " + jsonStr);
                 }
 
                 if (jsonStr != null) {
@@ -373,14 +373,11 @@ public class MainActivity<ViewGroup> extends ListActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            try {
                 // Dismiss the progress dialog
-                if (pDialog.isShowing())
+                if (pDialog.isShowing()) {
                     pDialog.dismiss();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                // handle Exception
-            }
+                }
+
             if (JSONFehler) {
                 new AlertDialog.Builder(MainActivity.this).setTitle(getString(R.string.Error)).setMessage(fehlerAusgabe).setNeutralButton(getString(R.string.Close), null).show();
             } else {
@@ -420,7 +417,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                         ((TextView) view.findViewById(R.id.channelName)).setTextColor(Color.parseColor(col));
                         ((TextView) view.findViewById(R.id.channelValue)).setTextColor(Color.parseColor(col));
                     } catch (IllegalArgumentException e) {
-                        // ToDo
+                        Log.e("MainActivity","Error setting color " + e.getMessage());
                     }
                 }
                 return view;

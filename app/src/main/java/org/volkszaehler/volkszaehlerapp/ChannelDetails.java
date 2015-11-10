@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +46,8 @@ public class ChannelDetails extends Activity {
             case "gas":
                 gas = true;
                 break;
+            default:
+                Log.e("ChannelDetails", "Unknown channel type: " + typeOfChannel);
         }
 
         String col = Tools.getPropertyOfChannel(myContext, mUUID, "color");
@@ -62,9 +65,7 @@ public class ChannelDetails extends Activity {
                 ((TextView) findViewById(R.id.textViewValue)).setTextColor(cColor);
                 findViewById(R.id.editTextChannelDetails).setBackgroundColor(cColor);
             } catch (IllegalArgumentException e) {
-                // new
-                // AlertDialog.Builder(MainActivity.this).setTitle("Error").setMessage("Unknown Color: "+
-                // col).setNeutralButton("Close",null).show();
+                Log.e("ChannelDetails","Unknown Color: "+ col);
             }
         }
         String myTitel = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TITLE);
@@ -74,7 +75,7 @@ public class ChannelDetails extends Activity {
             String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(i.getStringExtra("tuplesZeit"))));
             ((TextView) findViewById(R.id.textViewDateValue)).setText(currentDateTimeString);
         } catch (NumberFormatException nfe) {
-            // strange millis
+            Log.e("ChannelDetails","strange Tuple Time: "+ i.getStringExtra("tuplesZeit"));
         }
 
         ((TextView) findViewById(R.id.textViewDescription)).setText(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_DESCRIPTION));
@@ -90,7 +91,7 @@ public class ChannelDetails extends Activity {
                 // no cost
             }
         } catch (NumberFormatException nfe) {
-
+            Log.e("ChannelDetails", "strange costs: " + Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_COST));
         }
 
         ((TextView) findViewById(R.id.textViewUUID)).setText(mUUID);
@@ -215,7 +216,7 @@ public class ChannelDetails extends Activity {
                 try {
                     app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
                 } catch (NameNotFoundException e) {
-
+                    Log.e("ChannelDetails","strange VersionName");
                 }
                 new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
                 return (true);

@@ -108,7 +108,7 @@ class Tools {
                 return channelMap.containsKey(property) ? channelMap.get(property) : "";
             }
         }
-        return null;
+        return "";
     }
 
     // changes normal charts into Step charts by adding points
@@ -142,7 +142,7 @@ class Tools {
                 newJSONArray.put(newTuplePaar);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("Tools.createStepfromLine", "JSONException " + e.getMessage());
         } catch (IndexOutOfBoundsException iobe) {
             // eins zuviel
         }
@@ -328,7 +328,7 @@ class Tools {
                     try {
                         switch (property) {
                             case TAG_MIN:
-                                Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN).get(1)).toString() : "doof";
+                                Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN).get(1)).toString() : "";
                                 break;
                             case TAG_MAX:
                                 Wert = jSONObj.has(TAG_MAX) ? (jSONObj.getJSONArray(TAG_MAX).get(1)).toString() : "";
