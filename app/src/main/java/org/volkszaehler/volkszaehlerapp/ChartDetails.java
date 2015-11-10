@@ -87,9 +87,6 @@ public class ChartDetails extends Activity  {
             keepFrom = savedInstanceState.getDouble("KeepFrom");
             keepTo = savedInstanceState.getDouble("KeepTo");
             jsonStr = savedInstanceState.getString("JSONStr");
-            // mCost = savedInstanceState.getDouble("MCost");
-
-
         }
         Button select = (Button) findViewById(R.id.buttonDate);
 
@@ -104,12 +101,8 @@ public class ChartDetails extends Activity  {
             }
         });
 
-
-
         Intent inte = this.getIntent();
-
         mUUID = inte.getStringExtra("MUUID");
-
         unit = Tools.getUnit(myContext, null, mUUID);
 
         // from/to only the first time from intent, next time controlled by
@@ -124,10 +117,17 @@ public class ChartDetails extends Activity  {
 
         new GetChannelsDetails().execute();
     }
-            private final ArrayList<String> uUIDSOfaddedCharts = new ArrayList<>();
+
+    private final ArrayList<String> uUIDSOfaddedCharts = new ArrayList<>();
 
     private void prepareChart(String uUID) {
         TimeSeries mCurrentSeries = Tools.getTimeSeries(myContext, uUID);
+        //skip empty series
+        if(mCurrentSeries.getItemCount()<=1)
+        {
+            //no data or out of time range
+            return;
+        }
         String localMTitle = Tools.getPropertyOfChannel(myContext, uUID, Tools.TAG_TITLE);
         mCurrentSeries.setTitle(localMTitle + " " + getString(R.string.from) + " " + dateFormat.format(mCurrentSeries.getMinX()) + " " + timeFormat.format(mCurrentSeries.getMinX()) + " "
                 + getString(R.string.to) + " " + dateFormat.format(mCurrentSeries.getMaxX()) + " " + timeFormat.format(mCurrentSeries.getMaxX()));
@@ -139,11 +139,11 @@ public class ChartDetails extends Activity  {
         maxX = mCurrentSeries.getMaxX();
         dataset.addSeries(mCurrentSeries);
         uUIDSOfaddedCharts.add(uUID);
-        int mColor;
+        int mColor = Color.BLUE;
         try {
-            mColor = Color.parseColor(Tools.getPropertyOfChannel(myContext, uUID, Tools.TAG_COLOR).toUpperCase(Locale.getDefault()));
+                mColor = Color.parseColor(Tools.getPropertyOfChannel(myContext, uUID, Tools.TAG_COLOR).toUpperCase(Locale.getDefault()));
         } catch (Exception e) {
-            mColor = Color.BLUE;
+            Log.e("ChartDetails", e.getMessage());
         }
         XYSeriesRenderer renderer = new XYSeriesRenderer();
         renderer.setColor(mColor);
@@ -414,6 +414,7 @@ public class ChartDetails extends Activity  {
                 // are there child uuids? (in case of a group)
                 if ((Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE)).equals("group")) {
                     String childUUIDs = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_CHUILDUUIDS);
+                    Log.d("ChartDetails", "childUUIDs: " + childUUIDs);
 
                     if (null != childUUIDs && !"".equals(childUUIDs)) {
                         if (childUUIDs.contains("|")) {
@@ -433,7 +434,7 @@ public class ChartDetails extends Activity  {
                 }
 
                 url = url + "/data.json?from=" + f.format(from) + "&to=" + f.format(to) + "&tuples=1000" + uRLUUIDs + urlExtension;
-                Log.d("url", "ist: " + url);
+                Log.d("CahrtDetails", "request url is: " + url);
 
                 String uname = sharedPref.getString("username", "");
                 String pwd = sharedPref.getString("password", "");
@@ -477,7 +478,7 @@ public class ChartDetails extends Activity  {
                     }
                 }
             } else {
-                Log.e("ServiceHandler", "Couldn't get any data from the url");
+                Log.e("ChartDetails", "Couldn't get any data from the url");
             }
 
             return null;
@@ -549,7 +550,7 @@ public class ChartDetails extends Activity  {
                 try {
                     app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
                 } catch (NameNotFoundException e) {
-
+                    Log.e("ChannelDetails","strange VersionName");
                 }
                 new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
                 return (true);

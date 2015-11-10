@@ -108,7 +108,7 @@ class Tools {
                 return channelMap.containsKey(property) ? channelMap.get(property) : "";
             }
         }
-        return null;
+        return "";
     }
 
     // changes normal charts into Step charts by adding points
@@ -142,7 +142,7 @@ class Tools {
                 newJSONArray.put(newTuplePaar);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("Tools.createStepfromLine", "JSONException " + e.getMessage());
         } catch (IndexOutOfBoundsException iobe) {
             // eins zuviel
         }

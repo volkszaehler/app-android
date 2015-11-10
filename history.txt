@@ -1,5 +1,16 @@
 Version history:
 
+Version 0.8.4
+
+Changed
+ - improved logging
+
+Fixed
+ - no Costs in Chart Details for type "gas"
+ - mixed decimal format in Chart Details
+ - now graph skipped when no data in time range, useful especially with empty channel in groups
+
+
 Version 0.8.3
 New
  - Backup/Restore of Settings

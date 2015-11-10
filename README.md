@@ -1,7 +1,7 @@
 # app-android
 Volkszaehler frontend for Android 
 
-VolkszählerApp (Android) Version 0.8.3
+VolkszählerApp (Android) Version 0.8.4
 
 - sie kann die Channels abrufen und die letzten Werte anzeigen
 - ein paar Details zu jedem Channel anzeigen
@@ -16,7 +16,7 @@ Benötigte Berechtigungen:
 - android.permission.INTERNET für den Zugriff auf die Volkszähler-Installation
 - android.permission.WRITE_EXTERNAL_STORAGE für das Schreiben (und Lesen) des Backups
 
-Tips zum Clonen von Github in AndroidStudio:
+Tips zum Clonen von Github in AndroidStudio (nur für Entwickler):
 Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use default gradle wrapper (not configured for the current project)" nicht möglich ist, dann
 - das Projekt nochmal normal als "Open an existing Android Studio project" öffnen und im "Gradle Sync" Dialog einfach OK klicken
 - Wenn nötig unter Settings => Version Control das "Unregistered Root" auswählen und auf das grüne "+" klicken, fertig
