@@ -1,7 +1,9 @@
 package org.volkszaehler.volkszaehlerapp;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import org.achartengine.ChartFactory;
@@ -21,7 +23,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -69,8 +70,6 @@ public class ChartDetails extends Activity  {
     private double minY = Double.MAX_VALUE;
     private double minX = 0;
     private double maxX = 0;
-    // String mTitle = "";
-    private String unit = "";
 
     private java.text.DateFormat dateFormat = null;
     private java.text.DateFormat timeFormat = null;
@@ -103,10 +102,8 @@ public class ChartDetails extends Activity  {
 
         Intent inte = this.getIntent();
         mUUID = inte.getStringExtra("MUUID");
-        unit = Tools.getUnit(myContext, null, mUUID);
 
-        // from/to only the first time from intent, next time controlled by
-        // buttons
+        // from/to only the first time from intent, next time controlled by buttons or touch and move
         if (from == 0) {
             from = inte.getLongExtra("From", 0);
             to = inte.getLongExtra("To", 0);
@@ -134,7 +131,11 @@ public class ChartDetails extends Activity  {
         // get for minimal Y value
         minY = minY > mCurrentSeries.getMinY() ? minY = mCurrentSeries.getMinY() : minY;
 
-        // x values should be the same for all childs
+        // x values should be the same for all childs, but remove old values that would mess up the chart
+        while(mCurrentSeries.getMinX() < from)
+        {
+            mCurrentSeries.remove(0);
+        }
         minX = mCurrentSeries.getMinX();
         maxX = mCurrentSeries.getMaxX();
         dataset.addSeries(mCurrentSeries);
@@ -235,6 +236,9 @@ public class ChartDetails extends Activity  {
                 if (eventXTouchDown != 0 && Math.abs(eventXTouchDown - eventX) > 50) {
                     new GetChannelsDetails().execute();
                 } else {
+                    //no move, Orientation change must use old from and to
+                    from = keepFrom;
+                    to = keepTo;
                     SeriesSelection seriesSelection = mChartView.getCurrentSeriesAndPoint();
                     if (seriesSelection != null) {
                         buttonShowInfoHandler(mChartView, uUIDSOfaddedCharts.get(seriesSelection.getSeriesIndex()));
@@ -335,11 +339,12 @@ public class ChartDetails extends Activity  {
 
     private void buttonShowInfoHandler(View view, String UUID) {
         try {
-            // We need to get the instance of the LayoutInflater, use the
-            // context of this activity
+            String unit = Tools.getUnit(myContext, null, UUID);
+            // We need to get the instance of the LayoutInflater, use the context of this activity
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // Inflate the view from a predefined XML layout
             View layout = inflater.inflate(R.layout.info_popup, (ViewGroup) findViewById(R.id.popup_element));
+            ((TextView) layout.findViewById(R.id.DetailsTitle)).setText(Tools.getPropertyOfChannel(myContext,UUID,Tools.TAG_TITLE));
 
             pw = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
             pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
@@ -348,23 +353,40 @@ public class ChartDetails extends Activity  {
             cancelButton.setOnClickListener(cancel_button_click_listener);
             DecimalFormat f3 = new DecimalFormat("#0.000");
             DecimalFormat f2 = new DecimalFormat("#0.00");
-            ((TextView) layout.findViewById(R.id.minWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MIN))) + " " + unit);
-            ((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MAX))) + " " + unit);
+            String minValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MIN);
+            ((TextView) layout.findViewById(R.id.minWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(minValues.substring(1, minValues.length() - 1).split(",")[0]))));
+            ((TextView) layout.findViewById(R.id.minWertIDValue)).setText(f3.format(Double.parseDouble((minValues.substring(1,minValues.length()-1).split(",")[1]))) + " " + unit);
+            String maxValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MAX);
+            ((TextView) layout.findViewById(R.id.maxWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(maxValues.substring(1, maxValues.length() - 1).split(",")[0]))));
+            ((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(f3.format(Double.parseDouble((maxValues.substring(1,maxValues.length()-1).split(",")[1]))) + " " + unit);
+
+            //((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MAX))) + " " + unit);
             ((TextView) layout.findViewById(R.id.avWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_AVERAGE))) + " " + unit);
-            ((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, "letzter"))) + " " + unit);
+
+            String lastValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_LAST);
+            ((TextView) layout.findViewById(R.id.lastWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(lastValues.substring(1, lastValues.length() - 1).split(",")[0]))));
+            ((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(f3.format(Double.parseDouble((lastValues.substring(1,lastValues.length()-1).split(",")[1]))) + " " + unit);
+
+            //((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, "letzter"))) + " " + unit);
             ((TextView) layout.findViewById(R.id.rowWertIDValue)).setText(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_ROWS));
 
             String consumptionWert = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_CONSUMPTION);
             if (!"".equals(consumptionWert)) {
-                if("gas".equals(Tools.getPropertyOfChannel(myContext,UUID,"type")))
+                if("gas".equals(Tools.getPropertyOfChannel(myContext,UUID,Tools.TAG_TYPE)))
                 {
-                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f3.format(Double.parseDouble(consumptionWert)) + " " + unit.substring(0,2));
+                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f3.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 2));
                     ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f2.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
                 }
                 else {
-                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f3.format(Double.parseDouble(consumptionWert) + " " + unit + "h"));
+                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f3.format(Double.valueOf(consumptionWert)) + " " + unit + "h");
                     ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f2.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) / 1000 * Double.valueOf(consumptionWert)) + " €");
                 }
+            }
+            else
+            {
+                //remove consumption and costs from dialog
+                layout.findViewById(R.id.tableRow6).setVisibility(View.GONE);
+                layout.findViewById(R.id.tableRow7).setVisibility(View.GONE);
             }
 
         } catch (Exception e) {
@@ -546,14 +568,7 @@ public class ChartDetails extends Activity  {
                 return (true);
 
             case R.id.about:
-                String app_ver = "";
-                try {
-                    app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-                } catch (NameNotFoundException e) {
-                    Log.e("ChannelDetails","strange VersionName");
-                }
-                new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
-                return (true);
+                return Tools.showAboutDialog(myContext);
 
             default:
                 break;
