@@ -6,10 +6,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,11 +20,12 @@ import android.widget.Toast;
 public class ChannelDetails extends Activity {
 
     private String mUUID = "";
+    private static Context myContext;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.details);
-        Context myContext = this;
+        myContext = this;
         // addListenerOnButton();
         Intent i = getIntent();
         boolean strom = false;
@@ -117,16 +116,16 @@ public class ChannelDetails extends Activity {
 
     public void chartsDetailsHandler(View view) {
         switch (view.getId()) {
-            case R.id.textViewChartHour:
+            case R.id.buttonViewChartHour:
                 callChart("hour");
                 break;
-            case R.id.textViewChartDay:
+            case R.id.buttonViewChartDay:
                 callChart("day");
                 break;
-            case R.id.textViewChartWeek:
+            case R.id.buttonViewChartWeek:
                 callChart("week");
                 break;
-            case R.id.textViewChartMonth:
+            case R.id.buttonViewChartMonth:
                 callChart("month");
                 break;
             default:
@@ -212,14 +211,7 @@ public class ChannelDetails extends Activity {
 
 
             case R.id.about:
-                String app_ver = "";
-                try {
-                    app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-                } catch (NameNotFoundException e) {
-                    Log.e("ChannelDetails","strange VersionName");
-                }
-                new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
-                return (true);
+                return Tools.showAboutDialog(myContext);
 
             default:
                 break;
