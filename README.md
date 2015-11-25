@@ -1,7 +1,13 @@
 # Volkszaehler Frontend for Android 
-English below
+App Language: english, deutsch  
+(English description below)
 
 Download: [https://github.com/volkszaehler/app-android/releases/latest](https://github.com/volkszaehler/app-android/releases/latest "Latest Release")
+
+![ScreenShot1](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/uebersicht.png?w=200 "ScreenShots 1 of VolkszaehlerApp")|
+![ScreenShot2](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/details.png?w=200 "ScreenShots 2 of VolkszaehlerApp")|
+![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200 "ScreenShots 3 of VolkszaehlerApp")|
+![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200 "ScreenShots 4 of VolkszaehlerApp")
 
 ## VolkszählerApp für Android, Version 0.8.5
 ---
@@ -24,8 +30,9 @@ Benötigte Android Berechtigungen:
 Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use default gradle wrapper (not configured for the current project)" nicht möglich ist, dann  
 - das Projekt nochmal normal als "Open an existing Android Studio project" öffnen und im "Gradle Sync" Dialog einfach OK klicken  
 - Wenn nötig unter Settings => Version Control das "Unregistered Root" auswählen und auf das grüne "+" klicken, fertig
-
-
+  
+  
+  
 English:
 ## VolkszaehlerApp for Android, Version 0.8.5
 ---
@@ -55,41 +62,42 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 ###Version 0.8.5
 **Changed**  
- - Extended ChartDetails Dialog  
- - Completed README.md, removed history.txt 
+ - Extended Chart Details Dialog
+ - Improved Chart, especially when using Groups 
+ - Buttons instead of Text in Details
+ - Completed README.md, removed history.txt
+ - small improvmenets
+ **Fixed**  
+ - Consumption and Cost values in ChartDetails Dialog visible again, also fixed for "Gas" channel  
+ - Unit correctly displayed now with Channels from Group  
+ - Chart-Range keeps the same after orientation change
+ - Details now can be scrolled
 
 
 ###Version 0.8.4
 **Changed**  
- - improved logging
-
-**Fixed**  
+ - improved logging  
+ **Fixed**  
  - No Costs in Chart Details for type "gas"  
  - Mixed decimal format in Chart Details  
  - Now graph skipped when no data in time range, useful especially with empty channel in groups  
 
 
-
 ###Version 0.8.3
 **New**  
- - Backup/Restore of Settings
-
+ - Backup/Restore of Settings  
 **Changed**  
- - Details background not transparent anymore
-
+ - Details background not transparent anymore  
 **Fixed**  
  - Calculation and display of costs in Details dialog
 
 
-
 ###Version 0.8.2
 **Changed**  
- - Date/Time selection dialog
-
-**Fixed**  
+ - Date/Time selection dialog  
+ **Fixed**  
  - Cost for power meters no correct in "Channel Details"  
  - Some small fixes and optimizations
-
 
 
 ###Version 0.8.1
@@ -97,17 +105,14 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
  - Group support  
  - Several lines in one chart (when using groups)  
  - Start and end date/time can be set to define a range to display in chart  
- - Automatic reload can be configured
-
+ - Automatic reload can be configured  
 **Changed**  
- - Chart info now when clicking on the graph line
-
+ - Chart info now when clicking on the graph line  
 **Fixed**  
  - Single touch in chart doesn't cause zoom anymore, 50px move is necessary to zoom  
  - "About" is now translated in German version  
  - From/to translated below chart  
  - Some small fixes
-
 
 
 ###Version 0.8.0
