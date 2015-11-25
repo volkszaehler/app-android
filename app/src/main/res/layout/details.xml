@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+<LinearLayout
     android:id="@+id/linearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-
+    android:orientation="vertical"
+    >
     <TextView
         android:id="@+id/editTextChannelDetails"
         android:layout_width="match_parent"
@@ -19,23 +24,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#11111111"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textViewTitle"
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="0.35"
             android:ellipsize="end"
+            android:gravity="left"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/textViewValue"
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="0.65"
+            android:gravity="right"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
@@ -179,41 +182,37 @@
             android:background="#22222222"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/textViewChartHour"
+            <Button
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
                 android:onClick="chartsDetailsHandler"
                 android:text="@string/ChartHour"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/buttonViewChartHour" />
 
-            <TextView
-                android:id="@+id/textViewChartDay"
+            <Button
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
                 android:onClick="chartsDetailsHandler"
                 android:text="@string/ChartDay"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/buttonViewChartDay" />
 
-            <TextView
-                android:id="@+id/textViewChartWeek"
+            <Button
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
                 android:onClick="chartsDetailsHandler"
                 android:text="@string/ChartWeek"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/buttonViewChartWeek" />
 
-            <TextView
-                android:id="@+id/textViewChartMonth"
+            <Button
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
                 android:onClick="chartsDetailsHandler"
                 android:text="@string/ChartMonth"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/buttonViewChartMonth" />
         </LinearLayout>
 
 
@@ -242,3 +241,4 @@
         </LinearLayout>
 
 </LinearLayout>
+    </ScrollView>
