@@ -14,7 +14,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -84,7 +83,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 if (adapter != null) {
                     adapter.notifyDataSetChanged();
                 }
-                // jsonStr ="";
+                jsonStr ="";
                 channelsToRequest = "";
                 // adding uuids that are checked in preferences
                 for (String preference : PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getAll().keySet()) {
@@ -113,12 +112,6 @@ public class MainActivity<ViewGroup> extends ListActivity {
             channelValueList.clear();
             new GetJSONData().execute(channelsToRequest);
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        jsonStr = "";
     }
 
     @Override
@@ -159,14 +152,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 }
                 return (true);
             case R.id.about:
-                String app_ver = "";
-                try {
-                    app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-                } catch (NameNotFoundException e) {
-                    Log.e("ChannelDetails","strange VersionName");
-                }
-                new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setMessage(getString(R.string.version) + ": " + app_ver).setNeutralButton(getString(R.string.Close), null).show();
-                return (true);
+                return Tools.showAboutDialog(myContext);
 
             default:
                 break;
@@ -379,6 +365,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 }
 
             if (JSONFehler) {
+                jsonStr="";
                 new AlertDialog.Builder(MainActivity.this).setTitle(getString(R.string.Error)).setMessage(fehlerAusgabe).setNeutralButton(getString(R.string.Close), null).show();
             } else {
                 addValuesToListView();
