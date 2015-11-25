@@ -15,14 +15,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 class Tools {
 
@@ -45,6 +49,7 @@ class Tools {
     static final String TAG_BELONGSTOGROUP = "belongsToGroup";
     static final String TAG_MIN = "min";
     static final String TAG_MAX = "max";
+    static final String TAG_LAST = "letzter";
     static final String TAG_AVERAGE = "average";
     static final String TAG_CONSUMPTION = "consumption";
     static final String TAG_ROWS = "rows";
@@ -142,7 +147,7 @@ class Tools {
                 newJSONArray.put(newTuplePaar);
             }
         } catch (JSONException e) {
-            Log.e("Tools.createStepfromLine", "JSONException " + e.getMessage());
+            Log.e("Tools.createStepfLine", "JSONException " + e.getMessage());
         } catch (IndexOutOfBoundsException iobe) {
             // eins zuviel
         }
@@ -328,15 +333,15 @@ class Tools {
                     try {
                         switch (property) {
                             case TAG_MIN:
-                                Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN).get(1)).toString() : "";
+                                Wert = jSONObj.has(TAG_MIN) ? (jSONObj.getJSONArray(TAG_MIN)).toString() : "";
                                 break;
                             case TAG_MAX:
-                                Wert = jSONObj.has(TAG_MAX) ? (jSONObj.getJSONArray(TAG_MAX).get(1)).toString() : "";
+                                Wert = jSONObj.has(TAG_MAX) ? (jSONObj.getJSONArray(TAG_MAX)).toString() : "";
                                 break;
-                            case "letzter":
+                            case TAG_LAST:
                                 if (jSONObj.has(TAG_TUPLES)) {
                                     JSONArray jArray = (JSONArray) jSONObj.getJSONArray(TAG_TUPLES).get(jSONObj.getJSONArray(TAG_TUPLES).length() - 1);
-                                    Wert = jArray.getString(1);
+                                    Wert = jArray.toString();
                                 }
                                 break;
                             default:
@@ -466,5 +471,18 @@ class Tools {
                  }
              }
          }
+    }
+      static Boolean showAboutDialog(Context context)
+    {
+        String app_ver;
+        try {
+            app_ver = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("ChannelDetails","strange VersionName");
+            return false;
+        }
+        AlertDialog d = new AlertDialog.Builder(context).setTitle(context.getString(R.string.app_name) + ", Version " + app_ver).setMessage(R.string.aboutLinks).setNeutralButton(context.getString(R.string.Close), null).show();
+        ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+        return true;
     }
 }

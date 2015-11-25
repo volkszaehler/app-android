@@ -52,7 +52,6 @@
     <string name="rowsWertText">Anzahl Werte</string>
     <string name="costWertText">Kosten</string>
     <string name="lastWertText">Letzter Wert</string>
-    <string name="version">Version</string>
     <string name="about">Über VolkszählerApp</string>
     <string name="to">bis</string>
     <string name="from">von</string>
@@ -76,5 +75,7 @@
     <string name="notsaved">Fehler beim Speichern der Einstellungen!</string>
     <string name="restored">Einstellungen wiederhergestellt.</string>
     <string name="notrestored">Fehler bein Wiederherstellen der Einstellungen!</string>
+    <string name="WertTimeText">am:</string>
+    <string name="aboutLinks"><a href="http://www.volkszaehler.org">http://www.volkszaehler.org</a>\n<a href="http://github.com/volkszaehler/app-android/releases/latest">Download neuste Version</a></string>
 
 </resources>

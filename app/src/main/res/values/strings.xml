@@ -56,7 +56,6 @@
     <string name="costWertText">Costs</string>
     <string name="lastWertText">Last Value</string>
     <string name="about">About</string>
-    <string name="version">Version</string>
     <string name="from">from</string>
     <string name="Details">Details</string>
     <string name="group">(Group)</string>
@@ -78,5 +77,7 @@
     <string name="notsaved">Error saving settings!</string>
     <string name="restored">Settings restored.</string>
     <string name="notrestored">Error restoring settings!</string>
+    <string name="WertTimeText">at:</string>
+    <string name="aboutLinks"><a href="http://www.volkszaehler.org">http://www.volkszaehler.org</a>\n<a href="http://github.com/volkszaehler/app-android/releases/latest">Download Latest Version</a></string>
 
 </resources>
