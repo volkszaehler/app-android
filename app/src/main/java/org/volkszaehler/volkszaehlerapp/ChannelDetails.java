@@ -48,8 +48,8 @@ public class ChannelDetails extends Activity {
             default:
                 Log.e("ChannelDetails", "Unknown channel type: " + typeOfChannel);
         }
-
-        String col = Tools.getPropertyOfChannel(myContext, mUUID, "color");
+        //empty color, default = blue
+        String col = "".equals(Tools.getPropertyOfChannel(myContext, mUUID, "color")) ? "blue" :Tools.getPropertyOfChannel(myContext, mUUID, "color");
 
         int cColor;
         if (col != null && col.startsWith("#")) {
