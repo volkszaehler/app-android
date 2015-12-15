@@ -2,6 +2,10 @@ package org.volkszaehler.volkszaehlerapp;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.IDN;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
 import java.util.List;
@@ -30,6 +34,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import android.util.Base64;
+import android.util.Log;
 
 class ServiceHandler {
 
@@ -41,7 +46,21 @@ class ServiceHandler {
     }
 
     public String makeServiceCall(String url, int method) {
-        return this.makeServiceCall(url, method, null);
+        //fix for issue 8 https://github.com/volkszaehler/app-android/issues/8
+        URL newUrl = null;
+        try {
+            newUrl = new URL(url);
+            URI uri = new URI(newUrl.getProtocol(), newUrl.getUserInfo(), IDN.toASCII(newUrl.getHost()), newUrl.getPort(), newUrl.getPath(), newUrl.getQuery(), newUrl.getRef());
+            newUrl = uri.toURL();
+        } catch (MalformedURLException e) {
+            Log.e("ServiceHandler","malformed URL: " + url);
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            Log.e("ServiceHandler","wrong URL Syntax : " + newUrl);
+            e.printStackTrace();
+        }
+
+        return this.makeServiceCall(newUrl.toString(), method, null);
     }
 
     private HttpClient getNewHttpClient(String url) {
@@ -89,6 +108,7 @@ class ServiceHandler {
 
     public String makeServiceCall(String url, int method, List<NameValuePair> params, String uname, String pwd) {
         String response;
+
         try {
             // http client
             HttpClient httpClient = getNewHttpClient(url);
@@ -120,7 +140,6 @@ class ServiceHandler {
                     final String basicAuth = "Basic " + Base64.encodeToString((uname + ":" + pwd).getBytes(), Base64.NO_WRAP);
                     httpGet.setHeader("Authorization", basicAuth);
                 }
-
                 httpResponse = httpClient.execute(httpGet);
             }
             httpEntity = httpResponse.getEntity();
