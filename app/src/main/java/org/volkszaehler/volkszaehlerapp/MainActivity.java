@@ -386,8 +386,10 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 View view = super.getView(position, convertView, parent);
 
                 HashMap<String, String> items = (HashMap<String, String>) getListView().getItemAtPosition(position);
-                String col = items.get(Tools.TAG_COLOR);
-                // col =
+
+                //empty color, default = blue
+                String col = "".equals(items.get(Tools.TAG_COLOR)) ? "blue" : items.get(Tools.TAG_COLOR);
+
                 if (col.startsWith("#")) {
                     ((TextView) view.findViewById(R.id.channelName)).setTextColor(Color.parseColor(col.toUpperCase(Locale.getDefault())));
                     ((TextView) view.findViewById(R.id.channelValue)).setTextColor(Color.parseColor(col.toUpperCase(Locale.getDefault())));
