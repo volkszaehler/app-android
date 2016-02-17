@@ -4,12 +4,12 @@ App Language: english, deutsch
 
 Download: [https://github.com/volkszaehler/app-android/releases/latest](https://github.com/volkszaehler/app-android/releases/latest "Latest Release")
 
-![ScreenShot1](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/uebersicht.png?w=200 "ScreenShots 1 of VolkszaehlerApp")
-![ScreenShot2](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/details.png?w=200 "ScreenShots 2 of VolkszaehlerApp")
-![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200 "ScreenShots 3 of VolkszaehlerApp")
-![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200 "ScreenShots 4 of VolkszaehlerApp")
+![ScreenShot1](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:uebersicht.png "ScreenShots 1 of VolkszaehlerApp") 
+![ScreenShot2](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:details.png "ScreenShots 2 of VolkszaehlerApp") 
+![ScreenShot3](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:grafik.png "ScreenShots 3 of VolkszaehlerApp") 
+![ScreenShot4](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:einstellungen.png "ScreenShots 4 of VolkszaehlerApp") 
 
-## VolkszählerApp für Android, Version 0.8.6
+## VolkszählerApp für Android, Version 0.8.7
 ---
 
 Funktionen:  
@@ -34,7 +34,7 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
   
   
 English:
-## VolkszaehlerApp for Android, Version 0.8.6
+## VolkszaehlerApp for Android, Version 0.8.7
 ---
 
 Features:  
@@ -59,6 +59,13 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 ###Version history:
 ---
+
+###Version 0.8.7
+####Fixed  
+ - ChannelInfo popup can't be closed when clicking twice or more
+ 
+####Changed  
+ - changed image URLs in README.md to match the new Wiki image URL pattern
 
 ###Version 0.8.6
 ####Fixed  

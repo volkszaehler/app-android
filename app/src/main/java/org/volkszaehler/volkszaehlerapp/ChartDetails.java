@@ -209,6 +209,7 @@ public class ChartDetails extends Activity  {
     }
 
     private float eventXTouchDown = 0;
+    private boolean allowPopup = true;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -240,7 +241,8 @@ public class ChartDetails extends Activity  {
                     from = keepFrom;
                     to = keepTo;
                     SeriesSelection seriesSelection = mChartView.getCurrentSeriesAndPoint();
-                    if (seriesSelection != null) {
+                    if (seriesSelection != null && allowPopup) {
+                        allowPopup = false;
                         buttonShowInfoHandler(mChartView, uUIDSOfaddedCharts.get(seriesSelection.getSeriesIndex()));
                     }
                 }
@@ -397,6 +399,7 @@ public class ChartDetails extends Activity  {
     private final OnClickListener cancel_button_click_listener = new OnClickListener() {
         public void onClick(View v) {
             pw.dismiss();
+            allowPopup = true;
         }
     };
 
