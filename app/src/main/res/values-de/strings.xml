@@ -77,5 +77,9 @@
     <string name="notrestored">Fehler bein Wiederherstellen der Einstellungen!</string>
     <string name="WertTimeText">am:</string>
     <string name="aboutLinks"><a href="http://www.volkszaehler.org">http://www.volkszaehler.org</a>\n<a href="http://github.com/volkszaehler/app-android/releases/latest">Download neuste Version</a></string>
+    <string name="MultipleGraphsPopupDone">OK</string>
+    <string name="MultipleGraphsPopupCancel">Abbrechen</string>
+    <string name="MultipleGraphsPopupTitel">Channels wählen</string>
+    <string name="GesamtTitle">Gesamt</string>
 
 </resources>

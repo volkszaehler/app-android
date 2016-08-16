@@ -30,6 +30,7 @@ public class ChannelDetails extends Activity {
         Intent i = getIntent();
         boolean strom = false;
         boolean gas = false;
+        boolean water = false;
         boolean temp = false;
         mUUID = i.getStringExtra(Tools.TAG_UUID);
 
@@ -44,6 +45,9 @@ public class ChannelDetails extends Activity {
                 break;
             case "gas":
                 gas = true;
+                break;
+            case "water":
+                water = true;
                 break;
             default:
                 Log.e("ChannelDetails", "Unknown channel type: " + typeOfChannel);
@@ -79,13 +83,15 @@ public class ChannelDetails extends Activity {
 
         ((TextView) findViewById(R.id.textViewDescription)).setText(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_DESCRIPTION));
         try {
-            DecimalFormat f = new DecimalFormat("#0.0");
+            DecimalFormat f0 = new DecimalFormat("#0.0");
+            DecimalFormat f00 = new DecimalFormat("#0.00");
 
             double sCost = Double.valueOf(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_COST));
-            if (strom) {
-                ((TextView) findViewById(R.id.textViewCost)).setText(f.format(sCost * 100) + Units.CENT);
-            } else if (gas) {
-                ((TextView) findViewById(R.id.textViewCost)).setText(f.format((sCost * 100)) + Units.CENT);
+            double sResolution = Double.valueOf(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_RESOLUTION));
+            if (strom || gas) {
+                ((TextView) findViewById(R.id.textViewCost)).setText(f0.format(sCost * 100) + Units.CENT);
+            } else if (water) {
+                ((TextView) findViewById(R.id.textViewCost)).setText(f00.format(sCost * sResolution * 1000) + Units.EUROpermmm);
             } else if (temp) {
                 // no cost
             }

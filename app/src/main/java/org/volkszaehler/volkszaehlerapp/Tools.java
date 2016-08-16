@@ -55,6 +55,8 @@ class Tools {
     static final String TAG_ROWS = "rows";
     static final String TAG_FROM = "from";
     static final String TAG_TO = "to";
+    static final String TAG_RESOLUTION = "resolution";
+    static final String TAG_INITIALCONSUMPTION = "initialconsumption";
     private static final String BACKUP_FILENAME = "volkszaehler_settings_backup.txt";
     static final String JSON_CHANNELS = "JSONChannels";
     static final String JSON_CHANNEL_PREFS = "JSONChannelPrefs";
@@ -226,6 +228,8 @@ class Tools {
         String active = c.has(TAG_ACTIVE) ? c.getString(TAG_ACTIVE) : "";
         String ppublic = c.has(TAG_PUBLIC) ? c.getString(TAG_PUBLIC) : "";
         String fillstyle = c.has(TAG_FILLSTYLE) ? c.getString(TAG_FILLSTYLE) : "";
+        String resolution = c.has(TAG_RESOLUTION) ? c.getString(TAG_RESOLUTION) : "";
+        String initialconsumption = c.has(TAG_INITIALCONSUMPTION) ? c.getString(TAG_INITIALCONSUMPTION) : "";
 
         // tmp hashmap for single channel
         HashMap<String, String> channel = new HashMap<>();
@@ -242,6 +246,8 @@ class Tools {
         channel.put(TAG_ACTIVE, active);
         channel.put(TAG_PUBLIC, ppublic);
         channel.put(TAG_FILLSTYLE, fillstyle);
+        channel.put(TAG_INITIALCONSUMPTION, initialconsumption);
+        channel.put(TAG_RESOLUTION, resolution);
         return channel;
     }
 

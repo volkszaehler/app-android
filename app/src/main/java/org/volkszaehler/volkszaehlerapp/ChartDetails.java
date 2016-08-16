@@ -3,8 +3,12 @@ package org.volkszaehler.volkszaehlerapp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -21,6 +25,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -43,7 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class ChartDetails extends Activity  {
+public class ChartDetails extends Activity {
 
     private ProgressDialog pDialog;
 
@@ -79,14 +84,6 @@ public class ChartDetails extends Activity  {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.charts);
         myContext = this;
-        // after OrientationChange
-        if (savedInstanceState != null) {
-            from = savedInstanceState.getDouble("From");
-            to = savedInstanceState.getDouble("To");
-            keepFrom = savedInstanceState.getDouble("KeepFrom");
-            keepTo = savedInstanceState.getDouble("KeepTo");
-            jsonStr = savedInstanceState.getString("JSONStr");
-        }
         Button select = (Button) findViewById(R.id.buttonDate);
 
         select.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +104,16 @@ public class ChartDetails extends Activity  {
         if (from == 0) {
             from = inte.getLongExtra("From", 0);
             to = inte.getLongExtra("To", 0);
+        }
+
+        // after OrientationChange
+        if (savedInstanceState != null) {
+            from = savedInstanceState.getDouble("From");
+            to = savedInstanceState.getDouble("To");
+            keepFrom = savedInstanceState.getDouble("KeepFrom");
+            keepTo = savedInstanceState.getDouble("KeepTo");
+            jsonStr = savedInstanceState.getString("JSONStr");
+            mUUID = savedInstanceState.getString("mUUID");
         }
 
         dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
@@ -156,7 +163,32 @@ public class ChartDetails extends Activity  {
         dataset.clear();
         mRenderer.removeAllRenderers();
 
-        if ((Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE)).equals("group")) {
+        //several graphs?
+        if (mUUID.contains("|")) {
+            String[] mUUIDs = (mUUID.split("\\|"));
+
+            for (String singleUUID : mUUIDs) {
+                //is there a group in the list?
+                if ((Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_TYPE)).equals("group")) {                                // are there child uuids? (in case of a group)
+                    String childUUIDs = Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_CHUILDUUIDS);
+
+                    if (null != childUUIDs && !"".equals(childUUIDs)) {
+                        if (childUUIDs.contains("|")) {
+                            String[] children = (childUUIDs.split("\\|"));
+
+                            for (String child : children) {
+                                prepareChart(child);
+                            }
+                        } else {
+                            // only one uuid in childs
+                            prepareChart(childUUIDs);
+                        }
+                    }
+                } else {
+                    prepareChart(singleUUID);
+                }
+            }
+        } else if ((Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE)).equals("group")) {
             String childUUIDs = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_CHUILDUUIDS);
 
             if (null != childUUIDs && !"".equals(childUUIDs)) {
@@ -210,6 +242,9 @@ public class ChartDetails extends Activity  {
 
     private float eventXTouchDown = 0;
     private boolean allowPopup = true;
+    private static final int MIN_CLICK_DURATION = 1000;
+    private long startClickTime;
+    private boolean longClickActive = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -219,11 +254,17 @@ public class ChartDetails extends Activity  {
             case MotionEvent.ACTION_DOWN:
                 eventXTouchDown = eventX;
                 from = Tools.getMillisValueFromDisplayPoint(myContext, eventX, minX, maxX);
+                if (!longClickActive) {
+                    longClickActive = true;
+                    startClickTime = Calendar.getInstance().getTimeInMillis();
+                }
+
 
                 return true;
             case MotionEvent.ACTION_MOVE:
                 // Toast.makeText(this, "move X: " +eventX + " Y: " +eventY ,
                 // Toast.LENGTH_SHORT).show();
+                //longClickActive = false;
                 break;
             case MotionEvent.ACTION_UP:
                 to = Tools.getMillisValueFromDisplayPoint(myContext, eventX, minX, maxX);
@@ -237,21 +278,150 @@ public class ChartDetails extends Activity  {
                 if (eventXTouchDown != 0 && Math.abs(eventXTouchDown - eventX) > 50) {
                     new GetChannelsDetails().execute();
                 } else {
+                    if (longClickActive) {
+                        long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                        if (clickDuration >= MIN_CLICK_DURATION) {
+                            addMultipleGraphs();
+                            longClickActive = false;
+                        }
+                    }
                     //no move, Orientation change must use old from and to
                     from = keepFrom;
                     to = keepTo;
                     SeriesSelection seriesSelection = mChartView.getCurrentSeriesAndPoint();
-                    if (seriesSelection != null && allowPopup) {
+                    if (seriesSelection != null && allowPopup && longClickActive) {
                         allowPopup = false;
                         buttonShowInfoHandler(mChartView, uUIDSOfaddedCharts.get(seriesSelection.getSeriesIndex()));
                     }
                 }
+                longClickActive = false;
                 eventXTouchDown = 0;
                 break;
             default:
                 return false;
         }
         return true;
+    }
+
+    private void addMultipleGraphs() {
+
+        List<CharSequence> channelNames = new ArrayList<CharSequence>();
+
+        int i = 0;
+        final HashMap<String, String> channelsToRequest = new HashMap<String, String>();
+        //get the currently set Channels (in preferences)
+        for (String uuid : PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getAll().keySet()) {
+            // assume its a UUID of a channel
+            if (uuid.contains("-") && uuid.length() == 36) {
+                // is preference checked?
+                if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(uuid, false)) {
+                    channelsToRequest.put(uuid, Tools.getPropertyOfChannel(myContext, uuid, Tools.TAG_TITLE));
+                    i++;
+                }
+            }
+        }
+        boolean[] alreadyChecked = new boolean[i];
+        final ArrayList selectedItems = new ArrayList(i);
+        i = 0;
+        for (Map.Entry<String, String> channelMap : channelsToRequest.entrySet()) {
+
+            if (mUUID.contains("|")) {
+                String[] mUUIDs = (mUUID.split("\\|"));
+                boolean found = false;
+                for (String singleUUID : mUUIDs) {
+                    if (singleUUID.equals(channelMap.getKey())) {
+                        found = true;
+                        break;
+                    } else {
+                        found = false;
+                    }
+                }
+                if (found) {
+                    channelNames.add(channelMap.getValue());
+                    alreadyChecked[i] = true;
+                    selectedItems.add(i, 1);
+                } else {
+                    channelNames.add(channelMap.getValue());
+                    alreadyChecked[i] = false;
+                    selectedItems.add(i, 0);
+                }
+                i++;
+            } else {
+                if (mUUID.equals(channelMap.getKey())) {
+                    channelNames.add(channelMap.getValue());
+                    alreadyChecked[i] = true;
+                    selectedItems.add(i, 1);
+                    i++;
+                } else {
+                    channelNames.add(channelMap.getValue());
+                    alreadyChecked[i] = false;
+                    selectedItems.add(i, 0);
+                    i++;
+                }
+            }
+
+
+            //}
+        }
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
+        builder.setTitle(R.string.MultipleGraphsPopupTitel);
+
+        builder.setMultiChoiceItems(channelNames.toArray(new CharSequence[channelNames.size()]), alreadyChecked, new DialogInterface.OnMultiChoiceClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                //Here you add or remove the items from the list selectedItems. That list will be the result of the user selection.
+                if (isChecked) {
+                    selectedItems.set(which, 1);
+                } else {
+                    selectedItems.set(which, 0);
+                }
+            }
+        });
+
+
+        builder.setPositiveButton(R.string.MultipleGraphsPopupDone, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int indexItem = 0;
+                int countItem = 0;
+                //add UUIDs to mUUID
+                mUUID = "";
+                for (int j = 0; j < selectedItems.size(); j++) {
+                    indexItem = (int) selectedItems.get(j);
+                    if (1 == indexItem) {
+                        for (String UUID : channelsToRequest.keySet()) {
+                            if (j == countItem) {
+                                if ("".equals(mUUID)) {
+                                    mUUID = UUID;
+                                } else {
+                                    mUUID = mUUID + "|" + UUID;
+                                }
+                            }
+                            countItem++;
+                        }
+                    }
+                    countItem = 0;
+                }
+                //force a reload
+                from++;
+                new GetChannelsDetails().execute();
+            }
+        });
+
+        builder.setNegativeButton(R.string.MultipleGraphsPopupCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                //Do something else if you want
+            }
+        });
+
+        builder.create();
+        builder.show();
+
     }
 
     private void createChart() {
@@ -355,6 +525,7 @@ public class ChartDetails extends Activity  {
             cancelButton.setOnClickListener(cancel_button_click_listener);
             DecimalFormat f3 = new DecimalFormat("#0.000");
             DecimalFormat f2 = new DecimalFormat("#0.00");
+            DecimalFormat f1 = new DecimalFormat("#0.0");
             String minValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MIN);
             ((TextView) layout.findViewById(R.id.minWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(minValues.substring(1, minValues.length() - 1).split(",")[0]))));
             ((TextView) layout.findViewById(R.id.minWertIDValue)).setText(f3.format(Double.parseDouble((minValues.substring(1,minValues.length()-1).split(",")[1]))) + " " + unit);
@@ -377,6 +548,9 @@ public class ChartDetails extends Activity  {
                 if("gas".equals(Tools.getPropertyOfChannel(myContext,UUID,Tools.TAG_TYPE)))
                 {
                     ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f3.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 2));
+                    ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f2.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
+                } else if ("water".equals(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_TYPE))) {
+                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f1.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 1));
                     ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f2.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
                 }
                 else {
@@ -436,8 +610,35 @@ public class ChartDetails extends Activity  {
                 // use VZ-Aggregation for faster response
                 String urlExtension = to - from > 604800000 ? "&group=hour" : "";
 
-                // are there child uuids? (in case of a group)
-                if ((Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE)).equals("group")) {
+
+                if (mUUID.contains("|")) {
+                    String[] mUUIDs = (mUUID.split("\\|"));
+
+                    for (String singleUUID : mUUIDs) {
+                        //is there a group in the list?
+                        if ((Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_TYPE)).equals("group")) {                                // are there child uuids? (in case of a group)
+                            String childUUIDs = Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_CHUILDUUIDS);
+                            Log.d("ChartDetails", "childUUIDs: " + childUUIDs);
+
+                            if (null != childUUIDs && !"".equals(childUUIDs)) {
+                                if (childUUIDs.contains("|")) {
+                                    String[] children = (childUUIDs.split("\\|"));
+
+                                    for (String child : children) {
+                                        uRLUUIDs = uRLUUIDs + "&uuid[]=" + child;
+                                    }
+                                } else {
+                                    // only one uuid in childs
+                                    uRLUUIDs = "&uuid[]=" + childUUIDs;
+                                }
+                            }
+
+                        } else {
+                            uRLUUIDs = uRLUUIDs + "&uuid[]=" + singleUUID;
+                        }
+                    }
+                } else if ((Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE)).equals("group")) {
+                    // are there child uuids? (in case of a group)
                     String childUUIDs = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_CHUILDUUIDS);
                     Log.d("ChartDetails", "childUUIDs: " + childUUIDs);
 
@@ -586,6 +787,7 @@ public class ChartDetails extends Activity  {
         outState.putDouble("KeepFrom", keepFrom);
         outState.putDouble("KeepTo", keepTo);
         outState.putString("JSONStr", jsonStr);
+        outState.putString("mUUID", mUUID);
         // outState.putDouble("MCost", mCost);
     }
 }
