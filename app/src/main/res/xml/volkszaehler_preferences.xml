@@ -54,4 +54,13 @@
             android:title="@string/autoReloadTitle" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/VolkszaehlerCat_titleTuplesSettings" >
+        <EditTextPreference
+            android:key="Tuples"
+            android:summary="@string/TuplesSummary"
+            android:title="@string/Tuples"
+            android:defaultValue="1000"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>

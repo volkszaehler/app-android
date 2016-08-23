@@ -79,5 +79,12 @@
     <string name="notrestored">Error restoring settings!</string>
     <string name="WertTimeText">at:</string>
     <string name="aboutLinks"><a href="http://www.volkszaehler.org">http://www.volkszaehler.org</a>\n<a href="http://github.com/volkszaehler/app-android/releases/latest">Download Latest Version</a></string>
+    <string name="MultipleGraphsPopupDone">OK</string>
+    <string name="MultipleGraphsPopupCancel">Cancel</string>
+    <string name="MultipleGraphsPopupTitel">Choose Channels</string>
+    <string name="GesamtTitle">Total</string>
+    <string name="VolkszaehlerCat_titleTuplesSettings">Number of Tuples</string>
+    <string name="TuplesSummary">higher values show more detailed but slower graphs</string>
+    <string name="Tuples">Tuples</string>
 
 </resources>
