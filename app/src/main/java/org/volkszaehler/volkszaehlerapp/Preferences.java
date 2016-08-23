@@ -25,6 +25,7 @@ public class Preferences extends PreferenceActivity {
     private static String url = "http://demo.volkszaehler.org/middleware.php/entity.json";
     private static String uname;
     private static String pwd;
+    private static String tuples;
 
     private ArrayList<HashMap<String, String>> channelList = new ArrayList<>();
 
@@ -50,6 +51,7 @@ public class Preferences extends PreferenceActivity {
                     pwd = prefs.getString("password", "");
                     boolean bZeroBased = prefs.getBoolean("ZeroBasedYAxis", false);
                     boolean bAutoReload = prefs.getBoolean("autoReload", false);
+                    tuples = prefs.getString("Tuples","1000");
 
 
                     // remove all
@@ -59,7 +61,8 @@ public class Preferences extends PreferenceActivity {
                     prefs.edit().putString("username", uname).commit();
                     prefs.edit().putString("password", pwd).commit();
                     prefs.edit().putBoolean("ZeroBasedYAxis", bZeroBased).commit();
-                    prefs.edit().putBoolean("ZeroBasedYAxis", bAutoReload).commit();
+                    prefs.edit().putBoolean("autoReload", bAutoReload).commit();
+                    prefs.edit().putString("Tuples", tuples).commit();
                     // call Channels from VZ installation
                     new GetChannels().execute();
                     return true;

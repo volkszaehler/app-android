@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,6 +64,11 @@ class Tools {
     static final String JSON_DEFINITIONS = "JSONDefinitions";
 
     private static String unit = "";
+
+    static final DecimalFormat f = new DecimalFormat("#0");
+    static final DecimalFormat f0 = new DecimalFormat("#0.0");
+    static final DecimalFormat f00 = new DecimalFormat("#0.00");
+    static final DecimalFormat f000 = new DecimalFormat("#0.000");
 
     private static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
@@ -387,6 +393,7 @@ class Tools {
                 fw.write(JSON_CHANNELS + "=" + prefs.getString(Tools.JSON_CHANNELS, "") + "\n");
                 fw.write(JSON_DEFINITIONS + "=" + prefs.getString(JSON_DEFINITIONS, "") + "\n");
                 fw.write("volkszaehlerURL" + "=" + sharedPrefs.getString("volkszaehlerURL", "") + "\n");
+                fw.write("Tuples" + "=" + sharedPrefs.getString("Tuples", "1000") + "\n");
                 fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
                 fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false"));
             } catch (IOException e) {
@@ -439,6 +446,15 @@ class Tools {
                          continue;
                      }
                      PreferenceManager.getDefaultSharedPreferences(context).edit().putString("volkszaehlerURL", line).commit();
+                 } else if (line.startsWith("Tuples")) {
+                     try {
+                         line = line.split("=")[1];
+                     }
+                     catch (IndexOutOfBoundsException iobx)
+                     {
+                         continue;
+                     }
+                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("Tuples", line).commit();
                  }else if (line.startsWith("ZeroBasedYAxis")) {
                      try {
                          line = line.split("=")[1];

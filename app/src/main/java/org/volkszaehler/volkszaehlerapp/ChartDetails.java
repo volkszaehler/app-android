@@ -523,39 +523,37 @@ public class ChartDetails extends Activity {
 
             Button cancelButton = (Button) layout.findViewById(R.id.end_data_send_button);
             cancelButton.setOnClickListener(cancel_button_click_listener);
-            DecimalFormat f3 = new DecimalFormat("#0.000");
-            DecimalFormat f2 = new DecimalFormat("#0.00");
-            DecimalFormat f1 = new DecimalFormat("#0.0");
+
             String minValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MIN);
             ((TextView) layout.findViewById(R.id.minWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(minValues.substring(1, minValues.length() - 1).split(",")[0]))));
-            ((TextView) layout.findViewById(R.id.minWertIDValue)).setText(f3.format(Double.parseDouble((minValues.substring(1,minValues.length()-1).split(",")[1]))) + " " + unit);
+            ((TextView) layout.findViewById(R.id.minWertIDValue)).setText(Tools.f000.format(Double.parseDouble((minValues.substring(1,minValues.length()-1).split(",")[1]))) + " " + unit);
             String maxValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MAX);
             ((TextView) layout.findViewById(R.id.maxWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(maxValues.substring(1, maxValues.length() - 1).split(",")[0]))));
-            ((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(f3.format(Double.parseDouble((maxValues.substring(1,maxValues.length()-1).split(",")[1]))) + " " + unit);
+            ((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(Tools.f000.format(Double.parseDouble((maxValues.substring(1,maxValues.length()-1).split(",")[1]))) + " " + unit);
 
             //((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MAX))) + " " + unit);
-            ((TextView) layout.findViewById(R.id.avWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_AVERAGE))) + " " + unit);
+            ((TextView) layout.findViewById(R.id.avWertIDValue)).setText(Tools.f000.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_AVERAGE))) + " " + unit);
 
             String lastValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_LAST);
             ((TextView) layout.findViewById(R.id.lastWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(lastValues.substring(1, lastValues.length() - 1).split(",")[0]))));
-            ((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(f3.format(Double.parseDouble((lastValues.substring(1,lastValues.length()-1).split(",")[1]))) + " " + unit);
+            ((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(Tools.f000.format(Double.parseDouble((lastValues.substring(1,lastValues.length()-1).split(",")[1]))) + " " + unit);
 
-            //((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, "letzter"))) + " " + unit);
+            //((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(Tools.f000.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, "letzter"))) + " " + unit);
             ((TextView) layout.findViewById(R.id.rowWertIDValue)).setText(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_ROWS));
 
             String consumptionWert = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_CONSUMPTION);
             if (!"".equals(consumptionWert)) {
                 if("gas".equals(Tools.getPropertyOfChannel(myContext,UUID,Tools.TAG_TYPE)))
                 {
-                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f3.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 2));
-                    ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f2.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
+                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(Tools.f000.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 2));
+                    ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(Tools.f00.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
                 } else if ("water".equals(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_TYPE))) {
-                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f1.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 1));
-                    ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f2.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
+                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(Tools.f0.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 1));
+                    ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(Tools.f00.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
                 }
                 else {
-                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(f3.format(Double.valueOf(consumptionWert)) + " " + unit + "h");
-                    ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(f2.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) / 1000 * Double.valueOf(consumptionWert)) + " €");
+                    ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(Tools.f000.format(Double.valueOf(consumptionWert)) + " " + unit + "h");
+                    ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(Tools.f00.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) / 1000 * Double.valueOf(consumptionWert)) + " €");
                 }
             }
             else
@@ -604,10 +602,9 @@ public class ChartDetails extends Activity {
                 ServiceHandler sh = new ServiceHandler();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ChartDetails.this);
                 String url = sharedPref.getString("volkszaehlerURL", "");
+                String tuples = sharedPref.getString("Tuples", "1000");
 
-                DecimalFormat f = new DecimalFormat("#0");
-
-                // use VZ-Aggregation for faster response
+                // use VZ-Aggregation for faster response if more than one week
                 String urlExtension = to - from > 604800000 ? "&group=hour" : "";
 
 
@@ -659,7 +656,7 @@ public class ChartDetails extends Activity {
                     uRLUUIDs = "&uuid[]=" + mUUID;
                 }
 
-                url = url + "/data.json?from=" + f.format(from) + "&to=" + f.format(to) + "&tuples=1000" + uRLUUIDs + urlExtension;
+                url = url + "/data.json?from=" + Tools.f.format(from) + "&to=" + Tools.f.format(to) + "&tuples="+ tuples + uRLUUIDs + urlExtension;
                 Log.d("CahrtDetails", "request url is: " + url);
 
                 String uname = sharedPref.getString("username", "");

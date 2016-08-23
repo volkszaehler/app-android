@@ -1,15 +1,19 @@
 package org.volkszaehler.volkszaehlerapp;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,10 +21,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ChannelDetails extends Activity {
 
     private String mUUID = "";
     private static Context myContext;
+    private ProgressDialog pDialog;
+    String unit;
+    String jsonStrGesamt ="";
+    boolean strom = false;
+    boolean gas = false;
+    boolean water = false;
+    boolean temp = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +43,13 @@ public class ChannelDetails extends Activity {
         myContext = this;
         // addListenerOnButton();
         Intent i = getIntent();
-        boolean strom = false;
-        boolean gas = false;
-        boolean water = false;
-        boolean temp = false;
         mUUID = i.getStringExtra(Tools.TAG_UUID);
+
+        // after OrientationChange
+        if (savedInstanceState != null) {
+            jsonStrGesamt = savedInstanceState.getString("jsonStrGesamt");
+            unit = savedInstanceState.getString("unit");
+        }
 
         String typeOfChannel = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE);
         switch (typeOfChannel) {
@@ -52,6 +69,7 @@ public class ChannelDetails extends Activity {
             default:
                 Log.e("ChannelDetails", "Unknown channel type: " + typeOfChannel);
         }
+
         //empty color, default = blue
         String col = "".equals(Tools.getPropertyOfChannel(myContext, mUUID, "color")) ? "blue" :Tools.getPropertyOfChannel(myContext, mUUID, "color");
 
@@ -83,17 +101,20 @@ public class ChannelDetails extends Activity {
 
         ((TextView) findViewById(R.id.textViewDescription)).setText(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_DESCRIPTION));
         try {
-            DecimalFormat f0 = new DecimalFormat("#0.0");
-            DecimalFormat f00 = new DecimalFormat("#0.00");
-
-            double sCost = Double.valueOf(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_COST));
-            double sResolution = Double.valueOf(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_RESOLUTION));
-            if (strom || gas) {
-                ((TextView) findViewById(R.id.textViewCost)).setText(f0.format(sCost * 100) + Units.CENT);
-            } else if (water) {
-                ((TextView) findViewById(R.id.textViewCost)).setText(f00.format(sCost * sResolution * 1000) + Units.EUROpermmm);
-            } else if (temp) {
+            String sCost = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_COST);
+            if(!"".equals(sCost)) {
+                double dCost = Double.valueOf(sCost);
+                if (strom || gas) {
+                    ((TextView) findViewById(R.id.textViewCost)).setText(Tools.f0.format(dCost * 100) + Units.CENT);
+                } else if (water) {
+                    double sResolution = Double.valueOf(Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_RESOLUTION));
+                    ((TextView) findViewById(R.id.textViewCost)).setText(Tools.f00.format(dCost * sResolution * 1000) + Units.EUROpermmm);
+                }
+            }
+            else  {
                 // no cost
+                ((TextView) findViewById(R.id.textViewTitleCost)).setVisibility(View.GONE);
+                ((TextView) findViewById(R.id.textViewCost)).setVisibility(View.GONE);
             }
         } catch (NumberFormatException nfe) {
             Log.e("ChannelDetails", "strange costs: " + Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_COST));
@@ -118,6 +139,110 @@ public class ChannelDetails extends Activity {
             ((TextView) findViewById(R.id.textViewTitleChildren)).setText("");
         }
 
+        String initialConsumption = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_INITIALCONSUMPTION);
+        if ("".equals(jsonStrGesamt) && !"".equals(initialConsumption)) {
+            unit = Tools.getUnit(myContext,typeOfChannel ,mUUID);
+            if("gas".equals(typeOfChannel))
+            {
+                unit = unit.substring(0, 2);
+            } else if ("water".equals(typeOfChannel)) {
+                unit =  unit.substring(0, 1);
+            }
+            else {
+                unit = "k"+ unit + "h";
+            }
+            new GetTotalConsumtion().execute(initialConsumption);
+        }
+        else if (!"".equals(jsonStrGesamt))
+        {
+            ((TextView) findViewById(R.id.textViewGesamt)).setText(jsonStrGesamt + " " + unit);
+        }
+        else
+        {
+            //remove consumption from dialog
+            ((TextView) findViewById(R.id.textViewTitleGesamt)).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.textViewGesamt)).setVisibility(View.GONE);
+        }
+    }
+
+    private class GetTotalConsumtion extends AsyncTask<String, Void, String> {
+        boolean JSONFehler = false;
+        String fehlerAusgabe = "";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(ChannelDetails.this);
+            pDialog.setMessage(getString(R.string.please_wait));
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... arg0) {
+            // Creating service handler class instance
+            ServiceHandler sh = new ServiceHandler();
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ChannelDetails.this);
+            String url = sharedPref.getString("volkszaehlerURL", "");
+            String urlDef = url + "/data/"+mUUID+".json?from=0&tuples=1&group=day";
+
+            String uname = sharedPref.getString("username", "");
+            String pwd = sharedPref.getString("password", "");
+            Log.d("ChannelDetails", "urlDef: " + urlDef);
+
+            // Making a request to url and getting response
+            if (uname.equals("")) {
+                jsonStrGesamt = sh.makeServiceCall(urlDef, ServiceHandler.GET);
+            } else {
+                jsonStrGesamt = sh.makeServiceCall(urlDef, ServiceHandler.GET, null, uname, pwd);
+            }
+            if (jsonStrGesamt != null) {
+                if (!jsonStrGesamt.startsWith("{\"version\":\"0.3\",\"data")) {
+                    JSONFehler = true;
+                    fehlerAusgabe = jsonStrGesamt;
+                } else {
+                    Log.d("ChannelDetails", "jsonStrGesamt: " + jsonStrGesamt);
+                    try {
+                        if (gas)
+                        {
+                            jsonStrGesamt = String.valueOf(Tools.f000.format(new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0])));
+                        }
+                        else if (strom)
+                        {
+                            jsonStrGesamt = String.valueOf(Tools.f000.format((new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0]) * 1000)/1000));
+                        }
+                        else if (water)
+                        {
+                            jsonStrGesamt = String.valueOf(Tools.f0.format(new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0])));
+                        }
+                    } catch (JSONException je) {
+                        Log.e("ChannelDetails", je.getMessage());
+                    }
+                }
+            } else {
+                Log.e("ChannelDetails", "Couldn't get any data from the url");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                // Dismiss the progress dialog
+                if (pDialog.isShowing())
+                    pDialog.dismiss();
+            } catch (Exception e) {
+                // handle Exception
+            }
+            if (JSONFehler) {
+                    new AlertDialog.Builder(ChannelDetails.this).setTitle(getString(R.string.Error)).setMessage(fehlerAusgabe).setNeutralButton(getString(R.string.Close), null).show();
+            } else {
+                    ((TextView) findViewById(R.id.textViewGesamt)).setText(jsonStrGesamt + " " + unit);
+            }
+        }
     }
 
     public void chartsDetailsHandler(View view) {
@@ -224,4 +349,10 @@ public class ChannelDetails extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("jsonStrGesamt", jsonStrGesamt);
+        outState.putString("unit", unit);
+    }
+
 }

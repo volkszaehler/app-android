@@ -251,7 +251,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
 
                     long millisNow = System.currentTimeMillis();
                     long plus1second = millisNow + 1000;
-                    url = url + "/data.json?from=" + millisNow + "&to=" + plus1second + "&tuples=1" + uRLUUIDs;
+                    url = url + "/data.json?from=now&" + uRLUUIDs;
 
                     Log.d("MainActivity: ", "url: " + url);
 

@@ -81,5 +81,8 @@
     <string name="MultipleGraphsPopupCancel">Abbrechen</string>
     <string name="MultipleGraphsPopupTitel">Channels wählen</string>
     <string name="GesamtTitle">Gesamt</string>
+    <string name="VolkszaehlerCat_titleTuplesSettings">Anzahl Tuples</string>
+    <string name="TuplesSummary">höhere Werte führen zu detaillierteren, aber langsameren Graphen</string>
+    <string name="Tuples">Tuples</string>
 
 </resources>
