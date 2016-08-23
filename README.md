@@ -4,12 +4,12 @@ App Language: english, deutsch
 
 Download: [https://github.com/volkszaehler/app-android/releases/latest](https://github.com/volkszaehler/app-android/releases/latest "Latest Release")
 
-![ScreenShot1](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:uebersicht.png "ScreenShots 1 of VolkszaehlerApp") 
-![ScreenShot2](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:details.png "ScreenShots 2 of VolkszaehlerApp") 
-![ScreenShot3](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:grafik.png "ScreenShots 3 of VolkszaehlerApp") 
-![ScreenShot4](http://wiki.volkszaehler.org/lib/exe/fetch.php?cache=&w=393&h=700&media=software:frontends:vz_app:einstellungen.png "ScreenShots 4 of VolkszaehlerApp") 
+![ScreenShot1](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/uebersicht.png "ScreenShots 1 of VolkszaehlerApp") 
+![ScreenShot2](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/details.png "ScreenShots 2 of VolkszaehlerApp") 
+![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png "ScreenShots 3 of VolkszaehlerApp") 
+![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png "ScreenShots 4 of VolkszaehlerApp") 
 
-## VolkszählerApp für Android, Version 0.8.7
+## VolkszählerApp für Android, Version 0.8.8
 ---
 
 Funktionen:  
@@ -17,6 +17,7 @@ Funktionen:
 - Abrufen der Channelinformationen und Anzeige der letzten Werte
 - Anzeigen von Details zu jedem Channel
 - Anzeigen von Charts zu einzelnen Channels, incl. Zoom, auch mit „Touch and Move“ im Diagramm
+- Anzeigen von Gruppen-Charts und Hinzufügen weiterer Graphen ist möglich ("Long Touch" im Chart)
 - Unterstützung von Basic Authentication und HTTPS, **_ABER das Zertifikat wird nicht wirklich geprüft_**   , es werden auch ungültige oder Man-in-the-Middle-Zertifikate akzeptiert
 - Einstellungen können (z.B. vor einem Update) gesichert und (nach dem Update/Neuinstallation) wieder eingespielt werden
 
@@ -34,7 +35,7 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
   
   
 English:
-## VolkszaehlerApp for Android, Version 0.8.7
+## VolkszaehlerApp for Android, Version 0.8.8
 ---
 
 Features:  
@@ -42,6 +43,7 @@ Features:
 - Download of Channel Information and Display of recent Values
 - Shows Details for all Channels
 - Shows Charts for every Channel, supports Zoom, (Touch and Move)
+- Shows Charts of Groups, it is possible to add further graphs (use "Long Touch" in chart screen)
 - Supports Basic Authentication und HTTPS, **_BUT the certificate is not really checked_**, the app accepts also invalid or Man-in-the-Middle certificates
 - Settings can be saved (e.g. before updating) and can be restored (after the Update/Re-installation)
 
@@ -59,6 +61,18 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 ###Version history:
 ---
+
+###Version 0.8.8
+####New  
+ - It is now possible to have several graphs in one chart, use "Long Press" in chart view, Limitation: there is only one y-Axis
+ - ChannelDetails show now the total value if an initial value is set for the channel
+ - Number of Tuples can be set now (default is 1000), a higher number makes the Charts more detailled (as long as there are enough values in the database), but slows down the charts
+   
+####Fixed 
+ - fixed display issues with Channels of type "water" and costs
+ 
+####Changed
+ - small optimizations
 
 ###Version 0.8.7
 ####Fixed  
