@@ -4,10 +4,10 @@ App Language: english, deutsch
 
 Download: [https://github.com/volkszaehler/app-android/releases/latest](https://github.com/volkszaehler/app-android/releases/latest "Latest Release")
 
-![ScreenShot1](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/uebersicht.png "ScreenShots 1 of VolkszaehlerApp") 
-![ScreenShot2](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/details.png "ScreenShots 2 of VolkszaehlerApp") 
-![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png "ScreenShots 3 of VolkszaehlerApp") 
-![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png "ScreenShots 4 of VolkszaehlerApp") 
+![ScreenShot1](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/uebersicht.png?w=200&tok=2908a1 "ScreenShots 1 of VolkszaehlerApp") 
+![ScreenShot2](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/details.png?w=200&tok=60ff35 "ScreenShots 2 of VolkszaehlerApp") 
+![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200&tok=3e01fa "ScreenShots 3 of VolkszaehlerApp") 
+![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
 ## VolkszählerApp für Android, Version 0.8.8
 ---
