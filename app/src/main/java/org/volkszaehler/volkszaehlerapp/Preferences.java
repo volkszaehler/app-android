@@ -1,8 +1,5 @@
 package org.volkszaehler.volkszaehlerapp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -16,6 +13,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Preferences extends PreferenceActivity {
     private boolean newChannels = false;
@@ -175,29 +178,31 @@ public class Preferences extends PreferenceActivity {
                 jsonStr = sh.makeServiceCall(url, ServiceHandler.GET, null, uname, pwd);
                 jsonStrDef = sh.makeServiceCall(urlDef, ServiceHandler.GET, null, uname, pwd);
             }
-            if (jsonStr != null) {
-                if (!jsonStr.startsWith("{\"version\":\"0.3\",\"entities")) {
+            if (jsonStr.startsWith("Error: ") || jsonStrDef.startsWith("Error: ")) {
+                //{"version":"0.3","entities
                     JSONFehler = true;
-                    fehlerAusgabe = jsonStr;
-                } else {
-                    newChannels = true;
-                    Log.d("Preferences", "jsonStr: " + jsonStr);
-                    // store all channel stuff in a shared preference
-                    getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
-                }
-                if (!jsonStrDef.startsWith("{\"version\":\"0.3\",\"capabilities")) {
-                    JSONFehler2 = true;
-                    fehlerAusgabe2 = jsonStrDef;
-                } else {
-                    Log.d("Preferences", "jsonStrDef: " + jsonStrDef);
-                    // store all definitions stuff in a shared preference
-                    getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, jsonStrDef).commit();
-
-                }
+                    fehlerAusgabe = jsonStr + " | " +jsonStrDef;;
             } else {
-                Log.e("Preferences", "Couldn't get any data from the url");
-            }
+                try {
+                    JSONObject jsonStrObj = new JSONObject(jsonStr);
+                    JSONObject jsonStrDefObj = new JSONObject(jsonStrDef);
+                    if(jsonStrObj.has("entities")) {
+                        newChannels = true;
+                        Log.d("Preferences", "jsonStr: " + jsonStr);
+                        // store all channel stuff in a shared preference
+                        getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
+                    }
+                    if (jsonStrDefObj.has("capabilities")) {
+                        Log.d("Preferences", "jsonStrDef: " + jsonStrDef);
+                        // store all definitions stuff in a shared preference
+                        getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, jsonStrDef).commit();
+                    }
+                } catch (JSONException e) {
+                    JSONFehler = true;
+                    fehlerAusgabe = jsonStr + " | " +jsonStrDef;
+                }
 
+            }
             return null;
         }
 
@@ -209,7 +214,6 @@ public class Preferences extends PreferenceActivity {
                 if (pDialog.isShowing())
                     pDialog.dismiss();
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 // handle Exception
             }
             if (JSONFehler || JSONFehler2) {
