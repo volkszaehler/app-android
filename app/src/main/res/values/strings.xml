@@ -12,9 +12,11 @@
     <string name="VolkszaehlerCat_titleURL">Volkszaehler URL</string>
     <string name="PrefChannelsSummary">The Channels get from the Volkszaehler installation</string>
     <string name="knownChannels">List of known Channels</string>
-    <string name="getChannelsButtonSummary">Click to get the channels list.</string>
-    <string name="getChannelsText">Get Channels</string>
-    <string name="VolkszaehlerCat_titleButton">ReLoad Channels</string>
+    <string name="getChannelsButtonSummary">Click to get all Channels.</string>
+    <string name="getChannelsText">Load Channels</string>
+    <string name="privateChannelUUIDSummary">Enter UUIDs of private Channels, comma separated, e.g. uuid1,uuid2</string>
+    <string name="privateChannelUUID">Add UUIDs manually</string>
+    <string name="VolkszaehlerCat_titleButton">Get Channels</string>
     <string name="CallData">Requesting data from Volkszaehler…</string>
     <string name="buttonRefresh">ReLoad</string>
     <string name="ChannelDetailHeader">Channel Details</string>

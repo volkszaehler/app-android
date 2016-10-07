@@ -14,7 +14,9 @@
     <string name="knownChannels">Liste der bekannten Kanäle</string>
     <string name="getChannelsButtonSummary">Klicken um Kanäle abzurufen</string>
     <string name="getChannelsText">Kanäle abrufen</string>
-    <string name="VolkszaehlerCat_titleButton">Kanäle neuladen</string>
+    <string name="VolkszaehlerCat_titleButton">Kanäle hinzufügen</string>
+    <string name="privateChannelUUIDSummary">UUIDs privater Kanäle hinzufügen, kommasepariert, z.B.: uuid1,uuid2</string>
+    <string name="privateChannelUUID">UUIDs manuell hinzufügen</string>
     <string name="CallData">Rufe Daten von der Volkszählerinstallation ab…</string>
     <string name="buttonRefresh">NeuLaden</string>
     <string name="ChannelDetailHeader">Kanaldetails</string>

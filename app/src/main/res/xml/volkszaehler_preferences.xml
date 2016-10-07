@@ -32,6 +32,10 @@
     <PreferenceCategory
         android:key="channel_preference_button_category"
         android:title="@string/VolkszaehlerCat_titleButton" >
+        <EditTextPreference
+            android:key="privateChannelUUIDs"
+            android:summary="@string/privateChannelUUIDSummary"
+            android:title="@string/privateChannelUUID" />
         <Preference
             android:key="getChannelsButton"
             android:summary="@string/getChannelsButtonSummary"
