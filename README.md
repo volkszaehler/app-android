@@ -95,7 +95,7 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 ###Version 0.8.6
 ####Fixed  
  - empty Channel Color causes crash  
- - Umlauts in host name causes crash
+ - Umlauts in host name cause crash
 
 ###Version 0.8.5
 ####Changed  
