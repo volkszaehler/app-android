@@ -1,26 +1,5 @@
 package org.volkszaehler.volkszaehlerapp;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.achartengine.ChartFactory;
-import org.achartengine.GraphicalView;
-import org.achartengine.model.SeriesSelection;
-import org.achartengine.model.TimeSeries;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -47,6 +26,26 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
+import org.achartengine.model.SeriesSelection;
+import org.achartengine.model.TimeSeries;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+import org.achartengine.renderer.XYSeriesRenderer;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 
 public class ChartDetails extends Activity {
 
@@ -56,7 +55,7 @@ public class ChartDetails extends Activity {
 
     private final XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
-    private final XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+    private final XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer(2);
 
     private GraphicalView mChartView;
 
@@ -305,10 +304,10 @@ public class ChartDetails extends Activity {
 
     private void addMultipleGraphs() {
 
-        List<CharSequence> channelNames = new ArrayList<CharSequence>();
+        List<CharSequence> channelNames = new ArrayList<>();
 
         int i = 0;
-        final HashMap<String, String> channelsToRequest = new HashMap<String, String>();
+        final HashMap<String, String> channelsToRequest = new HashMap<>();
         //get the currently set Channels (in preferences)
         for (String uuid : PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getAll().keySet()) {
             // assume its a UUID of a channel
@@ -670,40 +669,35 @@ public class ChartDetails extends Activity {
                 }
             }
 
-            if (jsonStr != null) {
-                if (!jsonStr.startsWith("{\"version\":\"0.3\",\"data")) {
+            if (jsonStr.startsWith("Error: ")) {
                     JSONFehler = true;
                     fehlerAusgabe = jsonStr;
-                } else {
-
-                    // store all data stuff in a shared preference
-                    getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannelsData", jsonStr).commit();
-
-                    JSONObject jsonObj;
-                    try {
-                        jsonObj = new JSONObject(jsonStr);
-                        werte = jsonObj.getJSONArray(Tools.TAG_DATA);
-                        for (int l = 0; l < werte.length(); l++) {
-                            JSONObject c = werte.getJSONObject(l);
-                            if (c.has(Tools.TAG_TUPLES)) {
-                                JSONArray tuples = c.getJSONArray(Tools.TAG_TUPLES);
-                                // at least one with tuples
-                                JSONFehler = false;
-                                break;
-                            } else {
-                                JSONFehler = true;
-                                fehlerAusgabe = "no tuples data";
-                            }
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
             } else {
-                Log.e("ChartDetails", "Couldn't get any data from the url");
-            }
 
+                // store all data stuff in a shared preference
+                getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannelsData", jsonStr).commit();
+
+                JSONObject jsonObj;
+                try {
+                    jsonObj = new JSONObject(jsonStr);
+                    werte = jsonObj.getJSONArray(Tools.TAG_DATA);
+                    for (int l = 0; l < werte.length(); l++) {
+                        JSONObject c = werte.getJSONObject(l);
+                        if (c.has(Tools.TAG_TUPLES)) {
+                            JSONArray tuples = c.getJSONArray(Tools.TAG_TUPLES);
+                            // at least one with tuples
+                            JSONFehler = false;
+                            break;
+                        } else {
+                            JSONFehler = true;
+                            fehlerAusgabe = "no tuples data";
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
             return null;
         }
 
@@ -715,7 +709,6 @@ public class ChartDetails extends Activity {
                 if (pDialog.isShowing())
                     pDialog.dismiss();
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 // handle Exception
             }
             if (JSONFehler) {

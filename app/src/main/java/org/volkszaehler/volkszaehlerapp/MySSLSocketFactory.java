@@ -1,5 +1,7 @@
 package org.volkszaehler.volkszaehlerapp;
 
+import org.apache.http.conn.ssl.SSLSocketFactory;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.security.KeyManagementException;
@@ -13,8 +15,6 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import org.apache.http.conn.ssl.SSLSocketFactory;
 
 class MySSLSocketFactory extends SSLSocketFactory {
     private final SSLContext sslContext = SSLContext.getInstance("TLS");

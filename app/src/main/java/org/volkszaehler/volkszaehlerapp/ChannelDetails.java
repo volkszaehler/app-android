@@ -1,9 +1,5 @@
 package org.volkszaehler.volkszaehlerapp;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -21,21 +17,24 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ChannelDetails extends Activity {
 
     private String mUUID = "";
     private static Context myContext;
     private ProgressDialog pDialog;
-    String unit;
-    String jsonStrGesamt ="";
-    boolean strom = false;
-    boolean gas = false;
-    boolean water = false;
-    boolean temp = false;
+    private String unit;
+    private String jsonStrGesamt ="";
+    private boolean strom = false;
+    private boolean gas = false;
+    private boolean water = false;
+    private boolean temp = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,8 +112,8 @@ public class ChannelDetails extends Activity {
             }
             else  {
                 // no cost
-                ((TextView) findViewById(R.id.textViewTitleCost)).setVisibility(View.GONE);
-                ((TextView) findViewById(R.id.textViewCost)).setVisibility(View.GONE);
+                findViewById(R.id.textViewTitleCost).setVisibility(View.GONE);
+                findViewById(R.id.textViewCost).setVisibility(View.GONE);
             }
         } catch (NumberFormatException nfe) {
             Log.e("ChannelDetails", "strange costs: " + Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_COST));
@@ -160,8 +159,8 @@ public class ChannelDetails extends Activity {
         else
         {
             //remove consumption from dialog
-            ((TextView) findViewById(R.id.textViewTitleGesamt)).setVisibility(View.GONE);
-            ((TextView) findViewById(R.id.textViewGesamt)).setVisibility(View.GONE);
+            findViewById(R.id.textViewTitleGesamt).setVisibility(View.GONE);
+            findViewById(R.id.textViewGesamt).setVisibility(View.GONE);
         }
     }
 
@@ -198,31 +197,23 @@ public class ChannelDetails extends Activity {
             } else {
                 jsonStrGesamt = sh.makeServiceCall(urlDef, ServiceHandler.GET, null, uname, pwd);
             }
-            if (jsonStrGesamt != null) {
-                if (!jsonStrGesamt.startsWith("{\"version\":\"0.3\",\"data")) {
-                    JSONFehler = true;
-                    fehlerAusgabe = jsonStrGesamt;
-                } else {
-                    Log.d("ChannelDetails", "jsonStrGesamt: " + jsonStrGesamt);
-                    try {
-                        if (gas)
-                        {
-                            jsonStrGesamt = String.valueOf(Tools.f000.format(new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0])));
-                        }
-                        else if (strom)
-                        {
-                            jsonStrGesamt = String.valueOf(Tools.f000.format((new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0]) * 1000)/1000));
-                        }
-                        else if (water)
-                        {
-                            jsonStrGesamt = String.valueOf(Tools.f0.format(new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0])));
-                        }
-                    } catch (JSONException je) {
-                        Log.e("ChannelDetails", je.getMessage());
-                    }
-                }
+
+            if (jsonStrGesamt.startsWith("Error: ")) {
+                JSONFehler = true;
+                fehlerAusgabe = jsonStrGesamt;
             } else {
-                Log.e("ChannelDetails", "Couldn't get any data from the url");
+                Log.d("ChannelDetails", "jsonStrGesamt: " + jsonStrGesamt);
+                try {
+                    if (gas) {
+                        jsonStrGesamt = String.valueOf(Tools.f000.format(new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0])));
+                    } else if (strom) {
+                        jsonStrGesamt = String.valueOf(Tools.f000.format((new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0]) * 1000) / 1000));
+                    } else if (water) {
+                        jsonStrGesamt = String.valueOf(Tools.f0.format(new JSONObject(jsonStrGesamt).getJSONObject(Tools.TAG_DATA).getDouble(Tools.TAG_CONSUMPTION) + Double.valueOf(arg0[0])));
+                    }
+                } catch (JSONException je) {
+                    Log.e("ChannelDetails", je.getMessage());
+                }
             }
             return null;
         }

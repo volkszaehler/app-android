@@ -1,14 +1,7 @@
 package org.volkszaehler.volkszaehlerapp;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.IDN;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.KeyStore;
-import java.util.List;
+import android.util.Base64;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -32,9 +25,18 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import android.util.Base64;
-import android.util.Log;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.IDN;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.KeyStore;
+import java.util.List;
 
 class ServiceHandler {
 
@@ -107,7 +109,7 @@ class ServiceHandler {
     }
 
     public String makeServiceCall(String url, int method, List<NameValuePair> params, String uname, String pwd) {
-        String response;
+        String response ="";
 
         try {
             // http client
@@ -142,18 +144,36 @@ class ServiceHandler {
                 }
                 httpResponse = httpClient.execute(httpGet);
             }
+
             httpEntity = httpResponse.getEntity();
             response = EntityUtils.toString(httpEntity);
 
+            if(200 == (httpResponse.getStatusLine().getStatusCode()))
+            {
+                try {
+                    JSONObject jsonObj = new JSONObject(response);
+                } catch (JSONException e) {
+                    //no JSON response
+                    response = "Error: " + response;
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                //error occurred
+                response = "Error: " + httpResponse.getStatusLine() + " " + response;
+            }
+
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return e.getMessage();
+            return "Error: " + e.getMessage();
         } catch (ClientProtocolException e) {
             e.printStackTrace();
-            return e.getMessage();
+            return "Error: " + e.getMessage();
         } catch (IOException e) {
             e.printStackTrace();
-            return e.getMessage();
+            return "Error: " + e.getMessage();
         }
         return response;
     }

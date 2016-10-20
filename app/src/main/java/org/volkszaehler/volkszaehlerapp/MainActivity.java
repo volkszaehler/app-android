@@ -1,12 +1,5 @@
 package org.volkszaehler.volkszaehlerapp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -30,6 +23,13 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class MainActivity<ViewGroup> extends ListActivity {
     private static Context myContext;
@@ -250,8 +250,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     String url = sharedPref.getString("volkszaehlerURL", "");
 
                     long millisNow = System.currentTimeMillis();
-                    long plus1second = millisNow + 1000;
-                    url = url + "/data.json?from=now&" + uRLUUIDs;
+                    url = url + "/data.json?from=now" + uRLUUIDs;
 
                     Log.d("MainActivity: ", "url: " + url);
 
@@ -267,16 +266,18 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     Log.d("MainActivity", "response: " + jsonStr);
                 }
 
-                if (jsonStr != null) {
-                    if (!jsonStr.startsWith("{\"version\":\"0.3\",\"data")) {
+                if (jsonStr.startsWith("Error: ")) {
                         JSONFehler = true;
                         fehlerAusgabe = android.text.Html.fromHtml(jsonStr).toString();
-                        if (jsonStr.startsWith("{\"version\":\"0.3\"}")) {
-                            fehlerAusgabe = fehlerAusgabe + "\n" + getString(R.string.no_ChannelsSelected);
-                        }
 
+
+                } else {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    if (!jsonObj.has(Tools.TAG_DATA)) {
+                        JSONFehler = true;
+                        fehlerAusgabe = fehlerAusgabe + "\n" + getString(R.string.no_ChannelsSelected);
                     } else {
-                        JSONObject jsonObj = new JSONObject(jsonStr);
 
                         // Getting JSON Array node
                         werte = jsonObj.getJSONArray(Tools.TAG_DATA);
@@ -312,8 +313,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                             String rows = c.has(Tools.TAG_ROWS) ? c.getString(Tools.TAG_ROWS) : "";
                             if (c.has(Tools.TAG_TUPLES)) {
                                 JSONArray tuples = c.getJSONArray(Tools.TAG_TUPLES);
-                                if(tuples.length()<1)
-                                {
+                                if (tuples.length() < 1) {
                                     continue;
                                 }
                                 // only one tuple (in URL), otherwise loop here
@@ -388,7 +388,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 HashMap<String, String> items = (HashMap<String, String>) getListView().getItemAtPosition(position);
 
                 //empty color, default = blue
-                String col = "".equals(items.get(Tools.TAG_COLOR)) ? "blue" : items.get(Tools.TAG_COLOR);
+                String col = "".equals(items.get(Tools.TAG_COLOR)) ? "#0000FF" : items.get(Tools.TAG_COLOR);
 
                 if (col.startsWith("#")) {
                     ((TextView) view.findViewById(R.id.channelName)).setTextColor(Color.parseColor(col.toUpperCase(Locale.getDefault())));
