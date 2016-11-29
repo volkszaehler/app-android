@@ -394,6 +394,7 @@ class Tools {
                 fw.write(JSON_DEFINITIONS + "=" + prefs.getString(JSON_DEFINITIONS, "") + "\n");
                 fw.write("volkszaehlerURL" + "=" + sharedPrefs.getString("volkszaehlerURL", "") + "\n");
                 fw.write("Tuples" + "=" + sharedPrefs.getString("Tuples", "1000") + "\n");
+                fw.write("privateChannelUUIDs" + "=" + sharedPrefs.getString("privateChannelUUIDs", "") + "\n");
                 fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
                 fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false"));
             } catch (IOException e) {
@@ -455,7 +456,16 @@ class Tools {
                          continue;
                      }
                      PreferenceManager.getDefaultSharedPreferences(context).edit().putString("Tuples", line).commit();
-                 }else if (line.startsWith("ZeroBasedYAxis")) {
+                 } else if (line.startsWith("privateChannelUUIDs")) {
+                     try {
+                         line = line.split("=")[1];
+                     }
+                     catch (IndexOutOfBoundsException iobx)
+                     {
+                         continue;
+                     }
+                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("privateChannelUUIDs", line).commit();
+                 } else if (line.startsWith("ZeroBasedYAxis")) {
                      try {
                          line = line.split("=")[1];
                      }

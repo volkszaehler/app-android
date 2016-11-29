@@ -55,7 +55,7 @@ public class ChartDetails extends Activity {
 
     private final XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
-    private final XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+    private final XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer(2);
 
     private GraphicalView mChartView;
 

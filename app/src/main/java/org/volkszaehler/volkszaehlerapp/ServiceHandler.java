@@ -145,10 +145,11 @@ class ServiceHandler {
                 httpResponse = httpClient.execute(httpGet);
             }
 
+            httpEntity = httpResponse.getEntity();
+            response = EntityUtils.toString(httpEntity);
+
             if(200 == (httpResponse.getStatusLine().getStatusCode()))
             {
-                httpEntity = httpResponse.getEntity();
-                response = EntityUtils.toString(httpEntity);
                 try {
                     JSONObject jsonObj = new JSONObject(response);
                 } catch (JSONException e) {
@@ -160,7 +161,7 @@ class ServiceHandler {
             else
             {
                 //error occurred
-                response = "Error: " + response;
+                response = "Error: " + httpResponse.getStatusLine() + " " + response;
             }
 
 

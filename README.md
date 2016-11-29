@@ -9,7 +9,7 @@ Download: [https://github.com/volkszaehler/app-android/releases/latest](https://
 ![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200&tok=3e01fa "ScreenShots 3 of VolkszaehlerApp") 
 ![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
-## VolkszählerApp für Android, Version 0.8.8
+## VolkszählerApp für Android, Version 0.8.9
 ---
 
 Funktionen:  
@@ -35,7 +35,7 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
   
   
 English:
-## VolkszaehlerApp for Android, Version 0.8.8
+## VolkszaehlerApp for Android, Version 0.8.9
 ---
 
 Features:  
@@ -62,17 +62,28 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 ###Version history:
 ---
 
-###Version 0.8.8
+###Version 0.8.9
 ####New  
- - It is now possible to have several graphs in one chart, use "Long Press" in chart view, Limitation: there is only one y-Axis
- - ChannelDetails show now the total value if an initial value is set for the channel
- - Number of Tuples can be set now (default is 1000), a higher number makes the Charts more detailled (as long as there are enough values in the database), but slows down the charts
+ - Private channels can be manually added in preferences, if there are more than one, add them comma separated like uuid1,uuid2,uuid3
    
 ####Fixed 
- - fixed display issues with Channels of type "water" and costs
+ - better error handling, works with older Volkszaehler version now
  
 ####Changed
- - small optimizations
+  - small optimizations ([Font Size](https://github.com/volkszaehler/app-android/issues/16), [Values can be copied](https://github.com/volkszaehler/app-android/issues/14))
+ 
+ 
+###Version 0.8.8
+####New  
+  - It is now possible to have several graphs in one chart, use "Long Press" in chart view, Limitation: there is only one y-Axis
+  - ChannelDetails show now the total value if an initial value is set for the channel
+  - Number of Tuples can be set now (default is 1000), a higher number makes the Charts more detailled (as long as there are enough values in the database), but slows down the charts
+    
+####Fixed 
+  - fixed display issues with Channels of type "water" and costs
+  
+####Changed
+  - small optimizations
 
 ###Version 0.8.7
 ####Fixed  
@@ -84,7 +95,7 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 ###Version 0.8.6
 ####Fixed  
  - empty Channel Color causes crash  
- - Umlauts in host name causes crash
+ - Umlauts in host name cause crash
 
 ###Version 0.8.5
 ####Changed  

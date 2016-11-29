@@ -250,7 +250,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     String url = sharedPref.getString("volkszaehlerURL", "");
 
                     long millisNow = System.currentTimeMillis();
-                    url = url + "/data.json?from=now&" + uRLUUIDs;
+                    url = url + "/data.json?from=now" + uRLUUIDs;
 
                     Log.d("MainActivity: ", "url: " + url);
 
@@ -275,6 +275,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     JSONObject jsonObj = new JSONObject(jsonStr);
 
                     if (!jsonObj.has(Tools.TAG_DATA)) {
+                        JSONFehler = true;
                         fehlerAusgabe = fehlerAusgabe + "\n" + getString(R.string.no_ChannelsSelected);
                     } else {
 
