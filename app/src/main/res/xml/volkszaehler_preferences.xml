@@ -32,6 +32,10 @@
     <PreferenceCategory
         android:key="channel_preference_button_category"
         android:title="@string/VolkszaehlerCat_titleButton" >
+        <EditTextPreference
+            android:key="privateChannelUUIDs"
+            android:summary="@string/privateChannelUUIDSummary"
+            android:title="@string/privateChannelUUID" />
         <Preference
             android:key="getChannelsButton"
             android:summary="@string/getChannelsButtonSummary"
@@ -52,6 +56,15 @@
             android:key="autoReload"
             android:summary="@string/autoReloadSummary"
             android:title="@string/autoReloadTitle" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/VolkszaehlerCat_titleTuplesSettings" >
+        <EditTextPreference
+            android:key="Tuples"
+            android:summary="@string/TuplesSummary"
+            android:title="@string/Tuples"
+            android:defaultValue="1000"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

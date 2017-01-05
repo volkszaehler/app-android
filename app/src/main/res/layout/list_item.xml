@@ -43,5 +43,5 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#5d5d5d"
         android:textStyle="bold" />
- 
+
 </RelativeLayout>

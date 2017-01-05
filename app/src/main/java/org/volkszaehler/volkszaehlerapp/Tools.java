@@ -1,19 +1,5 @@
 package org.volkszaehler.volkszaehlerapp;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-
-import org.achartengine.model.TimeSeries;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -27,6 +13,21 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import org.achartengine.model.TimeSeries;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 class Tools {
 
@@ -55,12 +56,19 @@ class Tools {
     static final String TAG_ROWS = "rows";
     static final String TAG_FROM = "from";
     static final String TAG_TO = "to";
+    static final String TAG_RESOLUTION = "resolution";
+    static final String TAG_INITIALCONSUMPTION = "initialconsumption";
     private static final String BACKUP_FILENAME = "volkszaehler_settings_backup.txt";
     static final String JSON_CHANNELS = "JSONChannels";
     static final String JSON_CHANNEL_PREFS = "JSONChannelPrefs";
     static final String JSON_DEFINITIONS = "JSONDefinitions";
 
     private static String unit = "";
+
+    static final DecimalFormat f = new DecimalFormat("#0");
+    static final DecimalFormat f0 = new DecimalFormat("#0.0");
+    static final DecimalFormat f00 = new DecimalFormat("#0.00");
+    static final DecimalFormat f000 = new DecimalFormat("#0.000");
 
     private static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
@@ -226,6 +234,8 @@ class Tools {
         String active = c.has(TAG_ACTIVE) ? c.getString(TAG_ACTIVE) : "";
         String ppublic = c.has(TAG_PUBLIC) ? c.getString(TAG_PUBLIC) : "";
         String fillstyle = c.has(TAG_FILLSTYLE) ? c.getString(TAG_FILLSTYLE) : "";
+        String resolution = c.has(TAG_RESOLUTION) ? c.getString(TAG_RESOLUTION) : "";
+        String initialconsumption = c.has(TAG_INITIALCONSUMPTION) ? c.getString(TAG_INITIALCONSUMPTION) : "";
 
         // tmp hashmap for single channel
         HashMap<String, String> channel = new HashMap<>();
@@ -242,6 +252,8 @@ class Tools {
         channel.put(TAG_ACTIVE, active);
         channel.put(TAG_PUBLIC, ppublic);
         channel.put(TAG_FILLSTYLE, fillstyle);
+        channel.put(TAG_INITIALCONSUMPTION, initialconsumption);
+        channel.put(TAG_RESOLUTION, resolution);
         return channel;
     }
 
@@ -381,6 +393,8 @@ class Tools {
                 fw.write(JSON_CHANNELS + "=" + prefs.getString(Tools.JSON_CHANNELS, "") + "\n");
                 fw.write(JSON_DEFINITIONS + "=" + prefs.getString(JSON_DEFINITIONS, "") + "\n");
                 fw.write("volkszaehlerURL" + "=" + sharedPrefs.getString("volkszaehlerURL", "") + "\n");
+                fw.write("Tuples" + "=" + sharedPrefs.getString("Tuples", "1000") + "\n");
+                fw.write("privateChannelUUIDs" + "=" + sharedPrefs.getString("privateChannelUUIDs", "") + "\n");
                 fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
                 fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false"));
             } catch (IOException e) {
@@ -433,7 +447,25 @@ class Tools {
                          continue;
                      }
                      PreferenceManager.getDefaultSharedPreferences(context).edit().putString("volkszaehlerURL", line).commit();
-                 }else if (line.startsWith("ZeroBasedYAxis")) {
+                 } else if (line.startsWith("Tuples")) {
+                     try {
+                         line = line.split("=")[1];
+                     }
+                     catch (IndexOutOfBoundsException iobx)
+                     {
+                         continue;
+                     }
+                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("Tuples", line).commit();
+                 } else if (line.startsWith("privateChannelUUIDs")) {
+                     try {
+                         line = line.split("=")[1];
+                     }
+                     catch (IndexOutOfBoundsException iobx)
+                     {
+                         continue;
+                     }
+                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("privateChannelUUIDs", line).commit();
+                 } else if (line.startsWith("ZeroBasedYAxis")) {
                      try {
                          line = line.split("=")[1];
                      }

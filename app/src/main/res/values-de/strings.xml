@@ -14,7 +14,9 @@
     <string name="knownChannels">Liste der bekannten Kanäle</string>
     <string name="getChannelsButtonSummary">Klicken um Kanäle abzurufen</string>
     <string name="getChannelsText">Kanäle abrufen</string>
-    <string name="VolkszaehlerCat_titleButton">Kanäle neuladen</string>
+    <string name="VolkszaehlerCat_titleButton">Kanäle hinzufügen</string>
+    <string name="privateChannelUUIDSummary">UUIDs privater Kanäle hinzufügen, kommasepariert, z.B.: uuid1,uuid2</string>
+    <string name="privateChannelUUID">UUIDs manuell hinzufügen</string>
     <string name="CallData">Rufe Daten von der Volkszählerinstallation ab…</string>
     <string name="buttonRefresh">NeuLaden</string>
     <string name="ChannelDetailHeader">Kanaldetails</string>
@@ -77,5 +79,12 @@
     <string name="notrestored">Fehler bein Wiederherstellen der Einstellungen!</string>
     <string name="WertTimeText">am:</string>
     <string name="aboutLinks"><a href="http://www.volkszaehler.org">http://www.volkszaehler.org</a>\n<a href="http://github.com/volkszaehler/app-android/releases/latest">Download neuste Version</a></string>
+    <string name="MultipleGraphsPopupDone">OK</string>
+    <string name="MultipleGraphsPopupCancel">Abbrechen</string>
+    <string name="MultipleGraphsPopupTitel">Channels wählen</string>
+    <string name="GesamtTitle">Gesamt</string>
+    <string name="VolkszaehlerCat_titleTuplesSettings">Anzahl Tuples</string>
+    <string name="TuplesSummary">höhere Werte führen zu detaillierteren, aber langsameren Graphen</string>
+    <string name="Tuples">Tuples</string>
 
 </resources>
