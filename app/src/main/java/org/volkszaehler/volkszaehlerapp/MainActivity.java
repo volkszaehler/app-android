@@ -226,6 +226,8 @@ public class MainActivity<ViewGroup> extends ListActivity {
                                 Log.d("MainActivity", "uRLUUIDs only one Child: " + uRLUUIDs);
                             }
                         }
+                        //fix Exception "Getting data is not supported for groups", remove group UUID
+                        uRLUUIDs = uRLUUIDs.replace("&uuid[]="+aChannelsAusParameterMitLeerstring,"");
                     }
                 }
 
