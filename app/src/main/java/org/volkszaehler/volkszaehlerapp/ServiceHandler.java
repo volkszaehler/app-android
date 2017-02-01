@@ -35,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.util.List;
 
@@ -169,6 +170,9 @@ class ServiceHandler {
             e.printStackTrace();
             return "Error: " + e.getMessage();
         } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            return "Error: " + e.getMessage();
+        } catch (UnknownHostException e) {
             e.printStackTrace();
             return "Error: " + e.getMessage();
         } catch (IOException e) {
