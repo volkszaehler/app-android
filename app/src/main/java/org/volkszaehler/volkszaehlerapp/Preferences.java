@@ -253,8 +253,10 @@ public class Preferences extends PreferenceActivity {
             }
 
             // store all channel stuff in a shared preference
-            jsonStr = jsonStrObj.toString();
-            getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
+            if(jsonStrObj != null) {
+                jsonStr = jsonStrObj.toString();
+                getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
+            }
 
             return null;
         }
