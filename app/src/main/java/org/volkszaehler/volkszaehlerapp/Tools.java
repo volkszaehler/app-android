@@ -259,38 +259,44 @@ class Tools {
 
     private static void getGroupChannels(JSONObject channel, HashMap<String, String> channelMap, ArrayList<HashMap<String, String>> channelMapList) throws JSONException {
 
-        JSONArray children = channel.getJSONArray(TAG_CHILDREN);
-        boolean isDrin;
-        HashMap<String, String> existingChannel = new HashMap<>();
-        for (int j = 0; j < children.length(); j++) {
-            JSONObject childs = children.getJSONObject(j);
-            HashMap<String, String> child = getChannelValues(childs, true);
-            child.put("belongsToGroup", channelMap.get(TAG_UUID));
-            String childUUIDs;
-            // every group should know it's childs
-            if (channelMap.containsKey(TAG_CHUILDUUIDS)) {
-                childUUIDs = channelMap.get(TAG_CHUILDUUIDS) + "|" + child.get(TAG_UUID);
-                channelMap.put(TAG_CHUILDUUIDS, childUUIDs);
-            } else {
-                channelMap.put(TAG_CHUILDUUIDS, child.get(TAG_UUID));
-            }
-            isDrin = false;
-            for (HashMap<String, String> localExistingChannel : channelMapList) {
-                if (localExistingChannel.get(TAG_UUID).equals(child.get(TAG_UUID))) {
-                    existingChannel = localExistingChannel;
-                    isDrin = true;
+        try {
+            JSONArray children = channel.getJSONArray(TAG_CHILDREN);
+            boolean isDrin;
+            HashMap<String, String> existingChannel = new HashMap<>();
+            for (int j = 0; j < children.length(); j++) {
+                JSONObject childs = children.getJSONObject(j);
+                HashMap<String, String> child = getChannelValues(childs, true);
+                child.put("belongsToGroup", channelMap.get(TAG_UUID));
+                String childUUIDs;
+                // every group should know it's childs
+                if (channelMap.containsKey(TAG_CHUILDUUIDS)) {
+                    childUUIDs = channelMap.get(TAG_CHUILDUUIDS) + "|" + child.get(TAG_UUID);
+                    channelMap.put(TAG_CHUILDUUIDS, childUUIDs);
+                } else {
+                    channelMap.put(TAG_CHUILDUUIDS, child.get(TAG_UUID));
                 }
+                isDrin = false;
+                for (HashMap<String, String> localExistingChannel : channelMapList) {
+                    if (localExistingChannel.get(TAG_UUID).equals(child.get(TAG_UUID))) {
+                        existingChannel = localExistingChannel;
+                        isDrin = true;
+                    }
+                }
+                if (isDrin) {
+                    channelMapList.remove(existingChannel);
+                }
+                channelMapList.add(child);
+                // entities.json supports one level of groups only, so one level of
+                // groups for now...
+                // if(child.get("type").equals("group"))
+                // {
+                // getGroupChannels(childs, child);
+                // }
             }
-            if (isDrin) {
-                channelMapList.remove(existingChannel);
-            }
-            channelMapList.add(child);
-            // entities.json supports one level of groups only, so one level of
-            // groups for now...
-            // if(child.get("type").equals("group"))
-            // {
-            // getGroupChannels(childs, child);
-            // }
+        }
+        catch (JSONException jex)
+        {
+            Log.d("getGroupChannels:", "no children found for UUID: " + channel);
         }
 
     }
