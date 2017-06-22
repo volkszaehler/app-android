@@ -1,6 +1,6 @@
 # Volkszaehler Frontend for Android 
 App Language: english, deutsch  
-(English description below)
+**(English description below)**
 
 Download: [https://github.com/volkszaehler/app-android/releases/latest](https://github.com/volkszaehler/app-android/releases/latest "Latest Release")
 
@@ -9,8 +9,8 @@ Download: [https://github.com/volkszaehler/app-android/releases/latest](https://
 ![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200&tok=3e01fa "ScreenShots 3 of VolkszaehlerApp") 
 ![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
+
 ## VolkszählerApp für Android, Version 0.9.1
----
 
 Funktionen:  
   
@@ -25,18 +25,18 @@ Benötigte Android Berechtigungen:
 - _android.permission.INTERNET_ für den Zugriff auf die Volkszähler-Installation  
 - _android.permission.WRITE_EXTERNAL_STORAGE_ für das Schreiben (und Lesen) des Backups
 
-### Tips zum Clonen von Github in AndroidStudio (nur für Entwickler):###
----
+
+### Tipps zum Clonen von Github in AndroidStudio (nur für Entwickler):
 
 Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use default gradle wrapper (not configured for the current project)" nicht möglich ist, dann  
 - das Projekt nochmal normal als "Open an existing Android Studio project" öffnen und im "Gradle Sync" Dialog einfach OK klicken  
 - Wenn nötig unter Settings => Version Control das "Unregistered Root" auswählen und auf das grüne "+" klicken, fertig
   
   
-  
+---
+
 English:
 ## VolkszaehlerApp for Android, Version 0.9.1
----
 
 Features:  
   
@@ -51,16 +51,15 @@ Needed Android Permissions:
 - _android.permission.INTERNET_ for accessing the Volkszaehler installation  
 - _android.permission.WRITE_EXTERNAL_STORAGE_ for writing (and reading) of settings backups
 
-### Tips for Cloning from Github in AndroidStudio (only for developers):###
----
+
+### Tips for Cloning from Github in AndroidStudio (only for developers):
 
 If the cloning resp. opening of the project fails due to a grayed "Use default gradle wrapper (not configured for the current project)", then  
 - open the Project again as "Open an existing Android Studio project" and clock "OK" in the "Gradle Sync" Dialog  
 - If necessary, choose the "Unregistered Root" in Settings => Version Control and click the green plus "+" 
 
 
-### Version history:
----
+## Version history:
 
 ### Version 0.9.1
 
