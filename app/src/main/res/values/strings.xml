@@ -48,8 +48,9 @@
     <string name="ZeroBasedYAxisSummary">Set Zero based y-Axis</string>
     <string name="no_ChannelsSelected">No values received. Are there channels selected in Preferences?</string>
     <string name="ChartMonth">Last 4 Weeks</string>
-    
-    <string name="ChartWeek">Last 7 Days</string><string name="buttonDate">Date</string>
+
+    <string name="ChartWeek">Last 7 Days</string>
+    <string name="buttonDate">Date</string>
     <string name="minWertText">Min.</string>
     <string name="maxWertText">Max.</string>
     <string name="avWertText">Average</string>

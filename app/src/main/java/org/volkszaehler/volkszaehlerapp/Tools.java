@@ -31,19 +31,12 @@ import java.util.HashMap;
 
 class Tools {
 
-    private static final String TAG_ENTITIES = "entities";
     static final String TAG_UUID = "uuid";
     static final String TAG_TYPE = "type";
-    private static final String TAG_ACTIVE = "active";
     static final String TAG_COLOR = "color";
     static final String TAG_COST = "cost";
-    private static final String TAG_FILLSTYLE = "fillstyle";
-    private static final String TAG_PUBLIC = "public";
-    private static final String TAG_STYLE = "style";
     static final String TAG_TITLE = "title";
-    private static final String TAG_YAXIS = "yaxis";
     static final String TAG_DESCRIPTION = "description";
-    private static final String TAG_CHILDREN = "children";
     static final String TAG_CHUILDUUIDS = "childUUIDs";
     static final String TAG_DATA = "data";
     static final String TAG_TUPLES = "tuples";
@@ -58,17 +51,22 @@ class Tools {
     static final String TAG_TO = "to";
     static final String TAG_RESOLUTION = "resolution";
     static final String TAG_INITIALCONSUMPTION = "initialconsumption";
-    private static final String BACKUP_FILENAME = "volkszaehler_settings_backup.txt";
     static final String JSON_CHANNELS = "JSONChannels";
     static final String JSON_CHANNEL_PREFS = "JSONChannelPrefs";
     static final String JSON_DEFINITIONS = "JSONDefinitions";
-
-    private static String unit = "";
-
     static final DecimalFormat f = new DecimalFormat("#0");
     static final DecimalFormat f0 = new DecimalFormat("#0.0");
     static final DecimalFormat f00 = new DecimalFormat("#0.00");
     static final DecimalFormat f000 = new DecimalFormat("#0.000");
+    private static final String TAG_ENTITIES = "entities";
+    private static final String TAG_ACTIVE = "active";
+    private static final String TAG_FILLSTYLE = "fillstyle";
+    private static final String TAG_PUBLIC = "public";
+    private static final String TAG_STYLE = "style";
+    private static final String TAG_YAXIS = "yaxis";
+    private static final String TAG_CHILDREN = "children";
+    private static final String BACKUP_FILENAME = "volkszaehler_settings_backup.txt";
+    private static String unit = "";
 
     private static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
@@ -385,136 +383,118 @@ class Tools {
             e.printStackTrace();
             return false;
         }
-            //try {
-            SharedPreferences prefs = getPrefs(context);
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        //try {
+        SharedPreferences prefs = getPrefs(context);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+        try {
+            fw.write(JSON_CHANNELS + "=" + prefs.getString(Tools.JSON_CHANNELS, "") + "\n");
+            fw.write(JSON_DEFINITIONS + "=" + prefs.getString(JSON_DEFINITIONS, "") + "\n");
+            fw.write("volkszaehlerURL" + "=" + sharedPrefs.getString("volkszaehlerURL", "") + "\n");
+            fw.write("Tuples" + "=" + sharedPrefs.getString("Tuples", "1000") + "\n");
+            fw.write("privateChannelUUIDs" + "=" + sharedPrefs.getString("privateChannelUUIDs", "") + "\n");
+            fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
+            fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
             try {
-                fw.write(JSON_CHANNELS + "=" + prefs.getString(Tools.JSON_CHANNELS, "") + "\n");
-                fw.write(JSON_DEFINITIONS + "=" + prefs.getString(JSON_DEFINITIONS, "") + "\n");
-                fw.write("volkszaehlerURL" + "=" + sharedPrefs.getString("volkszaehlerURL", "") + "\n");
-                fw.write("Tuples" + "=" + sharedPrefs.getString("Tuples", "1000") + "\n");
-                fw.write("privateChannelUUIDs" + "=" + sharedPrefs.getString("privateChannelUUIDs", "") + "\n");
-                fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
-                fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false"));
+                fw.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
-            } finally {
+            }
+        }
+        return true;
+    }
+
+    static boolean loadFile(Context context) {
+
+        BufferedReader br = null;
+        try {
+            File sdcard = Environment.getExternalStorageDirectory();
+            File file = new File(sdcard, BACKUP_FILENAME);
+
+            br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith(JSON_CHANNELS)) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, line).commit();
+                } else if (line.startsWith(JSON_DEFINITIONS)) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, line).commit();
+                } else if (line.startsWith("volkszaehlerURL")) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("volkszaehlerURL", line).commit();
+                } else if (line.startsWith("Tuples")) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("Tuples", line).commit();
+                } else if (line.startsWith("privateChannelUUIDs")) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("privateChannelUUIDs", line).commit();
+                } else if (line.startsWith("ZeroBasedYAxis")) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("ZeroBasedYAxis", Boolean.parseBoolean(line)).commit();
+                } else if (line.startsWith("autoReload")) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("autoReload", Boolean.parseBoolean(line)).commit();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            if (br != null) {
                 try {
-                    fw.close();
+                    br.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        return true;
+        }
     }
 
-     static boolean loadFile(Context context) {
-
-         BufferedReader br = null;
-         try {
-             File sdcard = Environment.getExternalStorageDirectory();
-             File file = new File(sdcard,BACKUP_FILENAME);
-
-             br = new BufferedReader(new FileReader(file));
-             String line;
-             while ((line = br.readLine()) != null) {
-                 if (line.startsWith(JSON_CHANNELS)) {
-                     try {
-                         line = line.split("=")[1];
-                     }
-                     catch (IndexOutOfBoundsException iobx)
-                     {
-                         continue;
-                     }
-                     context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, line).commit();
-                 } else if (line.startsWith(JSON_DEFINITIONS)) {
-                     try {
-                         line = line.split("=")[1];
-                     }
-                     catch (IndexOutOfBoundsException iobx)
-                     {
-                         continue;
-                     }
-                     context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, line).commit();
-                 } else if (line.startsWith("volkszaehlerURL")) {
-                     try {
-                         line = line.split("=")[1];
-                     }
-                     catch (IndexOutOfBoundsException iobx)
-                     {
-                         continue;
-                     }
-                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("volkszaehlerURL", line).commit();
-                 } else if (line.startsWith("Tuples")) {
-                     try {
-                         line = line.split("=")[1];
-                     }
-                     catch (IndexOutOfBoundsException iobx)
-                     {
-                         continue;
-                     }
-                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("Tuples", line).commit();
-                 } else if (line.startsWith("privateChannelUUIDs")) {
-                     try {
-                         line = line.split("=")[1];
-                     }
-                     catch (IndexOutOfBoundsException iobx)
-                     {
-                         continue;
-                     }
-                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("privateChannelUUIDs", line).commit();
-                 } else if (line.startsWith("ZeroBasedYAxis")) {
-                     try {
-                         line = line.split("=")[1];
-                     }
-                     catch (IndexOutOfBoundsException iobx)
-                     {
-                         continue;
-                     }
-                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("ZeroBasedYAxis", Boolean.parseBoolean(line)).commit();
-                 }
-                 else if (line.startsWith("autoReload")) {
-                     try {
-                         line = line.split("=")[1];
-                     }
-                     catch (IndexOutOfBoundsException iobx)
-                     {
-                         continue;
-                     }
-                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("autoReload", Boolean.parseBoolean(line)).commit();
-                 }
-             }
-             return true;
-         }
-         catch (IOException e) {
-             e.printStackTrace();
-             return false;
-
-         }
-         finally{
-             if (br != null)
-             {
-                 try {
-                     br.close();
-                 } catch (IOException e) {
-                     e.printStackTrace();
-                 }
-             }
-         }
-    }
-      static Boolean showAboutDialog(Context context)
-    {
+    static Boolean showAboutDialog(Context context) {
         String app_ver;
         try {
             app_ver = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e("ChannelDetails","strange VersionName");
+            Log.e("ChannelDetails", "strange VersionName");
             return false;
         }
         AlertDialog d = new AlertDialog.Builder(context).setTitle(context.getString(R.string.app_name) + ", Version " + app_ver).setMessage(R.string.aboutLinks).setNeutralButton(context.getString(R.string.Close), null).show();
-        ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+        ((TextView) d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
         return true;
     }
 }
