@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.volkszaehler.volkszaehlerapp"
-    android:versionCode="91"
-    android:versionName="0.9.1" >
+    android:versionCode="92"
+    android:versionName="0.9.2">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-
-
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,20 +27,24 @@
             android:label="@string/app_name" />
         <activity
             android:name=".ChannelDetails"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".ChartDetails"
             android:label="@string/app_name"
-            android:noHistory="true">
-        </activity>
+            android:noHistory="true"></activity>
         <activity android:name="org.achartengine.GraphicalActivity" />
         <activity
             android:name=".DateTimeSelector"
             android:label="@string/SelectDateAndTime"
-            android:theme="@android:style/Theme.Holo.Dialog"
-            android:noHistory="true">
-        </activity>
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Holo.Dialog"></activity>
+        <activity
+            android:name=".TableDetails"
+            android:label="@string/app_name"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

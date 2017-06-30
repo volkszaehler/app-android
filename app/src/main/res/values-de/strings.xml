@@ -86,5 +86,13 @@
     <string name="VolkszaehlerCat_titleTuplesSettings">Anzahl Tuples</string>
     <string name="TuplesSummary">höhere Werte führen zu detaillierteren, aber langsameren Graphen</string>
     <string name="Tuples">Tuples</string>
+    <string name="TableDay">Letzte 24 Stunden</string>
+    <string name="TableWeek">Letzte 7 Tage</string>
+    <string name="TableMonth">Letzte 30 Tage</string>
+    <string name="TableYear">Letzte 12 Monate</string>
+    <string name="Table">Tabelle</string>
+    <string name="timeRange">Zeitraum</string>
+    <string name="ChannelName">ChannelName</string>
+    <string name="please_wait_infinite">Bitte warten...</string>
 
 </resources>

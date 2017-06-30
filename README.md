@@ -9,13 +9,14 @@ Download: [https://github.com/volkszaehler/app-android/releases/latest](https://
 ![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200&tok=3e01fa "ScreenShots 3 of VolkszaehlerApp") 
 ![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
-## VolkszählerApp für Android, Version 0.9.1
+## VolkszählerApp für Android, Version 0.9.2
 ---
 
 Funktionen:  
   
 - Abrufen der Channelinformationen und Anzeige der letzten Werte
 - Anzeigen von Details zu jedem Channel
+- Tabellarische Ansicht der Verbrauchswerte
 - Anzeigen von Charts zu einzelnen Channels, incl. Zoom, auch mit „Touch and Move“ im Diagramm
 - Anzeigen von Gruppen-Charts und Hinzufügen weiterer Graphen ist möglich ("Long Touch" im Chart)
 - Unterstützung von Basic Authentication und HTTPS, **_ABER das Zertifikat wird nicht wirklich geprüft_**   , es werden auch ungültige oder Man-in-the-Middle-Zertifikate akzeptiert
@@ -35,13 +36,14 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
   
   
 English:
-## VolkszaehlerApp for Android, Version 0.9.1
+## VolkszaehlerApp for Android, Version 0.9.2
 ---
 
 Features:  
   
 - Download of Channel Information and Display of recent Values
 - Shows Details for all Channels
+- Shows Values in TableView
 - Shows Charts for every Channel, supports Zoom, (Touch and Move)
 - Shows Charts of Groups, it is possible to add further graphs (use "Long Touch" in chart screen)
 - Supports Basic Authentication und HTTPS, **_BUT the certificate is not really checked_**, the app accepts also invalid or Man-in-the-Middle certificates
@@ -61,6 +63,16 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 ###Version history:
 ---
+
+###Version 0.9.2
+####New  
+  - new TabelView of Values
+    
+####Fixed 
+  - fixed display issues with Channel of type "heat" and consumption
+  
+####Changed
+  - small optimizations
 
 ###Version 0.9.1
 

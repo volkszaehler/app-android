@@ -24,10 +24,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.TimeZone;
 
 class Tools {
 
@@ -296,7 +300,8 @@ class Tools {
         }
         catch (JSONException jex)
         {
-            Log.d("getGroupChannels:", "no children found for UUID: " + channel);
+            Log.d("getGroupChannels:", String.format("no children found for UUID: %s", channel));
+            jex.printStackTrace();
         }
 
     }
@@ -373,6 +378,48 @@ class Tools {
                     break;
                 }
             }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return Wert;
+    }
+
+    static String getDataOfChannel(Context context, String uuid, String jSONString, String property) {
+        String Wert = "";
+
+        try {
+            JSONObject jSONObj;
+            JSONObject jsonObj = new JSONObject(jSONString);
+            JSONObject werte = jsonObj.getJSONObject(TAG_DATA);
+            //for (int i = 0; i < werte.length(); i++) {
+                //jSONObj = werte.getJSONObject(i);
+                if (werte.get(TAG_UUID).equals(uuid)) {
+                    try {
+                        switch (property) {
+                            case TAG_MIN:
+                                Wert = werte.has(TAG_MIN) ? (werte.getJSONArray(TAG_MIN)).toString() : "";
+                                break;
+                            case TAG_MAX:
+                                Wert = werte.has(TAG_MAX) ? (werte.getJSONArray(TAG_MAX)).toString() : "";
+                                break;
+                            case TAG_LAST:
+                                if (werte.has(TAG_TUPLES)) {
+                                    JSONArray jArray = (JSONArray) werte.getJSONArray(TAG_TUPLES).get(werte.getJSONArray(TAG_TUPLES).length() - 1);
+                                    Wert = jArray.toString();
+                                }
+                                break;
+                            default:
+                                Wert = werte.has(property) ? werte.getString(property) : "";
+                                break;
+                        }
+                    } catch (Exception e) {
+                        Log.d("Exception", e.getMessage());
+                    }
+
+                    //break;
+                }
+            //}
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -522,5 +569,84 @@ class Tools {
         AlertDialog d = new AlertDialog.Builder(context).setTitle(context.getString(R.string.app_name) + ", Version " + app_ver).setMessage(R.string.aboutLinks).setNeutralButton(context.getString(R.string.Close), null).show();
         ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
         return true;
+    }
+
+    public static String getDateTimeString(long localfrom, long localto, String range, Context myContext) {
+        String dateTimeString="";
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getDefault());
+        calendar.setTimeInMillis(localfrom);
+        int fromYear = calendar.get(Calendar.YEAR);
+        int fromMonth = calendar.get(Calendar.MONTH);
+        int fromDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int fromHours = calendar.get(Calendar.HOUR_OF_DAY);
+        int fromMinutes = calendar.get(Calendar.MINUTE);
+        int fromSeconds = calendar.get(Calendar.SECOND);
+
+        calendar.setTimeInMillis(localto);
+        int toYear = calendar.get(Calendar.YEAR);
+        int toMonth = calendar.get(Calendar.MONTH);
+        int toDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int toHours = calendar.get(Calendar.HOUR_OF_DAY);
+        int toMinutes = calendar.get(Calendar.MINUTE);
+        int toSeconds = calendar.get(Calendar.SECOND);
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(myContext);
+        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(myContext);
+
+        switch (range) {
+            case "day":
+                String test = dateFormat.format(localfrom);
+                String tes2 = timeFormat.format(localfrom);
+                dateTimeString = timeFormat.format(localfrom) + " - " + timeFormat.format(localto);
+
+
+                break;
+            case "week":
+                dateTimeString = dateFormat.format(localfrom) + " - " + dateFormat.format(localto);
+                break;
+            case "month":
+                dateTimeString = dateFormat.format(localfrom) + " - " + dateFormat.format(localto);
+                break;
+            case "year":
+                dateTimeString = dateFormat.format(localfrom) + " - " + dateFormat.format(localto);
+                break;
+            default:
+                Log.e("TableDetails", "Unknown 'Range': " + range);
+        }
+
+        return dateTimeString;
+    }
+
+    public static String determineColor(float anzahlStufen, float stufe)
+    {
+        float gruenTeil;
+        float rotTeil;
+        String color;
+
+        if (stufe > anzahlStufen/4) {
+            gruenTeil = 255 - (255 * ((stufe - anzahlStufen / 4)/(anzahlStufen * 3 / 4)));
+            String s = Integer.toHexString((int) gruenTeil);
+            s = s.length() < 2 ? s = "0" + s : s;
+            color = "#ff" + s + "00";
+        }
+        else {
+            rotTeil = 255 * (stufe * 4  / anzahlStufen);
+            String s = Integer.toHexString((int) rotTeil);
+            s = s.length() < 2 ? s = "0" + s : s;
+            color = "#" + s + "ff00";
+        }
+        if(color.length() != 7)
+        {
+            color = color + color;
+        }
+        return color;
+    }
+
+    public static float determineStufe(float min, float max, float stufen, String value)
+    {
+        float stufengroesse = (max - min)/stufen;
+        float stufe = (Float.parseFloat(value) - min) / stufengroesse;
+        return Math.round(stufe);
     }
 }
