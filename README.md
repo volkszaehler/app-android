@@ -10,7 +10,7 @@ Download: [https://github.com/volkszaehler/app-android/releases/latest](https://
 ![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
 ## VolkszählerApp für Android, Version 0.9.2
----
+
 
 Funktionen:  
   
@@ -38,7 +38,7 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
 
 English:
 ## VolkszaehlerApp for Android, Version 0.9.2
----
+
 
 Features:  
   
@@ -64,17 +64,17 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 ## Version history:
 
-###Version 0.9.2
-####New  
+### Version 0.9.2
+#### New  
   - new TabelView of Values
     
-####Fixed 
+#### Fixed 
   - fixed display issues with Channel of type "heat" and consumption
   
-####Changed
+#### Changed
   - small optimizations
 
-###Version 0.9.1
+### Version 0.9.1
 
 #### Fixed 
  - fixed style issues with Android 7 (https://github.com/volkszaehler/app-android/issues/21)

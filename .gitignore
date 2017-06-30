@@ -103,7 +103,7 @@ obj/
 /out/
 
 # User-specific configurations
-.idea/libraries/
+.idea/libraries
 .idea/.name
 .idea/compiler.xml
 .idea/copyright/profiles_settings.xml
