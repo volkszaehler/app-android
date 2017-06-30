@@ -1,259 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
     >
 
-<LinearLayout
-    android:id="@+id/linearLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
-    <TextView
-        android:id="@+id/editTextChannelDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#55555555"
-        android:text="@string/ChannelDetailHeader"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
-    </TextView>
-
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#11111111"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        >
 
         <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="fill_parent"
+            android:id="@+id/editTextChannelDetails"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="left"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textIsSelectable="true" />
-
-        <TextView
-            android:id="@+id/textViewValue"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textIsSelectable="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2c"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#11111111"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textViewDateTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="0.35"
-            android:text="@string/textViewDateTitle"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/textViewDateValue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="0.65"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textIsSelectable="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2b"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#22222222"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textViewDescriptionTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:text="@string/textViewDescriptionTitle"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.65"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#11111111"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textViewUUIDTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:text="@string/UUIDTitle"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewUUID"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.65"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#22222222"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textViewTitleType"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:text="@string/TypeTitle"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewType"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.65"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout5"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#11111111"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textViewTitleCost"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:text="@string/CostTitle"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewCost"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.65"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4g"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#22222222"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textViewTitleGesamt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:text="@string/GesamtTitle"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewGesamt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.65"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#22222222"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textViewTitleChart"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:text="@string/Chart"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:background="#55555555"
+            android:text="@string/ChannelDetailHeader"
+            android:textAppearance="?android:attr/textAppearanceLarge">
+        </TextView>
 
         <LinearLayout
-            android:id="@+id/linearLayout61"
-            android:layout_width="0dp"
+            android:id="@+id/linearLayout2"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.65"
-            android:background="#22222222"
-            android:orientation="vertical" >
+            android:background="#11111111"
+            android:orientation="vertical">
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textViewTitle"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:onClick="chartsDetailsHandler"
-                android:text="@string/ChartHour"
-                android:id="@+id/buttonViewChartHour" />
+                android:ellipsize="end"
+                android:gravity="left"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textIsSelectable="true"/>
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textViewValue"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:onClick="chartsDetailsHandler"
-                android:text="@string/ChartDay"
-                android:id="@+id/buttonViewChartDay" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="chartsDetailsHandler"
-                android:text="@string/ChartWeek"
-                android:id="@+id/buttonViewChartWeek" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="chartsDetailsHandler"
-                android:text="@string/ChartMonth"
-                android:id="@+id/buttonViewChartMonth" />
+                android:gravity="right"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textIsSelectable="true"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayout2c"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#11111111"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textViewDateTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="0.35"
+                android:text="@string/textViewDateTitle"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <TextView
+                android:id="@+id/textViewDateValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_weight="0.65"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2b"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#22222222"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewDescriptionTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="@string/textViewDescriptionTitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textIsSelectable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#11111111"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewUUIDTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="@string/UUIDTitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/textViewUUID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textIsSelectable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#22222222"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewTitleType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="@string/TypeTitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/textViewType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textIsSelectable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#11111111"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewTitleCost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="@string/CostTitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/textViewCost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textIsSelectable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout4g"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#22222222"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewTitleGesamt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="@string/GesamtTitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/textViewGesamt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textIsSelectable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#22222222"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewTitleChart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="@string/Chart"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
             <LinearLayout
+                android:id="@+id/linearLayout61"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:background="#22222222"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/buttonViewChartHour"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="chartsDetailsHandler"
+                    android:text="@string/ChartHour"/>
+
+                <Button
+                    android:id="@+id/buttonViewChartDay"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="chartsDetailsHandler"
+                    android:text="@string/ChartDay"/>
+
+                <Button
+                    android:id="@+id/buttonViewChartWeek"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="chartsDetailsHandler"
+                    android:text="@string/ChartWeek"/>
+
+                <Button
+                    android:id="@+id/buttonViewChartMonth"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="chartsDetailsHandler"
+                    android:text="@string/ChartMonth"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/linearLayout7"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="#11111111"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textViewTitleChildren"
@@ -261,7 +263,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.35"
                 android:text="@string/ChildrenTitle"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <TextView
                 android:id="@+id/textViewChildren"
@@ -269,8 +271,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.65"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textIsSelectable="true" />
+                android:textIsSelectable="true"/>
         </LinearLayout>
 
-</LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+</ScrollView>

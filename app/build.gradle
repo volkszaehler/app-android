@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "org.volkszaehler.volkszaehlerapp"
@@ -21,9 +21,9 @@ android {
         }
     }
 
-    useLibrary  'org.apache.http.legacy'
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
-    compile files('libs/achartengine-1.2.0.jar')
+    compile 'com.github.ddanny:achartengine:e49b62b'
 }

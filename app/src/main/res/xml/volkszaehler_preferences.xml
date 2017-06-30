@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/VolkszaehlerCat_titleURL" >
+    <PreferenceCategory android:title="@string/VolkszaehlerCat_titleURL">
         <EditTextPreference
             android:defaultValue="@string/volkszaehlerURLDefault"
             android:dialogTitle="@string/volkszaehlerURLDefault"
+            android:inputType="textUri"
             android:key="volkszaehlerURL"
             android:singleLine="true"
             android:summary="@string/volkszaehlerURLSummary"
-            android:title="@string/volkszaehlerURLTitle"
-            android:inputType="textUri">
+            android:title="@string/volkszaehlerURLTitle">
         </EditTextPreference>
     </PreferenceCategory>
     <PreferenceCategory
         android:summary="@string/basicAuthenticationSummary"
-        android:title="@string/basicAuthentication" >
+        android:title="@string/basicAuthentication">
         <EditTextPreference
             android:key="username"
             android:summary="@string/usernameSummary"
-            android:title="@string/username" />
+            android:title="@string/username"/>
         <EditTextPreference
             android:key="password"
             android:password="true"
             android:summary="@string/passwordSumary"
-            android:title="@string/password" />
+            android:title="@string/password"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="channel_preference_category"
-        android:title="@string/PrefChannels" >
+        android:title="@string/PrefChannels">
     </PreferenceCategory>
     <PreferenceCategory
         android:key="channel_preference_button_category"
-        android:title="@string/VolkszaehlerCat_titleButton" >
+        android:title="@string/VolkszaehlerCat_titleButton">
         <EditTextPreference
             android:key="privateChannelUUIDs"
             android:summary="@string/privateChannelUUIDSummary"
-            android:title="@string/privateChannelUUID" />
+            android:title="@string/privateChannelUUID"/>
         <Preference
             android:key="getChannelsButton"
             android:summary="@string/getChannelsButtonSummary"
-            android:title="@string/getChannelsText" />
-    </PreferenceCategory>
-    
-    <PreferenceCategory
-        android:title="@string/VolkszaehlerCat_titleChartSettings" >
-        <CheckBoxPreference 
-            android:key="ZeroBasedYAxis"
-            android:summary="@string/ZeroBasedYAxisSummary"
-            android:title="@string/ZeroBasedYAxisTitle" />
-    </PreferenceCategory>
-    
-        <PreferenceCategory
-        android:title="@string/VolkszaehlerCat_titleReloadSettings" >
-        <CheckBoxPreference 
-            android:key="autoReload"
-            android:summary="@string/autoReloadSummary"
-            android:title="@string/autoReloadTitle" />
+            android:title="@string/getChannelsText"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/VolkszaehlerCat_titleTuplesSettings" >
+        android:title="@string/VolkszaehlerCat_titleChartSettings">
+        <CheckBoxPreference
+            android:key="ZeroBasedYAxis"
+            android:summary="@string/ZeroBasedYAxisSummary"
+            android:title="@string/ZeroBasedYAxisTitle"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/VolkszaehlerCat_titleReloadSettings">
+        <CheckBoxPreference
+            android:key="autoReload"
+            android:summary="@string/autoReloadSummary"
+            android:title="@string/autoReloadTitle"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/VolkszaehlerCat_titleTuplesSettings">
         <EditTextPreference
+            android:defaultValue="1000"
             android:key="Tuples"
             android:summary="@string/TuplesSummary"
-            android:title="@string/Tuples"
-            android:defaultValue="1000"/>
+            android:title="@string/Tuples"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

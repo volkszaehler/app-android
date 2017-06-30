@@ -56,10 +56,10 @@ class ServiceHandler {
             URI uri = new URI(newUrl.getProtocol(), newUrl.getUserInfo(), IDN.toASCII(newUrl.getHost()), newUrl.getPort(), newUrl.getPath(), newUrl.getQuery(), newUrl.getRef());
             newUrl = uri.toURL();
         } catch (MalformedURLException e) {
-            Log.e("ServiceHandler","malformed URL: " + url);
+            Log.e("ServiceHandler", "malformed URL: " + url);
             e.printStackTrace();
         } catch (URISyntaxException e) {
-            Log.e("ServiceHandler","wrong URL Syntax : " + newUrl);
+            Log.e("ServiceHandler", "wrong URL Syntax : " + newUrl);
             e.printStackTrace();
         }
 
@@ -110,7 +110,7 @@ class ServiceHandler {
     }
 
     public String makeServiceCall(String url, int method, List<NameValuePair> params, String uname, String pwd) {
-        String response ="";
+        String response = "";
 
         try {
             // http client
@@ -149,8 +149,7 @@ class ServiceHandler {
             httpEntity = httpResponse.getEntity();
             response = EntityUtils.toString(httpEntity);
 
-            if(200 == (httpResponse.getStatusLine().getStatusCode()))
-            {
+            if (200 == (httpResponse.getStatusLine().getStatusCode())) {
                 try {
                     JSONObject jsonObj = new JSONObject(response);
                 } catch (JSONException e) {
@@ -158,9 +157,7 @@ class ServiceHandler {
                     response = "Error: " + response;
                     e.printStackTrace();
                 }
-            }
-            else
-            {
+            } else {
                 //error occurred
                 response = "Error: " + httpResponse.getStatusLine() + " " + response;
             }
