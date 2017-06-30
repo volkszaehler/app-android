@@ -33,16 +33,14 @@ import java.util.Locale;
 
 public class MainActivity<ViewGroup> extends ListActivity {
     private static Context myContext;
+    // Hashmaps for ListView
+    private final ArrayList<HashMap<String, String>> channelValueList = new ArrayList<>();
     private String jsonStr = "";
-
     private Button refreshButton;
     private ProgressDialog pDialog;
     private SimpleAdapter adapter = null;
     private boolean bAutoReload = false;
     private String channelsToRequest = "";
-
-    // Hashmaps for ListView
-    private final ArrayList<HashMap<String, String>> channelValueList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +81,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 if (adapter != null) {
                     adapter.notifyDataSetChanged();
                 }
-                jsonStr ="";
+                jsonStr = "";
                 channelsToRequest = "";
                 // adding uuids that are checked in preferences
                 for (String preference : PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getAll().keySet()) {
@@ -130,25 +128,19 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 return (true);
             case R.id.backup_settings:
                 boolean saved = Tools.saveFile(getApplicationContext());
-                if(saved)
-                {
-                    Toast.makeText(this, R.string.saved , Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(this, R.string.notsaved , Toast.LENGTH_SHORT).show();
+                if (saved) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.notsaved, Toast.LENGTH_SHORT).show();
                 }
                 return (true);
             case R.id.restore_settings:
 
                 boolean restored = Tools.loadFile(getApplicationContext());
-                if(restored)
-                {
-                    Toast.makeText(this, R.string.restored , Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(this, R.string.notrestored , Toast.LENGTH_SHORT).show();
+                if (restored) {
+                    Toast.makeText(this, R.string.restored, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.notrestored, Toast.LENGTH_SHORT).show();
                 }
                 return (true);
             case R.id.about:
@@ -158,6 +150,52 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addValuesToListView() {
+        /**
+         * Updating parsed JSON data into ListView
+         * */
+        adapter = new SimpleAdapter(MainActivity.this, channelValueList, R.layout.list_item, new String[]{Tools.TAG_TITLE, Tools.TAG_DESCRIPTION, "tuplesWert"}, new int[]{R.id.channelName,
+                R.id.channelDescription, R.id.channelValue}) {
+            @Override
+            public View getView(int position, View convertView, android.view.ViewGroup parent) {
+
+                View view = super.getView(position, convertView, parent);
+
+                HashMap<String, String> items = (HashMap<String, String>) getListView().getItemAtPosition(position);
+
+                //empty color, default = blue
+                String col = "".equals(items.get(Tools.TAG_COLOR)) ? "#0000FF" : items.get(Tools.TAG_COLOR);
+
+                if (col.startsWith("#")) {
+                    ((TextView) view.findViewById(R.id.channelName)).setTextColor(Color.parseColor(col.toUpperCase(Locale.getDefault())));
+                    ((TextView) view.findViewById(R.id.channelValue)).setTextColor(Color.parseColor(col.toUpperCase(Locale.getDefault())));
+                }
+                // Workarounds for non existing Colors on S4Mini 4.2.2
+                else if (col.equals("teal")) {
+                    ((TextView) view.findViewById(R.id.channelName)).setTextColor(getResources().getColor(R.color.teal));
+                    ((TextView) view.findViewById(R.id.channelValue)).setTextColor(getResources().getColor(R.color.teal));
+                } else if (col.equals("aqua")) {
+                    ((TextView) view.findViewById(R.id.channelName)).setTextColor(getResources().getColor(R.color.aqua));
+                    ((TextView) view.findViewById(R.id.channelValue)).setTextColor(getResources().getColor(R.color.aqua));
+                } else {
+                    try {
+                        ((TextView) view.findViewById(R.id.channelName)).setTextColor(Color.parseColor(col));
+                        ((TextView) view.findViewById(R.id.channelValue)).setTextColor(Color.parseColor(col));
+                    } catch (IllegalArgumentException e) {
+                        Log.e("MainActivity", "Error setting color " + e.getMessage());
+                    }
+                }
+                return view;
+            }
+        };
+        setListAdapter(adapter);
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("JSONStr", jsonStr);
+        outState.putString("ChannelsToRequest", channelsToRequest);
     }
 
     private class GetJSONData extends AsyncTask<String, Void, Void> {
@@ -227,7 +265,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                             }
                         }
                         //fix Exception "Getting data is not supported for groups", remove group UUID
-                        uRLUUIDs = uRLUUIDs.replace("&uuid[]="+aChannelsAusParameterMitLeerstring,"");
+                        uRLUUIDs = uRLUUIDs.replace("&uuid[]=" + aChannelsAusParameterMitLeerstring, "");
                     }
                 }
 
@@ -269,8 +307,8 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 }
 
                 if (jsonStr.startsWith("Error: ")) {
-                        JSONFehler = true;
-                        fehlerAusgabe = android.text.Html.fromHtml(jsonStr).toString();
+                    JSONFehler = true;
+                    fehlerAusgabe = android.text.Html.fromHtml(jsonStr).toString();
 
 
                 } else {
@@ -361,64 +399,18 @@ public class MainActivity<ViewGroup> extends ListActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-                // Dismiss the progress dialog
-                if (pDialog.isShowing()) {
-                    pDialog.dismiss();
-                }
+            // Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
 
             if (JSONFehler) {
-                jsonStr="";
+                jsonStr = "";
                 new AlertDialog.Builder(MainActivity.this).setTitle(getString(R.string.Error)).setMessage(fehlerAusgabe).setNeutralButton(getString(R.string.Close), null).show();
             } else {
                 addValuesToListView();
             }
 
         }
-    }
-
-    private void addValuesToListView() {
-        /**
-         * Updating parsed JSON data into ListView
-         * */
-        adapter = new SimpleAdapter(MainActivity.this, channelValueList, R.layout.list_item, new String[]{Tools.TAG_TITLE, Tools.TAG_DESCRIPTION, "tuplesWert"}, new int[]{R.id.channelName,
-                R.id.channelDescription, R.id.channelValue}) {
-            @Override
-            public View getView(int position, View convertView, android.view.ViewGroup parent) {
-
-                View view = super.getView(position, convertView, parent);
-
-                HashMap<String, String> items = (HashMap<String, String>) getListView().getItemAtPosition(position);
-
-                //empty color, default = blue
-                String col = "".equals(items.get(Tools.TAG_COLOR)) ? "#0000FF" : items.get(Tools.TAG_COLOR);
-
-                if (col.startsWith("#")) {
-                    ((TextView) view.findViewById(R.id.channelName)).setTextColor(Color.parseColor(col.toUpperCase(Locale.getDefault())));
-                    ((TextView) view.findViewById(R.id.channelValue)).setTextColor(Color.parseColor(col.toUpperCase(Locale.getDefault())));
-                }
-                // Workarounds for non existing Colors on S4Mini 4.2.2
-                else if (col.equals("teal")) {
-                    ((TextView) view.findViewById(R.id.channelName)).setTextColor(getResources().getColor(R.color.teal));
-                    ((TextView) view.findViewById(R.id.channelValue)).setTextColor(getResources().getColor(R.color.teal));
-                } else if (col.equals("aqua")) {
-                    ((TextView) view.findViewById(R.id.channelName)).setTextColor(getResources().getColor(R.color.aqua));
-                    ((TextView) view.findViewById(R.id.channelValue)).setTextColor(getResources().getColor(R.color.aqua));
-                } else {
-                    try {
-                        ((TextView) view.findViewById(R.id.channelName)).setTextColor(Color.parseColor(col));
-                        ((TextView) view.findViewById(R.id.channelValue)).setTextColor(Color.parseColor(col));
-                    } catch (IllegalArgumentException e) {
-                        Log.e("MainActivity","Error setting color " + e.getMessage());
-                    }
-                }
-                return view;
-            }
-        };
-        setListAdapter(adapter);
-    }
-
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString("JSONStr", jsonStr);
-        outState.putString("ChannelsToRequest", channelsToRequest);
     }
 }

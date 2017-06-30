@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:orientation="vertical"
     >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/From"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/fromDatePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
             android:ems="10"
-            android:id="@+id/fromDatePicker"
             android:focusable="false"
+            android:inputType="date"
             />
 
         <EditText
+            android:id="@+id/fromTimePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="time"
             android:ems="10"
-            android:id="@+id/fromTimePicker"
             android:focusable="false"
-             />
+            android:inputType="time"
+            />
 
     </LinearLayout>
 
@@ -41,29 +41,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/To"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
             android:id="@+id/toDatePicker"
-            android:focusable="false"
-             />
-
-        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="time"
             android:ems="10"
-            android:id="@+id/toTimePicker"
             android:focusable="false"
+            android:inputType="date"
+            />
+
+        <EditText
+            android:id="@+id/toTimePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="time"
             />
     </LinearLayout>
 
@@ -73,6 +73,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/Select" />
+        android:text="@string/Select"/>
 
 </LinearLayout>

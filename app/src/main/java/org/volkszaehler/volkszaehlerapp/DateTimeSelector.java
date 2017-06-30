@@ -28,7 +28,7 @@ public class DateTimeSelector extends Activity implements View.OnClickListener {
 
     private long from = 0;
     private long to = 0;
-    private String mUUID ="";
+    private String mUUID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class DateTimeSelector extends Activity implements View.OnClickListener {
         final int hourTo = newCalendarTo.get(Calendar.HOUR_OF_DAY);
         final int minuteTo = newCalendarTo.get(Calendar.MINUTE);
 
-        if(view == editDFrom) {
+        if (view == editDFrom) {
             DatePickerDialog fromDatePickerDialog = new DatePickerDialog(this, new OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -107,9 +107,9 @@ public class DateTimeSelector extends Activity implements View.OnClickListener {
                     editDFrom.setText(DateFormat.getDateInstance().format(newDate.getTime()));
                     from = newDate.getTimeInMillis();
                 }
-            },yearFrom, monthFrom, dayFrom);
+            }, yearFrom, monthFrom, dayFrom);
             fromDatePickerDialog.show();
-        } else if(view == editTFrom) {
+        } else if (view == editTFrom) {
             TimePickerDialog fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -125,11 +125,11 @@ public class DateTimeSelector extends Activity implements View.OnClickListener {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     Calendar newDate = Calendar.getInstance();
-                    newDate.set(year, monthOfYear, dayOfMonth,hourTo,minuteTo);
+                    newDate.set(year, monthOfYear, dayOfMonth, hourTo, minuteTo);
                     editDTo.setText(DateFormat.getDateInstance().format(newDate.getTime()));
                     to = newDate.getTimeInMillis();
                 }
-            },yearTo, monthTo, dayTo);
+            }, yearTo, monthTo, dayTo);
             toDatePickerDialog.show();
         } else if (view == editTTo) {
             TimePickerDialog toTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
@@ -140,18 +140,18 @@ public class DateTimeSelector extends Activity implements View.OnClickListener {
                     editTTo.setText(DateFormat.getTimeInstance().format(newDate.getTime()));
                     to = newDate.getTimeInMillis();
                 }
-            }, hourTo,minuteTo, false);
+            }, hourTo, minuteTo, false);
             toTimePickerDialog.show();
         } else if (view == set) {
-                        if (from > to) {
-                            new AlertDialog.Builder(DateTimeSelector.this).setTitle(getString(R.string.Error)).setMessage(getString(R.string.FromGreaterTo)).setNeutralButton(getString(R.string.Close), null).show();
-                        } else {
-                            Intent detailChartIntent = new Intent(DateTimeSelector.this, ChartDetails.class);
-                            detailChartIntent.putExtra("MUUID", mUUID);
-                            detailChartIntent.putExtra("From", from);
-                            detailChartIntent.putExtra("To", to);
-                            startActivity(detailChartIntent);
-                        }
+            if (from > to) {
+                new AlertDialog.Builder(DateTimeSelector.this).setTitle(getString(R.string.Error)).setMessage(getString(R.string.FromGreaterTo)).setNeutralButton(getString(R.string.Close), null).show();
+            } else {
+                Intent detailChartIntent = new Intent(DateTimeSelector.this, ChartDetails.class);
+                detailChartIntent.putExtra("MUUID", mUUID);
+                detailChartIntent.putExtra("From", from);
+                detailChartIntent.putExtra("To", to);
+                startActivity(detailChartIntent);
+            }
         }
     }
 }

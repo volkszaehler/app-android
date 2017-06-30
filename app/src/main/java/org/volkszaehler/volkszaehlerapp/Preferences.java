@@ -22,16 +22,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Preferences extends PreferenceActivity {
-    private boolean newChannels = false;
-    private ProgressDialog pDialog;
-
     // URL to get contacts JSON
     private static String url = "http://demo.volkszaehler.org/middleware.php/entity.json";
     private static String uname;
     private static String pwd;
     private static String tuples;
     private static String privateChannelString;
-
+    private boolean newChannels = false;
+    private ProgressDialog pDialog;
     private ArrayList<HashMap<String, String>> channelList = new ArrayList<>();
 
     @Override
@@ -56,9 +54,8 @@ public class Preferences extends PreferenceActivity {
                     pwd = prefs.getString("password", "");
                     boolean bZeroBased = prefs.getBoolean("ZeroBasedYAxis", false);
                     boolean bAutoReload = prefs.getBoolean("autoReload", false);
-                    tuples = prefs.getString("Tuples","1000");
-                    privateChannelString = prefs.getString("privateChannelUUIDs","");
-
+                    tuples = prefs.getString("Tuples", "1000");
+                    privateChannelString = prefs.getString("privateChannelUUIDs", "");
 
 
                     // remove all
@@ -165,7 +162,7 @@ public class Preferences extends PreferenceActivity {
             url = sharedPref.getString("volkszaehlerURL", "");
 
             //private channels
-            String privateChannelString = sharedPref.getString("privateChannelUUIDs","");
+            String privateChannelString = sharedPref.getString("privateChannelUUIDs", "");
             String[] privateChannels = privateChannelString.split(",");
             String baseURL = url;
 
@@ -194,13 +191,14 @@ public class Preferences extends PreferenceActivity {
             }
 
             if (jsonStr.startsWith("Error: ") || jsonStrDef.startsWith("Error: ")) {
-                    JSONFehler = true;
-                    fehlerAusgabe = jsonStr + " | " +jsonStrDef;;
+                JSONFehler = true;
+                fehlerAusgabe = jsonStr + " | " + jsonStrDef;
+                ;
             } else {
                 try {
                     jsonStrObj = new JSONObject(jsonStr);
                     JSONObject jsonStrDefObj = new JSONObject(jsonStrDef);
-                    if(jsonStrObj.has("entities") && !jsonStrObj.getString("entities").equals("[]")) {
+                    if (jsonStrObj.has("entities") && !jsonStrObj.getString("entities").equals("[]")) {
                         newChannels = true;
                         Log.d("Preferences", "jsonStr: " + jsonStr);
                         // store all channel stuff in a shared preference
@@ -213,13 +211,13 @@ public class Preferences extends PreferenceActivity {
                     }
                 } catch (JSONException e) {
                     JSONFehler = true;
-                    fehlerAusgabe = jsonStr + " | " +jsonStrDef;
+                    fehlerAusgabe = jsonStr + " | " + jsonStrDef;
                 }
 
             }
 
-            String privatChannelURL ="";
-            if(!"".equals(privateChannelString)) {
+            String privatChannelURL = "";
+            if (!"".equals(privateChannelString)) {
                 //Loop over each private channel
                 for (String channelUUID : privateChannels) {
                     channelUUID = channelUUID.trim();
@@ -253,7 +251,7 @@ public class Preferences extends PreferenceActivity {
             }
 
             // store all channel stuff in a shared preference
-            if(jsonStrObj != null) {
+            if (jsonStrObj != null) {
                 jsonStr = jsonStrObj.toString();
                 getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
             }

@@ -49,20 +49,16 @@ import java.util.Map;
 
 public class ChartDetails extends Activity {
 
-    private ProgressDialog pDialog;
-
-    private PopupWindow pw;
-
+    private static final int MIN_CLICK_DURATION = 1000;
     private final XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-
     private final XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer(2);
-
+    private final ArrayList<String> uUIDSOfaddedCharts = new ArrayList<>();
+    private ProgressDialog pDialog;
+    private PopupWindow pw;
     private GraphicalView mChartView;
-
     // int mColor = Color.BLUE;
     private String mUUID = "";
     private String jsonStr = "";
-
     private double xmin = 0;
     private double xmax = 0;
     private double from = 0;
@@ -74,10 +70,19 @@ public class ChartDetails extends Activity {
     private double minY = Double.MAX_VALUE;
     private double minX = 0;
     private double maxX = 0;
-
     private java.text.DateFormat dateFormat = null;
     private java.text.DateFormat timeFormat = null;
     private Context myContext = null;
+    private float eventXTouchDown = 0;
+    private boolean allowPopup = true;
+    private final OnClickListener cancel_button_click_listener = new OnClickListener() {
+        public void onClick(View v) {
+            pw.dismiss();
+            allowPopup = true;
+        }
+    };
+    private long startClickTime;
+    private boolean longClickActive = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,13 +126,10 @@ public class ChartDetails extends Activity {
         new GetChannelsDetails().execute();
     }
 
-    private final ArrayList<String> uUIDSOfaddedCharts = new ArrayList<>();
-
     private void prepareChart(String uUID) {
         TimeSeries mCurrentSeries = Tools.getTimeSeries(myContext, uUID);
         //skip empty series
-        if(mCurrentSeries.getItemCount()<=1)
-        {
+        if (mCurrentSeries.getItemCount() <= 1) {
             //no data or out of time range
             return;
         }
@@ -138,8 +140,7 @@ public class ChartDetails extends Activity {
         minY = minY > mCurrentSeries.getMinY() ? minY = mCurrentSeries.getMinY() : minY;
 
         // x values should be the same for all childs, but remove old values that would mess up the chart
-        while(mCurrentSeries.getMinX() < from)
-        {
+        while (mCurrentSeries.getMinX() < from) {
             mCurrentSeries.remove(0);
         }
         minX = mCurrentSeries.getMinX();
@@ -148,7 +149,7 @@ public class ChartDetails extends Activity {
         uUIDSOfaddedCharts.add(uUID);
         int mColor = Color.BLUE;
         try {
-                mColor = Color.parseColor(Tools.getPropertyOfChannel(myContext, uUID, Tools.TAG_COLOR).toUpperCase(Locale.getDefault()));
+            mColor = Color.parseColor(Tools.getPropertyOfChannel(myContext, uUID, Tools.TAG_COLOR).toUpperCase(Locale.getDefault()));
         } catch (Exception e) {
             Log.e("ChartDetails", e.getMessage());
         }
@@ -238,12 +239,6 @@ public class ChartDetails extends Activity {
         mRenderer.setSelectableBuffer(80);
 
     }
-
-    private float eventXTouchDown = 0;
-    private boolean allowPopup = true;
-    private static final int MIN_CLICK_DURATION = 1000;
-    private long startClickTime;
-    private boolean longClickActive = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -515,7 +510,7 @@ public class ChartDetails extends Activity {
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // Inflate the view from a predefined XML layout
             View layout = inflater.inflate(R.layout.info_popup, (ViewGroup) findViewById(R.id.popup_element));
-            ((TextView) layout.findViewById(R.id.DetailsTitle)).setText(Tools.getPropertyOfChannel(myContext,UUID,Tools.TAG_TITLE));
+            ((TextView) layout.findViewById(R.id.DetailsTitle)).setText(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_TITLE));
 
             pw = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
             pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
@@ -525,38 +520,34 @@ public class ChartDetails extends Activity {
 
             String minValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MIN);
             ((TextView) layout.findViewById(R.id.minWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(minValues.substring(1, minValues.length() - 1).split(",")[0]))));
-            ((TextView) layout.findViewById(R.id.minWertIDValue)).setText(Tools.f000.format(Double.parseDouble((minValues.substring(1,minValues.length()-1).split(",")[1]))) + " " + unit);
+            ((TextView) layout.findViewById(R.id.minWertIDValue)).setText(Tools.f000.format(Double.parseDouble((minValues.substring(1, minValues.length() - 1).split(",")[1]))) + " " + unit);
             String maxValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MAX);
             ((TextView) layout.findViewById(R.id.maxWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(maxValues.substring(1, maxValues.length() - 1).split(",")[0]))));
-            ((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(Tools.f000.format(Double.parseDouble((maxValues.substring(1,maxValues.length()-1).split(",")[1]))) + " " + unit);
+            ((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(Tools.f000.format(Double.parseDouble((maxValues.substring(1, maxValues.length() - 1).split(",")[1]))) + " " + unit);
 
             //((TextView) layout.findViewById(R.id.maxWertIDValue)).setText(f3.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_MAX))) + " " + unit);
             ((TextView) layout.findViewById(R.id.avWertIDValue)).setText(Tools.f000.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_AVERAGE))) + " " + unit);
 
             String lastValues = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_LAST);
             ((TextView) layout.findViewById(R.id.lastWertTimeIDValue)).setText(DateFormat.getDateTimeInstance().format(new Date(Long.valueOf(lastValues.substring(1, lastValues.length() - 1).split(",")[0]))));
-            ((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(Tools.f000.format(Double.parseDouble((lastValues.substring(1,lastValues.length()-1).split(",")[1]))) + " " + unit);
+            ((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(Tools.f000.format(Double.parseDouble((lastValues.substring(1, lastValues.length() - 1).split(",")[1]))) + " " + unit);
 
             //((TextView) layout.findViewById(R.id.lastWertIDValue)).setText(Tools.f000.format(Double.parseDouble(Tools.getDataOfChannel(myContext, UUID, "letzter"))) + " " + unit);
             ((TextView) layout.findViewById(R.id.rowWertIDValue)).setText(Tools.getDataOfChannel(myContext, UUID, Tools.TAG_ROWS));
 
             String consumptionWert = Tools.getDataOfChannel(myContext, UUID, Tools.TAG_CONSUMPTION);
             if (!"".equals(consumptionWert)) {
-                if("gas".equals(Tools.getPropertyOfChannel(myContext,UUID,Tools.TAG_TYPE)))
-                {
+                if ("gas".equals(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_TYPE))) {
                     ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(Tools.f000.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 2));
                     ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(Tools.f00.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
                 } else if ("water".equals(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_TYPE))) {
                     ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(Tools.f0.format(Double.valueOf(consumptionWert)) + " " + unit.substring(0, 1));
                     ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(Tools.f00.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) * Double.valueOf(consumptionWert)) + " €");
-                }
-                else {
+                } else {
                     ((TextView) layout.findViewById(R.id.conWertIDValue)).setText(Tools.f000.format(Double.valueOf(consumptionWert)) + " " + unit + "h");
                     ((TextView) layout.findViewById(R.id.costWertIDValue)).setText(Tools.f00.format(Double.valueOf(Tools.getPropertyOfChannel(myContext, UUID, Tools.TAG_COST)) / 1000 * Double.valueOf(consumptionWert)) + " €");
                 }
-            }
-            else
-            {
+            } else {
                 //remove consumption and costs from dialog
                 layout.findViewById(R.id.tableRow6).setVisibility(View.GONE);
                 layout.findViewById(R.id.tableRow7).setVisibility(View.GONE);
@@ -567,12 +558,57 @@ public class ChartDetails extends Activity {
         }
     }
 
-    private final OnClickListener cancel_button_click_listener = new OnClickListener() {
-        public void onClick(View v) {
-            pw.dismiss();
-            allowPopup = true;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, Preferences.class));
+                return (true);
+            case R.id.backup_settings:
+                boolean saved = Tools.saveFile(getApplicationContext());
+                if (saved) {
+                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.notsaved, Toast.LENGTH_SHORT).show();
+                }
+                return (true);
+            case R.id.restore_settings:
+
+                boolean restored = Tools.loadFile(getApplicationContext());
+                if (restored) {
+                    Toast.makeText(this, R.string.restored, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.notrestored, Toast.LENGTH_SHORT).show();
+                }
+                return (true);
+
+            case R.id.about:
+                return Tools.showAboutDialog(myContext);
+
+            default:
+                break;
         }
-    };
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putDouble("From", from);
+        outState.putDouble("To", to);
+        outState.putDouble("KeepFrom", keepFrom);
+        outState.putDouble("KeepTo", keepTo);
+        outState.putString("JSONStr", jsonStr);
+        outState.putString("mUUID", mUUID);
+        // outState.putDouble("MCost", mCost);
+    }
 
     private class GetChannelsDetails extends AsyncTask<Void, Void, String> {
         JSONArray werte = null;
@@ -655,7 +691,7 @@ public class ChartDetails extends Activity {
                     uRLUUIDs = "&uuid[]=" + mUUID;
                 }
 
-                url = url + "/data.json?from=" + Tools.f.format(from) + "&to=" + Tools.f.format(to) + "&tuples="+ tuples + uRLUUIDs + urlExtension;
+                url = url + "/data.json?from=" + Tools.f.format(from) + "&to=" + Tools.f.format(to) + "&tuples=" + tuples + uRLUUIDs + urlExtension;
                 Log.d("CahrtDetails", "request url is: " + url);
 
                 String uname = sharedPref.getString("username", "");
@@ -670,8 +706,8 @@ public class ChartDetails extends Activity {
             }
 
             if (jsonStr.startsWith("Error: ")) {
-                    JSONFehler = true;
-                    fehlerAusgabe = jsonStr;
+                JSONFehler = true;
+                fehlerAusgabe = jsonStr;
             } else {
 
                 // store all data stuff in a shared preference
@@ -721,63 +757,5 @@ public class ChartDetails extends Activity {
             }
 
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.action_settings:
-                startActivity(new Intent(this, Preferences.class));
-                return (true);
-            case R.id.backup_settings:
-                boolean saved = Tools.saveFile(getApplicationContext());
-                if(saved)
-                {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(this, R.string.notsaved , Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-            case R.id.restore_settings:
-
-                boolean restored = Tools.loadFile(getApplicationContext());
-                if(restored)
-                {
-                    Toast.makeText(this, R.string.restored , Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(this, R.string.notrestored , Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-
-            case R.id.about:
-                return Tools.showAboutDialog(myContext);
-
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putDouble("From", from);
-        outState.putDouble("To", to);
-        outState.putDouble("KeepFrom", keepFrom);
-        outState.putDouble("KeepTo", keepTo);
-        outState.putString("JSONStr", jsonStr);
-        outState.putString("mUUID", mUUID);
-        // outState.putDouble("MCost", mCost);
     }
 }
