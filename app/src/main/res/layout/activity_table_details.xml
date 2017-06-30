@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="none"
+    android:layout_weight="1"
+    >
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        android:layout_weight="1"
+        >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/table_ChannelName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textIsSelectable="true" />
+
+    <TextView
+        android:id="@+id/table_textViewDateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="0.35"
+        android:text="@string/textViewDateTitle"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@+id/table_textViewDateValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_weight="0.65"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="true" />
+
+
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/main_table"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:isScrollContainer="true">
+
+        <TableRow android:id="@+id/head">
+            <TextView
+                android:text="@string/timeRange"
+                android:layout_marginRight="8dp"
+                android:textStyle="bold"
+                android:gravity="right" />
+            <TextView
+                android:text="@string/minWertText"
+                android:layout_marginRight="8dp"
+                android:gravity="right"
+                android:textStyle="bold"/>
+            <TextView
+                android:text="@string/maxWertText"
+                android:layout_marginRight="8dp"
+                android:gravity="right"
+                android:textStyle="bold"/>
+            <TextView
+                android:text="@string/avWertText"
+                android:layout_marginRight="8dp"
+                android:gravity="right"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tableColumnConsumptionHead"
+                android:text="@string/conWertText"
+                android:layout_marginRight="8dp"
+                android:gravity="right"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tableColumnCostHead"
+                android:text="@string/costWertText"
+                android:gravity="right"
+                android:textStyle="bold"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
+    </ScrollView>
+</HorizontalScrollView>

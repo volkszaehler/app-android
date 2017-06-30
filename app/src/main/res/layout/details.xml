@@ -248,14 +248,67 @@
             </LinearLayout>
 
 
-        </LinearLayout>
-
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout620"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#22222222"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/textViewTitleTable"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.35"
+            android:text="@string/Table"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
         <LinearLayout
+            android:id="@+id/linearLayout62"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.65"
+            android:background="#22222222"
+            android:orientation="vertical" >
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="tableDetailsHandler"
+                android:text="@string/TableDay"
+                android:id="@+id/buttonViewTableDay" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="tableDetailsHandler"
+                android:text="@string/TableWeek"
+                android:id="@+id/buttonViewTableWeek" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="tableDetailsHandler"
+                android:text="@string/TableMonth"
+                android:id="@+id/buttonViewTableMonth" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="tableDetailsHandler"
+                android:text="@string/TableYear"
+                android:id="@+id/buttonViewTableYear" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
             android:id="@+id/linearLayout7"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="#11111111"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/textViewTitleChildren"
@@ -263,7 +316,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.35"
                 android:text="@string/ChildrenTitle"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/textViewChildren"
@@ -271,8 +324,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.65"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textIsSelectable="true"/>
-        </LinearLayout>
+                android:textIsSelectable="true" />
+    </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

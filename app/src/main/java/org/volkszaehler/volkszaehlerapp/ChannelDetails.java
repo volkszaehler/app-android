@@ -53,6 +53,7 @@ public class ChannelDetails extends Activity {
         String typeOfChannel = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE);
         switch (typeOfChannel) {
             case "power":
+            case "heat": //really for all heat?
             case "powersensor":
                 strom = true;
                 break;
@@ -175,6 +176,32 @@ public class ChannelDetails extends Activity {
                 callChart("day");
                 break;
         }
+    }
+
+    public void tableDetailsHandler(View view) {
+        String range = "day";
+        switch (view.getId()) {
+            case R.id.buttonViewTableDay:
+                range = "day";
+                break;
+            case R.id.buttonViewTableWeek:
+                range = "week";
+                break;
+            case R.id.buttonViewTableMonth:
+                range = "month";
+                break;
+            case R.id.buttonViewTableYear:
+                range = "year";
+                break;
+            default:
+                range = "day";
+                break;
+        }
+
+        Intent detailTableIntent = new Intent(ChannelDetails.this, TableDetails.class);
+        detailTableIntent.putExtra("MUUID", mUUID);
+        detailTableIntent.putExtra("Range", range);
+        startActivity(detailTableIntent);
     }
 
     private void callChart(String zeitRaum) {
