@@ -35,6 +35,7 @@ public class ChannelDetails extends Activity {
     private boolean gas = false;
     private boolean water = false;
     private boolean temp = false;
+    private boolean group = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +66,9 @@ public class ChannelDetails extends Activity {
                 break;
             case "water":
                 water = true;
+                break;
+            case "group":
+                group = true;
                 break;
             default:
                 Log.e("ChannelDetails", "Unknown channel type: " + typeOfChannel);
@@ -156,6 +160,13 @@ public class ChannelDetails extends Activity {
             findViewById(R.id.textViewTitleGesamt).setVisibility(View.GONE);
             findViewById(R.id.textViewGesamt).setVisibility(View.GONE);
         }
+
+        //remove table for type Group
+        if(group)
+        {
+            findViewById(R.id.linearLayout620).setVisibility(View.GONE);
+        }
+
     }
 
     public void chartsDetailsHandler(View view) {
