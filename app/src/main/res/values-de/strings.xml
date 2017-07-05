@@ -89,7 +89,7 @@
     <string name="TableDay">Letzte 24 Stunden</string>
     <string name="TableWeek">Letzte 7 Tage</string>
     <string name="TableMonth">Letzte 30 Tage</string>
-    <string name="TableYear">Letzte 12 Monate</string>
+    <string name="TableYear">Letzte 53 Wochen</string>
     <string name="Table">Tabelle</string>
     <string name="timeRange">Zeitraum</string>
     <string name="ChannelName">ChannelName</string>

@@ -92,7 +92,7 @@
     <string name="TableDay">Last 24 Hours</string>
     <string name="TableWeek">Last 7 Days</string>
     <string name="TableMonth">Last 30 Days</string>
-    <string name="TableYear">Last 12 Months</string>
+    <string name="TableYear">Last 53 Weeks</string>
     <string name="title_activity_table_details">TableDetails</string>
     <string name="Table">Table</string>
     <string name="timeRange">Time Range</string>
