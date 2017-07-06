@@ -81,7 +81,7 @@
     <string name="aboutLinks"><a href="http://www.volkszaehler.org">http://www.volkszaehler.org</a>\n<a href="http://github.com/volkszaehler/app-android/releases/latest">Download neuste Version</a></string>
     <string name="MultipleGraphsPopupDone">OK</string>
     <string name="MultipleGraphsPopupCancel">Abbrechen</string>
-    <string name="MultipleGraphsPopupTitel">Channels wählen</string>
+    <string name="MultipleGraphsPopupTitel">Kanäle wählen</string>
     <string name="GesamtTitle">Gesamt</string>
     <string name="VolkszaehlerCat_titleTuplesSettings">Anzahl Tuples</string>
     <string name="TuplesSummary">höhere Werte führen zu detaillierteren, aber langsameren Graphen</string>
@@ -94,5 +94,8 @@
     <string name="timeRange">Zeitraum</string>
     <string name="ChannelName">ChannelName</string>
     <string name="please_wait_infinite">Bitte warten...</string>
+    <string name="sortChannelsTitle">Kanäle Sortieren</string>
+    <string name="sortChannelsSummary">Kanäle werden alphabetisch sortiert, Kanäle müssen neu abgerufen werden" </string>
+    <string name="VolkszaehlerCat_titleSortChannels">Sortierungseinstellungen</string>
 
 </resources>
