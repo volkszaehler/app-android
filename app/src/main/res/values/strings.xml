@@ -92,11 +92,14 @@
     <string name="TableDay">Last 24 Hours</string>
     <string name="TableWeek">Last 7 Days</string>
     <string name="TableMonth">Last 30 Days</string>
-    <string name="TableYear">Last 12 Months</string>
+    <string name="TableYear">Last 53 Weeks</string>
     <string name="title_activity_table_details">TableDetails</string>
     <string name="Table">Table</string>
     <string name="timeRange">Time Range</string>
     <string name="ChannelName">ChannelName</string>
     <string name="please_wait_infinite">Please wait...</string>
+    <string name="sortChannelsTitle">Sort Channels</string>
+    <string name="sortChannelsSummary">Channels are sorted in List, Channels must be re-loaded</string>
+    <string name="VolkszaehlerCat_titleSortChannels">Sort Settings</string>
 
 </resources>

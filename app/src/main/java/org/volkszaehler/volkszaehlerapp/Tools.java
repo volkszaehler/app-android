@@ -28,6 +28,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -62,7 +64,7 @@ class Tools {
     static final DecimalFormat f0 = new DecimalFormat("#0.0");
     static final DecimalFormat f00 = new DecimalFormat("#0.00");
     static final DecimalFormat f000 = new DecimalFormat("#0.000");
-    private static final String TAG_ENTITIES = "entities";
+    public static final String TAG_ENTITIES = "entities";
     private static final String TAG_ACTIVE = "active";
     private static final String TAG_FILLSTYLE = "fillstyle";
     private static final String TAG_PUBLIC = "public";
@@ -70,6 +72,7 @@ class Tools {
     private static final String TAG_YAXIS = "yaxis";
     private static final String TAG_CHILDREN = "children";
     private static final String BACKUP_FILENAME = "volkszaehler_settings_backup.txt";
+    private static final Object TAG_GROUP = "group";
     private static String unit = "";
 
     private static SharedPreferences getPrefs(Context context) {
@@ -298,7 +301,7 @@ class Tools {
         }
         catch (JSONException jex)
         {
-            Log.d("getGroupChannels:", String.format("no children found for UUID: %s", channel));
+            Log.e("getGroupChannels:", String.format("no children found for UUID: %s", channel));
             jex.printStackTrace();
         }
 
@@ -448,6 +451,7 @@ class Tools {
             fw.write("privateChannelUUIDs" + "=" + sharedPrefs.getString("privateChannelUUIDs", "") + "\n");
             fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
             fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false"));
+            fw.write("sortChannels" + "=" + (sharedPrefs.getBoolean("sortChannels", false) ? "true" : "false"));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -513,6 +517,13 @@ class Tools {
                         continue;
                     }
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("ZeroBasedYAxis", Boolean.parseBoolean(line)).commit();
+                } else if (line.startsWith("sortChannels")) {
+                    try {
+                        line = line.split("=")[1];
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("sortChannels", Boolean.parseBoolean(line)).commit();
                 } else if (line.startsWith("autoReload")) {
                     try {
                         line = line.split("=")[1];
@@ -628,5 +639,47 @@ class Tools {
         float stufengroesse = (max - min)/stufen;
         float stufe = (Float.parseFloat(value) - min) / stufengroesse;
         return Math.round(stufe);
+    }
+
+    public static JSONObject sortJSONChannels(JSONObject JSONChannels, String sortWhat)
+    {
+        ArrayList<JSONObject> list = null;
+        JSONArray what_Array = null;
+        try {
+            what_Array = (JSONArray) JSONChannels.get(sortWhat);
+            list = new ArrayList<>();
+            for (int i = 0; i < what_Array.length(); i++) {
+                JSONObject channel = (JSONObject) what_Array.get(i);
+                if(TAG_GROUP.equals(channel.get(TAG_TYPE)))
+                {
+                    if(channel.get(TAG_CHILDREN)!="" && channel.get(TAG_CHILDREN) != null) {
+                        channel = sortJSONChannels((JSONObject) channel,TAG_CHILDREN);
+                    }
+                }
+                list.add(channel);
+            }
+            Collections.sort(list, new MyJSONComparator());
+            JSONChannels.remove(sortWhat);
+            JSONChannels.put(sortWhat, list);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return JSONChannels;
+    }
+}
+
+class  MyJSONComparator implements Comparator<JSONObject> {
+
+    @Override
+    public int compare(JSONObject jo1, JSONObject jo2) {
+        String v1 = "", v2 = "";
+        try {
+            v1 = (String) jo1.get(Tools.TAG_TITLE);
+            v2 = (String) jo2.get(Tools.TAG_TITLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return v1.compareTo(v2);
     }
 }

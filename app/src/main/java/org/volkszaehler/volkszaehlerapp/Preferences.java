@@ -54,6 +54,7 @@ public class Preferences extends PreferenceActivity {
                     pwd = prefs.getString("password", "");
                     boolean bZeroBased = prefs.getBoolean("ZeroBasedYAxis", false);
                     boolean bAutoReload = prefs.getBoolean("autoReload", false);
+                    boolean bSortChannels = prefs.getBoolean("sortChannels", false);
                     tuples = prefs.getString("Tuples", "1000");
                     privateChannelString = prefs.getString("privateChannelUUIDs", "");
 
@@ -66,6 +67,7 @@ public class Preferences extends PreferenceActivity {
                     prefs.edit().putString("password", pwd).commit();
                     prefs.edit().putBoolean("ZeroBasedYAxis", bZeroBased).commit();
                     prefs.edit().putBoolean("autoReload", bAutoReload).commit();
+                    prefs.edit().putBoolean("sortChannels", bSortChannels).commit();
                     prefs.edit().putString("Tuples", tuples).commit();
                     prefs.edit().putString("privateChannelUUIDs", privateChannelString).commit();
                     // call Channels from VZ installation
@@ -249,13 +251,18 @@ public class Preferences extends PreferenceActivity {
                     }
                 }
             }
-
             // store all channel stuff in a shared preference
             if (jsonStrObj != null) {
-                jsonStr = jsonStrObj.toString();
+                if(sharedPref.getBoolean("sortChannels", false))
+                {
+                    jsonStr = Tools.sortJSONChannels(jsonStrObj, Tools.TAG_ENTITIES).toString().replace("\\", "").replace("\"[", "[").replace("]\"","]"); //not sure why the quotes are escaped after put, so remove escaped quotes a.s.o.
+                }
+                else
+                {
+                    jsonStrObj.toString();
+                }
                 getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
             }
-
             return null;
         }
 
