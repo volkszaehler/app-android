@@ -110,7 +110,7 @@ class ServiceHandler {
     }
 
     public String makeServiceCall(String url, int method, List<NameValuePair> params, String uname, String pwd) {
-        String response = "";
+        String response;
 
         try {
             // http client
