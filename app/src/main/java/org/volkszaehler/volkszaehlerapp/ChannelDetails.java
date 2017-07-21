@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public class ChannelDetails extends Activity {
 
-    private static Context myContext;
+    private Context myContext;
     private String mUUID = "";
     private ProgressDialog pDialog;
     private String unit;
@@ -190,7 +190,7 @@ public class ChannelDetails extends Activity {
     }
 
     public void tableDetailsHandler(View view) {
-        String range = "day";
+        String range;
         switch (view.getId()) {
             case R.id.buttonViewTableDay:
                 range = "day";
