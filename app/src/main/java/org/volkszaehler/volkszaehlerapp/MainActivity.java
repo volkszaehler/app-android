@@ -28,11 +28,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity<ViewGroup> extends ListActivity {
-    private static Context myContext;
+    private Context myContext;
     // Hashmaps for ListView
     private final ArrayList<HashMap<String, String>> channelValueList = new ArrayList<>();
     private String jsonStr = "";
@@ -82,6 +83,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     adapter.notifyDataSetChanged();
                 }
                 jsonStr = "";
+                //the channels that are checked
                 channelsToRequest = "";
                 // adding uuids that are checked in preferences
                 for (String preference : PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getAll().keySet()) {
@@ -221,6 +223,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
 
                 JSONArray werte;
                 SharedPreferences prefs = getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE);
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 String JSONChannels = prefs.getString("JSONChannels", "");
                 // are there really channels in the Prefs?
                 if (JSONChannels.equals("")) {
@@ -228,6 +231,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     fehlerAusgabe = getString(R.string.no_Channelinformation_found);
                     return null;
                 }
+                //the channels to request
                 String uRLUUIDs = arg0[0];
                 Log.d("MainActivity", "uRLUUIDs first: " + uRLUUIDs);
 
@@ -239,7 +243,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                         // empty element
                         continue;
                     }
-                    // add all checked channels
+                    // add checked channel
                     allUUIDs.add(aChannelsAusParameterMitLeerstring);
                     // check for childs if above is a group
                     String childUUIDs = Tools.getPropertyOfChannel(myContext, aChannelsAusParameterMitLeerstring, Tools.TAG_CHUILDUUIDS);
@@ -269,8 +273,8 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     }
                 }
 
-                //
-                ArrayList<HashMap<String, String>> allChannelsMapList = Tools.getChannelsFromJSONStringEntities(JSONChannels);
+                // all channels
+                ArrayList<HashMap<String, String>> allChannelsMapList = Tools.getChannelsFromJSONStringEntities(JSONChannels, myContext);
 
                 for (HashMap<String, String> channelMap : allChannelsMapList) {
                     for (String channelAusParameter : allUUIDs) {
@@ -286,10 +290,9 @@ public class MainActivity<ViewGroup> extends ListActivity {
                 if (bAutoReload || jsonStr.equals("")) {
                     // Creating service handler class instance
                     ServiceHandler sh = new ServiceHandler();
-                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                     String url = sharedPref.getString("volkszaehlerURL", "");
 
-                    long millisNow = System.currentTimeMillis();
+                    //long millisNow = System.currentTimeMillis();
                     url = url + "/data.json?from=now" + uRLUUIDs;
 
                     Log.d("MainActivity: ", "url: " + url);
@@ -363,6 +366,9 @@ public class MainActivity<ViewGroup> extends ListActivity {
                             }
 
                             int listSize = channelValueList.size();
+                            if(sharedPref.getString("sortChannelMode", "off").equals("plain")) {
+                                Collections.sort(channelValueList, new MyHashMapComparator());
+                            }
                             // add values to existing Channels in List
                             String unit;
                             for (int j = 0; j < listSize; j++) {
