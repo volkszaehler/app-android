@@ -99,7 +99,9 @@
     <string name="ChannelName">ChannelName</string>
     <string name="please_wait_infinite">Please wait...</string>
     <string name="sortChannelsTitle">Sort Channels</string>
-    <string name="sortChannelsSummary">Channels are sorted in List, Channels must be re-loaded</string>
+    <string name="sortChannelsSummary">Sort Order of Channels</string>
     <string name="VolkszaehlerCat_titleSortChannels">Sort Settings</string>
+    <string name="off">Off</string>
+    <string name="groups">groups</string>
 
 </resources>
