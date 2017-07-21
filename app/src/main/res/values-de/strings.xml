@@ -95,7 +95,12 @@
     <string name="ChannelName">ChannelName</string>
     <string name="please_wait_infinite">Bitte warten...</string>
     <string name="sortChannelsTitle">Kanäle Sortieren</string>
-    <string name="sortChannelsSummary">Kanäle werden alphabetisch sortiert, Kanäle müssen neu abgerufen werden" </string>
+    <string name="sortChannelsSummary">Sortierung der Kanäle" </string>
     <string name="VolkszaehlerCat_titleSortChannels">Sortierungseinstellungen</string>
+    <string name="groups">groups</string>
+    <string name="minWertText">Min.</string>
+    <string name="maxWertText">Max.</string>
+    <string name="title_activity_table_details">TableDetails</string>
+    <string name="off">Off</string>
 
 </resources>

@@ -50,20 +50,20 @@ public class TableDetails extends Activity {
 
     private ProgressDialog pDialog;
 
-    float minMin = 2147483647f;
-    float maxMin = 0f;
-    float minMax = 2147483647f;
-    float maxMax = 0f;
-    float minAverage = 2147483647f;
-    float maxAverage = 0f;
-    float minConsumption = 2147483647f;
-    float maxConsumption = 0f;
-    String cost = "";
-    String resolution = "";
+    private float minMin = 2147483647f;
+    private float maxMin = 0f;
+    private float minMax = 2147483647f;
+    private float maxMax = 0f;
+    private float minAverage = 2147483647f;
+    private float maxAverage = 0f;
+    private float minConsumption = 2147483647f;
+    private float maxConsumption = 0f;
+    private String cost = "";
+    private String resolution = "";
 
-    boolean bConsumption = false;
+    private boolean bConsumption = false;
 
-    List<String[]> tabellenZeilenHolder = new ArrayList<>();
+    private List<String[]> tabellenZeilenHolder = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +175,7 @@ public class TableDetails extends Activity {
 
                 long millisNow = System.currentTimeMillis();
                 Calendar c=Calendar.getInstance();
-                long millisNow2 = c.getInstance().getTimeInMillis();
+                long millisNow2 = Calendar.getInstance().getTimeInMillis();
                 c.setTime(new Date());
                 c.setTimeZone(TimeZone.getDefault());
                 long millis3 = c.getTimeInMillis();

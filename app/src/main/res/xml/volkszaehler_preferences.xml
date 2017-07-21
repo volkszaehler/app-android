@@ -59,10 +59,15 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/VolkszaehlerCat_titleSortChannels">
-        <CheckBoxPreference
-            android:key="sortChannels"
+
+        <ListPreference
+            android:key="sortChannelMode"
+            android:title="@string/sortChannelsTitle"
             android:summary="@string/sortChannelsSummary"
-            android:title="@string/sortChannelsTitle"/>
+            android:entryValues="@array/pref_keys"
+            android:entries="@array/pref_values"
+            android:defaultValue="@string/groups"
+            />
     </PreferenceCategory>
 
     <PreferenceCategory

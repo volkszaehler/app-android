@@ -27,12 +27,13 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.List;
 import java.util.TimeZone;
 
 class Tools {
@@ -64,7 +65,7 @@ class Tools {
     static final DecimalFormat f0 = new DecimalFormat("#0.0");
     static final DecimalFormat f00 = new DecimalFormat("#0.00");
     static final DecimalFormat f000 = new DecimalFormat("#0.000");
-    public static final String TAG_ENTITIES = "entities";
+    static final String TAG_ENTITIES = "entities";
     private static final String TAG_ACTIVE = "active";
     private static final String TAG_FILLSTYLE = "fillstyle";
     private static final String TAG_PUBLIC = "public";
@@ -79,7 +80,7 @@ class Tools {
         return context.getSharedPreferences(JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
     }
 
-    public static String getUnit(Context context, String type, String uuid) {
+    static String getUnit(Context context, String type, String uuid) {
 
         SharedPreferences prefs = getPrefs(context);
         if (type != null && !"".equals(type)) {
@@ -117,10 +118,10 @@ class Tools {
 
     }
 
-    public static String getPropertyOfChannel(Context context, String uuid, String property) {
+    static String getPropertyOfChannel(Context context, String uuid, String property) {
         SharedPreferences prefs = getPrefs(context);
         String sJSONChannels = prefs.getString(JSON_CHANNELS, "");
-        for (HashMap<String, String> channelMap : getChannelsFromJSONStringEntities(sJSONChannels)) {
+        for (HashMap<String, String> channelMap : getChannelsFromJSONStringEntities(sJSONChannels, context)) {
 
             if (uuid.equals(channelMap.get(TAG_UUID))) {
                 return channelMap.containsKey(property) ? channelMap.get(property) : "";
@@ -168,7 +169,7 @@ class Tools {
         return newJSONArray;
     }
 
-    public static double getMillisValueFromDisplayPoint(Context context, float xValue, double startX, double endX) {
+    static double getMillisValueFromDisplayPoint(Context context, float xValue, double startX, double endX) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -185,8 +186,10 @@ class Tools {
         return Math.round((ratio * (xValue - 20))) + startX;
     }
 
-    public static ArrayList<HashMap<String, String>> getChannelsFromJSONStringEntities(String jSONStringEntities) {
+    static ArrayList<HashMap<String, String>> getChannelsFromJSONStringEntities(String jSONStringEntities, Context myContext) {
         ArrayList<HashMap<String, String>> channelMapList = new ArrayList<>();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(myContext);
+        String sortMode = prefs.getString("sortChannelMode", "off");
 
         try {
             JSONObject jsonObj = new JSONObject(jSONStringEntities);
@@ -223,6 +226,9 @@ class Tools {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+        if(sortMode.equals("plain")) {
+            Collections.sort(channelMapList, new MyHashMapComparator());
         }
         return channelMapList;
     }
@@ -262,7 +268,7 @@ class Tools {
         return channel;
     }
 
-    private static void getGroupChannels(JSONObject channel, HashMap<String, String> channelMap, ArrayList<HashMap<String, String>> channelMapList) throws JSONException {
+    private static void getGroupChannels(JSONObject channel, HashMap<String, String> channelMap, ArrayList<HashMap<String, String>> channelMapList) {
 
         try {
             JSONArray children = channel.getJSONArray(TAG_CHILDREN);
@@ -390,7 +396,6 @@ class Tools {
         String Wert = "";
 
         try {
-            JSONObject jSONObj;
             JSONObject jsonObj = new JSONObject(jSONString);
             JSONObject werte = jsonObj.getJSONObject(TAG_DATA);
             //for (int i = 0; i < werte.length(); i++) {
@@ -450,8 +455,9 @@ class Tools {
             fw.write("Tuples" + "=" + sharedPrefs.getString("Tuples", "1000") + "\n");
             fw.write("privateChannelUUIDs" + "=" + sharedPrefs.getString("privateChannelUUIDs", "") + "\n");
             fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
-            fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false"));
-            fw.write("sortChannels" + "=" + (sharedPrefs.getBoolean("sortChannels", false) ? "true" : "false"));
+            fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false") + "\n");
+            fw.write("allCheckedChannels" + "=" + getCheckedChannels(context) + "\n");
+            fw.write("sortChannelMode" + "=" + sharedPrefs.getString("sortChannelMode", "") + "\n");
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -474,6 +480,7 @@ class Tools {
 
             br = new BufferedReader(new FileReader(file));
             String line;
+            String allCheckedChannels="";
             while ((line = br.readLine()) != null) {
                 if (line.startsWith(JSON_CHANNELS)) {
                     try {
@@ -510,6 +517,13 @@ class Tools {
                         continue;
                     }
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("privateChannelUUIDs", line).commit();
+                } else if (line.startsWith("allCheckedChannels")) {
+                    try {
+                        line = line.split("=")[1];
+                        allCheckedChannels = line;
+                    } catch (IndexOutOfBoundsException iobx) {
+                        continue;
+                    }
                 } else if (line.startsWith("ZeroBasedYAxis")) {
                     try {
                         line = line.split("=")[1];
@@ -517,13 +531,13 @@ class Tools {
                         continue;
                     }
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("ZeroBasedYAxis", Boolean.parseBoolean(line)).commit();
-                } else if (line.startsWith("sortChannels")) {
+                } else if (line.startsWith("sortChannelMode")) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("sortChannels", Boolean.parseBoolean(line)).commit();
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("sortChannelMode", line).commit();
                 } else if (line.startsWith("autoReload")) {
                     try {
                         line = line.split("=")[1];
@@ -533,6 +547,8 @@ class Tools {
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("autoReload", Boolean.parseBoolean(line)).commit();
                 }
             }
+            //set checkboxes
+            checkChannels(allCheckedChannels,context);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -549,6 +565,37 @@ class Tools {
         }
     }
 
+    static String getCheckedChannels(Context myContext)
+    {
+        String allCheckedChannels = "";
+        for (String preference : PreferenceManager.getDefaultSharedPreferences(myContext).getAll().keySet()) {
+            // assume its a UUID of a channel
+            if (preference.contains("-") && preference.length() == 36) {
+                // is preference checked?
+                if (PreferenceManager.getDefaultSharedPreferences(myContext).getBoolean(preference, false)) {
+                    if(!"".equals(allCheckedChannels)) {
+                        allCheckedChannels = allCheckedChannels + "," + preference;
+                    }
+                    else {
+                        allCheckedChannels = preference;
+                    }
+                }
+            }
+        }
+        //always sort by Title (for Chart Popup)
+        String[] channelUUIDs = allCheckedChannels.split(",");
+        List<String> channelList = new ArrayList<String>(Arrays.asList(channelUUIDs));
+        Collections.sort(channelList,new UUIDbyTitleComparator(myContext));
+        return android.text.TextUtils.join(",", channelList);
+    }
+
+    private static void checkChannels(String allCheckedChannels, Context myContext)
+    {
+        for(String checkedChannel : allCheckedChannels.split(",")) {
+            PreferenceManager.getDefaultSharedPreferences(myContext).edit().putBoolean(checkedChannel, true).commit();
+        }
+    }
+
     static Boolean showAboutDialog(Context context) {
         String app_ver;
         try {
@@ -562,7 +609,7 @@ class Tools {
         return true;
     }
 
-    public static String getDateTimeString(long localfrom, long localto, String range, Context myContext) {
+    static String getDateTimeString(long localfrom, long localto, String range, Context myContext) {
         String dateTimeString="";
 
         Calendar calendar = Calendar.getInstance();
@@ -609,7 +656,7 @@ class Tools {
         return dateTimeString;
     }
 
-    public static String determineColor(float anzahlStufen, float stufe)
+    static String determineColor(float anzahlStufen, float stufe)
     {
         float gruenTeil;
         float rotTeil;
@@ -641,10 +688,11 @@ class Tools {
         return Math.round(stufe);
     }
 
-    public static JSONObject sortJSONChannels(JSONObject JSONChannels, String sortWhat)
+    static JSONObject sortJSONChannels(JSONObject JSONChannels, String sortWhat, String sortMode)
     {
         ArrayList<JSONObject> list = null;
         JSONArray what_Array = null;
+        JSONArray group_Array = null;
         try {
             what_Array = (JSONArray) JSONChannels.get(sortWhat);
             list = new ArrayList<>();
@@ -653,7 +701,9 @@ class Tools {
                 if(TAG_GROUP.equals(channel.get(TAG_TYPE)))
                 {
                     if(channel.get(TAG_CHILDREN)!="" && channel.get(TAG_CHILDREN) != null) {
-                        channel = sortJSONChannels((JSONObject) channel,TAG_CHILDREN);
+                        if(sortMode.equals("groups")) {
+                            channel = sortJSONChannels(channel, TAG_CHILDREN, "groups");
+                        }
                     }
                 }
                 list.add(channel);
@@ -670,7 +720,6 @@ class Tools {
 }
 
 class  MyJSONComparator implements Comparator<JSONObject> {
-
     @Override
     public int compare(JSONObject jo1, JSONObject jo2) {
         String v1 = "", v2 = "";
@@ -681,5 +730,34 @@ class  MyJSONComparator implements Comparator<JSONObject> {
             e.printStackTrace();
         }
         return v1.compareTo(v2);
+    }
+}
+
+class  MyHashMapComparator implements Comparator<HashMap> {
+    @Override
+    public int compare(HashMap channel1, HashMap channel2) {
+        String v1 = (String) channel1.get(Tools.TAG_TITLE);
+        String v2 = (String) channel2.get(Tools.TAG_TITLE);
+        return v1.compareTo(v2);
+    }
+}
+
+class  UUIDbyTitleComparator implements Comparator<String> {
+    Context context;
+    public UUIDbyTitleComparator(Context myContext) {
+        context = myContext;
+    }
+    @Override
+    public int compare(String channel1, String channel2) {
+        String v1 = (String) Tools.getPropertyOfChannel(context,channel1,Tools.TAG_TITLE);
+        String v2 = (String) Tools.getPropertyOfChannel(context,channel2,Tools.TAG_TITLE);;
+        return v1.compareTo(v2);
+    }
+}
+
+class  MyCharSequenceComparator implements Comparator<CharSequence> {
+    @Override
+    public int compare(CharSequence charSequence1, CharSequence charSequence2) {
+        return charSequence1.toString().compareTo(charSequence2.toString());
     }
 }

@@ -28,9 +28,11 @@ public class Preferences extends PreferenceActivity {
     private static String pwd;
     private static String tuples;
     private static String privateChannelString;
+    private static String sortChannelMode;
     private boolean newChannels = false;
     private ProgressDialog pDialog;
     private ArrayList<HashMap<String, String>> channelList = new ArrayList<>();
+    private String allCheckedChannels = "";
 
     @Override
     protected void onCreate(Bundle savedInstancesState) {
@@ -54,11 +56,11 @@ public class Preferences extends PreferenceActivity {
                     pwd = prefs.getString("password", "");
                     boolean bZeroBased = prefs.getBoolean("ZeroBasedYAxis", false);
                     boolean bAutoReload = prefs.getBoolean("autoReload", false);
-                    boolean bSortChannels = prefs.getBoolean("sortChannels", false);
+                    sortChannelMode = prefs.getString("sortChannelMode", "off");
                     tuples = prefs.getString("Tuples", "1000");
                     privateChannelString = prefs.getString("privateChannelUUIDs", "");
-
-
+                    //keep all checked channels
+                    allCheckedChannels = Tools.getCheckedChannels(getApplicationContext());
                     // remove all
                     prefs.edit().clear().commit();
                     // and put back
@@ -67,7 +69,7 @@ public class Preferences extends PreferenceActivity {
                     prefs.edit().putString("password", pwd).commit();
                     prefs.edit().putBoolean("ZeroBasedYAxis", bZeroBased).commit();
                     prefs.edit().putBoolean("autoReload", bAutoReload).commit();
-                    prefs.edit().putBoolean("sortChannels", bSortChannels).commit();
+                    prefs.edit().putString("sortChannelMode", sortChannelMode).commit();
                     prefs.edit().putString("Tuples", tuples).commit();
                     prefs.edit().putString("privateChannelUUIDs", privateChannelString).commit();
                     // call Channels from VZ installation
@@ -77,7 +79,7 @@ public class Preferences extends PreferenceActivity {
             });
         }
         // fill PreferenceScreen dynamically with new channels
-        addPreferenceChannels();
+        addPreferenceChannels(allCheckedChannels);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class Preferences extends PreferenceActivity {
         super.onBackPressed();
     }
 
-    private void addPreferenceChannels() {
+    private void addPreferenceChannels(String allCheckedChannels) {
         SharedPreferences prefs = getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
         String JSONChannels = prefs.getString(Tools.JSON_CHANNELS, "");
         Log.d("Preferences", "JSONChannels: " + JSONChannels);
@@ -110,11 +112,11 @@ public class Preferences extends PreferenceActivity {
 
                 if ("group".equals(channel.get(Tools.TAG_TYPE))) {
                     checkBoxPreference.setTitle(channel.get(Tools.TAG_TITLE) + " " + getString(R.string.group));
-                    // checkBoxPreference.setEnabled(false);
                 } else if (channel.containsKey(Tools.TAG_BELONGSTOGROUP) && !((channel.get(Tools.TAG_BELONGSTOGROUP)).equals("") || channel.get(Tools.TAG_BELONGSTOGROUP) == null)) {
-                    for (HashMap<String, String> channel2 : channelList) {
-                        if (channel.get(Tools.TAG_BELONGSTOGROUP).equals(channel2.get(Tools.TAG_UUID))) {
-                            checkBoxPreference.setTitle(channel.get(Tools.TAG_TITLE) + " " + getString(R.string.belongsTo) + " " + channel2.get(Tools.TAG_TITLE) + ")");
+                    for (HashMap<String, String> groupChannel : channelList) {
+                        if (channel.get(Tools.TAG_BELONGSTOGROUP).equals(groupChannel.get(Tools.TAG_UUID))) {
+                            checkBoxPreference.setTitle(channel.get(Tools.TAG_TITLE) + " " + getString(R.string.belongsTo) + " " + groupChannel.get(Tools.TAG_TITLE) + ")");
+                            break;
                         }
                     }
                 } else {
@@ -123,6 +125,13 @@ public class Preferences extends PreferenceActivity {
                 checkBoxPreference.setKey(channel.get(Tools.TAG_UUID));
                 checkBoxPreference.setSummary(channel.get(Tools.TAG_DESCRIPTION) + "\n" + channel.get(Tools.TAG_UUID));
                 targetCategory.addPreference(checkBoxPreference);
+                // check preference
+                for(String checkedChannel : allCheckedChannels.split(",")) {
+                    if (channel.get(Tools.TAG_UUID).equals(checkedChannel)) {
+                        checkBoxPreference.setChecked(true);
+                        prefs.edit().putBoolean(checkedChannel, true).commit();
+                    }
+                }
             }
 
         }
@@ -134,7 +143,7 @@ public class Preferences extends PreferenceActivity {
         for (int i = 0; i < size; i++) {
             channelList.remove(0);
         }
-        channelList = Tools.getChannelsFromJSONStringEntities(jsonStr);
+        channelList = Tools.getChannelsFromJSONStringEntities(jsonStr, getApplicationContext());
         // channelList = Tools.removeExistingChannel(channelList);
         Log.d("Preferences", "channelList" + channelList);
     }
@@ -195,7 +204,6 @@ public class Preferences extends PreferenceActivity {
             if (jsonStr.startsWith("Error: ") || jsonStrDef.startsWith("Error: ")) {
                 JSONFehler = true;
                 fehlerAusgabe = jsonStr + " | " + jsonStrDef;
-                ;
             } else {
                 try {
                     jsonStrObj = new JSONObject(jsonStr);
@@ -218,7 +226,7 @@ public class Preferences extends PreferenceActivity {
 
             }
 
-            String privatChannelURL = "";
+            String privatChannelURL;
             if (!"".equals(privateChannelString)) {
                 //Loop over each private channel
                 for (String channelUUID : privateChannels) {
@@ -253,13 +261,14 @@ public class Preferences extends PreferenceActivity {
             }
             // store all channel stuff in a shared preference
             if (jsonStrObj != null) {
-                if(sharedPref.getBoolean("sortChannels", false))
-                {
-                    jsonStr = Tools.sortJSONChannels(jsonStrObj, Tools.TAG_ENTITIES).toString().replace("\\", "").replace("\"[", "[").replace("]\"","]"); //not sure why the quotes are escaped after put, so remove escaped quotes a.s.o.
+                if(sharedPref.getString("sortChannelMode", "off").equals("off")) {
+                    jsonStr = jsonStrObj.toString();
                 }
-                else
-                {
-                    jsonStrObj.toString();
+                else if (sharedPref.getString("sortChannelMode", "off").equals("groups")) {
+                    jsonStr = Tools.sortJSONChannels(jsonStrObj, Tools.TAG_ENTITIES, "groups").toString().replace("\\", "").replace("\"[", "[").replace("]\"","]"); //not sure why the quotes are escaped after put, so remove escaped quotes a.s.o.
+                }
+                else if (sharedPref.getString("sortChannelMode", "off").equals("plain")) {
+                    jsonStr = Tools.sortJSONChannels(jsonStrObj, Tools.TAG_ENTITIES, "plain").toString().replace("\\", "").replace("\"[", "[").replace("]\"","]"); //not sure why the quotes are escaped after put, so remove escaped quotes a.s.o.
                 }
                 getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
             }
@@ -284,7 +293,7 @@ public class Preferences extends PreferenceActivity {
                     new AlertDialog.Builder(Preferences.this).setTitle(getString(R.string.Error)).setMessage(fehlerAusgabe2).setNeutralButton(getString(R.string.Close), null).show();
                 }
             } else {
-                addPreferenceChannels();
+                addPreferenceChannels(allCheckedChannels);
             }
         }
     }
