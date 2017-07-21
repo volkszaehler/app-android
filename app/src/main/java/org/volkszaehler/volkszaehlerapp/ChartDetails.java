@@ -40,11 +40,14 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import org.volkszaehler.volkszaehlerapp.Tools;
 
 
 public class ChartDetails extends Activity {
@@ -302,17 +305,12 @@ public class ChartDetails extends Activity {
         List<CharSequence> channelNames = new ArrayList<>();
 
         int i = 0;
-        final HashMap<String, String> channelsToRequest = new HashMap<>();
+        final LinkedHashMap<String, String> channelsToRequest = new LinkedHashMap<>();
         //get the currently set Channels (in preferences)
-        for (String uuid : PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getAll().keySet()) {
-            // assume its a UUID of a channel
-            if (uuid.contains("-") && uuid.length() == 36) {
-                // is preference checked?
-                if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(uuid, false)) {
+        String allCheckedChannels = Tools.getCheckedChannels(myContext);
+        for (String uuid : allCheckedChannels.split(",")) {
                     channelsToRequest.put(uuid, Tools.getPropertyOfChannel(myContext, uuid, Tools.TAG_TITLE));
                     i++;
-                }
-            }
         }
         boolean[] alreadyChecked = new boolean[i];
         final ArrayList selectedItems = new ArrayList(i);
@@ -353,11 +351,7 @@ public class ChartDetails extends Activity {
                     i++;
                 }
             }
-
-
-            //}
         }
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
         builder.setTitle(R.string.MultipleGraphsPopupTitel);
@@ -379,7 +373,7 @@ public class ChartDetails extends Activity {
         builder.setPositiveButton(R.string.MultipleGraphsPopupDone, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int indexItem = 0;
+                int indexItem;
                 int countItem = 0;
                 //add UUIDs to mUUID
                 mUUID = "";
