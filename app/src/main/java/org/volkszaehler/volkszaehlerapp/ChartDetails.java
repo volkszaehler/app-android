@@ -173,7 +173,7 @@ public class ChartDetails extends Activity {
             for (String singleUUID : mUUIDs) {
                 //is there a group in the list?
                 if ((Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_TYPE)).equals("group")) {                                // are there child uuids? (in case of a group)
-                    String childUUIDs = Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_CHUILDUUIDS);
+                    String childUUIDs = Tools.getHashMapBasedPropertyOfChannel(myContext, singleUUID, Tools.TAG_CHUILDUUIDS);
 
                     if (null != childUUIDs && !"".equals(childUUIDs)) {
                         if (childUUIDs.contains("|")) {
@@ -192,7 +192,7 @@ public class ChartDetails extends Activity {
                 }
             }
         } else if ((Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE)).equals("group")) {
-            String childUUIDs = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_CHUILDUUIDS);
+            String childUUIDs = Tools.getHashMapBasedPropertyOfChannel(myContext, mUUID, Tools.TAG_CHUILDUUIDS);
 
             if (null != childUUIDs && !"".equals(childUUIDs)) {
                 if (childUUIDs.contains("|")) {
@@ -307,7 +307,7 @@ public class ChartDetails extends Activity {
         int i = 0;
         final LinkedHashMap<String, String> channelsToRequest = new LinkedHashMap<>();
         //get the currently set Channels (in preferences)
-        String allCheckedChannels = Tools.getCheckedChannels(myContext);
+        String allCheckedChannels = Tools.getCheckedChannels(myContext, true);
         for (String uuid : allCheckedChannels.split(",")) {
                     channelsToRequest.put(uuid, Tools.getPropertyOfChannel(myContext, uuid, Tools.TAG_TITLE));
                     i++;
@@ -643,7 +643,7 @@ public class ChartDetails extends Activity {
                     for (String singleUUID : mUUIDs) {
                         //is there a group in the list?
                         if ((Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_TYPE)).equals("group")) {                                // are there child uuids? (in case of a group)
-                            String childUUIDs = Tools.getPropertyOfChannel(myContext, singleUUID, Tools.TAG_CHUILDUUIDS);
+                            String childUUIDs = Tools.getHashMapBasedPropertyOfChannel(myContext, singleUUID, Tools.TAG_CHUILDUUIDS);
                             Log.d("ChartDetails", "childUUIDs: " + childUUIDs);
 
                             if (null != childUUIDs && !"".equals(childUUIDs)) {
@@ -665,7 +665,7 @@ public class ChartDetails extends Activity {
                     }
                 } else if ((Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_TYPE)).equals("group")) {
                     // are there child uuids? (in case of a group)
-                    String childUUIDs = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_CHUILDUUIDS);
+                    String childUUIDs = Tools.getHashMapBasedPropertyOfChannel(myContext, mUUID, Tools.TAG_CHUILDUUIDS);
                     Log.d("ChartDetails", "childUUIDs: " + childUUIDs);
 
                     if (null != childUUIDs && !"".equals(childUUIDs)) {
@@ -705,7 +705,7 @@ public class ChartDetails extends Activity {
             } else {
 
                 // store all data stuff in a shared preference
-                getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannelsData", jsonStr).commit();
+                getApplicationContext().getSharedPreferences("JSONChannelPrefs", Activity.MODE_PRIVATE).edit().putString("JSONChannelsData", jsonStr).apply();
 
                 JSONObject jsonObj;
                 try {

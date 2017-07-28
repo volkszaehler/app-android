@@ -9,7 +9,7 @@ Download: [https://github.com/volkszaehler/app-android/releases/latest](https://
 ![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200&tok=3e01fa "ScreenShots 3 of VolkszaehlerApp") 
 ![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
-## VolkszählerApp für Android, Version 0.9.4
+## VolkszählerApp für Android, Version 0.9.5
 
 
 Funktionen:  
@@ -37,7 +37,7 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
 ---
 
 English:
-## VolkszaehlerApp for Android, Version 0.9.4
+## VolkszaehlerApp for Android, Version 0.9.5
 
 
 Features:  
@@ -63,17 +63,22 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 
 ## Version history:
+### Version 0.9.5
+  
+#### Changed
+  - When reading the channels the very first time all channels are checked by default (https://github.com/volkszaehler/app-android/issues/32) 
+
 
 ### Version 0.9.4
 #### New  
-  - now 3 Sorting modes: Off, Sorting of Channels in Groups, or Sorting all Channles independend of Groups
+  - now 3 Sorting modes: Off, Sorting of Channels in Groups, or Sorting all Channles independend of Groups (https://github.com/volkszaehler/app-android/issues/29) 
   - the backup of settings now also saves the "checked state" of the channels 
     
 #### Fixed 
   - small bugs
   
 #### Changed
-  - Sorting of channels now also for Popup in chart view
+  - Sorting of channels now also for Popup in chart view (https://github.com/volkszaehler/app-android/issues/30)
   - small optimizations
 
 ### Version 0.9.3

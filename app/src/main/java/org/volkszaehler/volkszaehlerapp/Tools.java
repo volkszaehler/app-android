@@ -66,6 +66,7 @@ class Tools {
     static final DecimalFormat f00 = new DecimalFormat("#0.00");
     static final DecimalFormat f000 = new DecimalFormat("#0.000");
     static final String TAG_ENTITIES = "entities";
+    static final String AllCheckedChannels = "allCheckedChannels";
     private static final String TAG_ACTIVE = "active";
     private static final String TAG_FILLSTYLE = "fillstyle";
     private static final String TAG_PUBLIC = "public";
@@ -110,7 +111,7 @@ class Tools {
 
             }
         } else if (uuid != null && !"".equals(uuid)) {
-            String rType = getPropertyOfChannel(context, uuid, "type");
+            String rType = getPropertyOfChannel(context, uuid, TAG_TYPE);
             getUnit(context, rType, null);
         }
 
@@ -118,7 +119,7 @@ class Tools {
 
     }
 
-    static String getPropertyOfChannel(Context context, String uuid, String property) {
+    static String getHashMapBasedPropertyOfChannel(Context context, String uuid, String property) {
         SharedPreferences prefs = getPrefs(context);
         String sJSONChannels = prefs.getString(JSON_CHANNELS, "");
         for (HashMap<String, String> channelMap : getChannelsFromJSONStringEntities(sJSONChannels, context)) {
@@ -126,6 +127,24 @@ class Tools {
             if (uuid.equals(channelMap.get(TAG_UUID))) {
                 return channelMap.containsKey(property) ? channelMap.get(property) : "";
             }
+        }
+        return "";
+    }
+    static String getPropertyOfChannel(Context context, String uuid, String property) {
+        try {
+            JSONObject JSON_Channels = new JSONObject(getPrefs(context).getString(JSON_CHANNELS,""));
+            JSONArray channels = JSON_Channels.getJSONArray(TAG_ENTITIES);
+            boolean isDrin;
+            // looping through All channels
+            for (int i = 0; i < channels.length(); i++) {
+                JSONObject channel = channels.getJSONObject(i);
+                if (uuid.equals(channel.get(TAG_UUID))) {
+                    return channel.has(property) ? channel.get(property).toString() : "";
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return "";
     }
@@ -456,7 +475,7 @@ class Tools {
             fw.write("privateChannelUUIDs" + "=" + sharedPrefs.getString("privateChannelUUIDs", "") + "\n");
             fw.write("ZeroBasedYAxis" + "=" + (sharedPrefs.getBoolean("ZeroBasedYAxis", false) ? "true" : "false") + "\n");
             fw.write("autoReload" + "=" + (sharedPrefs.getBoolean("autoReload", false) ? "true" : "false") + "\n");
-            fw.write("allCheckedChannels" + "=" + getCheckedChannels(context) + "\n");
+            fw.write("allCheckedChannels" + "=" + sharedPrefs.getString(AllCheckedChannels, "") + "\n");
             fw.write("sortChannelMode" + "=" + sharedPrefs.getString("sortChannelMode", "") + "\n");
         } catch (IOException e) {
             e.printStackTrace();
@@ -488,63 +507,64 @@ class Tools {
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, line).commit();
+                    context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, line).apply();
                 } else if (line.startsWith(JSON_DEFINITIONS)) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, line).commit();
+                    context.getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, line).apply();
                 } else if (line.startsWith("volkszaehlerURL")) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("volkszaehlerURL", line).commit();
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("volkszaehlerURL", line).apply();
                 } else if (line.startsWith("Tuples")) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("Tuples", line).commit();
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("Tuples", line).apply();
                 } else if (line.startsWith("privateChannelUUIDs")) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("privateChannelUUIDs", line).commit();
-                } else if (line.startsWith("allCheckedChannels")) {
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("privateChannelUUIDs", line).apply();
+                } else if (line.startsWith(AllCheckedChannels)) {
                     try {
                         line = line.split("=")[1];
                         allCheckedChannels = line;
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString(AllCheckedChannels, line).apply();
                 } else if (line.startsWith("ZeroBasedYAxis")) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("ZeroBasedYAxis", Boolean.parseBoolean(line)).commit();
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("ZeroBasedYAxis", Boolean.parseBoolean(line)).apply();
                 } else if (line.startsWith("sortChannelMode")) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("sortChannelMode", line).commit();
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("sortChannelMode", line).apply();
                 } else if (line.startsWith("autoReload")) {
                     try {
                         line = line.split("=")[1];
                     } catch (IndexOutOfBoundsException iobx) {
                         continue;
                     }
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("autoReload", Boolean.parseBoolean(line)).commit();
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("autoReload", Boolean.parseBoolean(line)).apply();
                 }
             }
             //set checkboxes
@@ -565,34 +585,29 @@ class Tools {
         }
     }
 
-    static String getCheckedChannels(Context myContext)
+    static String getCheckedChannels(Context myContext, boolean bSorted)
     {
-        String allCheckedChannels = "";
+        List<String> channelList = new ArrayList<String>();
         for (String preference : PreferenceManager.getDefaultSharedPreferences(myContext).getAll().keySet()) {
             // assume its a UUID of a channel
             if (preference.contains("-") && preference.length() == 36) {
                 // is preference checked?
                 if (PreferenceManager.getDefaultSharedPreferences(myContext).getBoolean(preference, false)) {
-                    if(!"".equals(allCheckedChannels)) {
-                        allCheckedChannels = allCheckedChannels + "," + preference;
-                    }
-                    else {
-                        allCheckedChannels = preference;
-                    }
+                    channelList.add(preference);
                 }
             }
         }
         //always sort by Title (for Chart Popup)
-        String[] channelUUIDs = allCheckedChannels.split(",");
-        List<String> channelList = new ArrayList<String>(Arrays.asList(channelUUIDs));
-        Collections.sort(channelList,new UUIDbyTitleComparator(myContext));
+        if(bSorted) {
+            Collections.sort(channelList,new UUIDbyTitleComparator(myContext));
+        }
         return android.text.TextUtils.join(",", channelList);
     }
 
     private static void checkChannels(String allCheckedChannels, Context myContext)
     {
         for(String checkedChannel : allCheckedChannels.split(",")) {
-            PreferenceManager.getDefaultSharedPreferences(myContext).edit().putBoolean(checkedChannel, true).commit();
+            PreferenceManager.getDefaultSharedPreferences(myContext).edit().putBoolean(checkedChannel, true).apply();
         }
     }
 
@@ -749,8 +764,8 @@ class  UUIDbyTitleComparator implements Comparator<String> {
     }
     @Override
     public int compare(String channel1, String channel2) {
-        String v1 = (String) Tools.getPropertyOfChannel(context,channel1,Tools.TAG_TITLE);
-        String v2 = (String) Tools.getPropertyOfChannel(context,channel2,Tools.TAG_TITLE);;
+        String v1 = Tools.getPropertyOfChannel(context,channel1,Tools.TAG_TITLE);
+        String v2 = Tools.getPropertyOfChannel(context,channel2,Tools.TAG_TITLE);;
         return v1.compareTo(v2);
     }
 }
