@@ -63,17 +63,22 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 
 ## Version history:
+### Version 0.9.5
+  
+#### Changed
+  - When reading the channels the very first time all channels are checked by default (https://github.com/volkszaehler/app-android/issues/32) 
+
 
 ### Version 0.9.4
 #### New  
-  - now 3 Sorting modes: Off, Sorting of Channels in Groups, or Sorting all Channles independend of Groups
+  - now 3 Sorting modes: Off, Sorting of Channels in Groups, or Sorting all Channles independend of Groups (https://github.com/volkszaehler/app-android/issues/29) 
   - the backup of settings now also saves the "checked state" of the channels 
     
 #### Fixed 
   - small bugs
   
 #### Changed
-  - Sorting of channels now also for Popup in chart view
+  - Sorting of channels now also for Popup in chart view (https://github.com/volkszaehler/app-android/issues/30)
   - small optimizations
 
 ### Version 0.9.3
