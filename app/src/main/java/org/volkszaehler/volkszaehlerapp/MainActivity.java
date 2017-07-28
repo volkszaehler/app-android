@@ -67,6 +67,8 @@ public class MainActivity<ViewGroup> extends ListActivity {
             jsonStr = savedInstanceState.getString("JSONStr");
             channelsToRequest = savedInstanceState.getString("ChannelsToRequest");
         }
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        sharedPref.registerOnSharedPreferenceChangeListener(listener);
     }
 
     private void addListenerOnButton() {
@@ -112,6 +114,13 @@ public class MainActivity<ViewGroup> extends ListActivity {
             channelValueList.clear();
             new GetJSONData().execute(channelsToRequest);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        sharedPref.unregisterOnSharedPreferenceChangeListener(listener);
+        super.onDestroy();
     }
 
     @Override
@@ -200,6 +209,17 @@ public class MainActivity<ViewGroup> extends ListActivity {
         outState.putString("ChannelsToRequest", channelsToRequest);
     }
 
+    private SharedPreferences.OnSharedPreferenceChangeListener listener =
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                    if (key.contains("-") && key.length() == 36) {
+                        prefs.edit().putString(Tools.AllCheckedChannels,Tools.getCheckedChannels(myContext, false)).apply();
+                    }
+                }
+            };
+
+
     private class GetJSONData extends AsyncTask<String, Void, Void> {
 
         boolean JSONFehler = false;
@@ -246,7 +266,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                     // add checked channel
                     allUUIDs.add(aChannelsAusParameterMitLeerstring);
                     // check for childs if above is a group
-                    String childUUIDs = Tools.getPropertyOfChannel(myContext, aChannelsAusParameterMitLeerstring, Tools.TAG_CHUILDUUIDS);
+                    String childUUIDs = Tools.getHashMapBasedPropertyOfChannel(myContext, aChannelsAusParameterMitLeerstring, Tools.TAG_CHUILDUUIDS);
                     if (null != childUUIDs && !"".equals(childUUIDs)) {
                         if (childUUIDs.contains("|")) {
                             String[] children = (childUUIDs.split("\\|"));

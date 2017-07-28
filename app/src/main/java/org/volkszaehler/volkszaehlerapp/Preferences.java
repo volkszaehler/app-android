@@ -60,18 +60,19 @@ public class Preferences extends PreferenceActivity {
                     tuples = prefs.getString("Tuples", "1000");
                     privateChannelString = prefs.getString("privateChannelUUIDs", "");
                     //keep all checked channels
-                    allCheckedChannels = Tools.getCheckedChannels(getApplicationContext());
+                    allCheckedChannels = prefs.getString(Tools.AllCheckedChannels, "");
                     // remove all
                     prefs.edit().clear().commit();
                     // and put back
-                    prefs.edit().putString("volkszaehlerURL", url).commit();
-                    prefs.edit().putString("username", uname).commit();
-                    prefs.edit().putString("password", pwd).commit();
-                    prefs.edit().putBoolean("ZeroBasedYAxis", bZeroBased).commit();
-                    prefs.edit().putBoolean("autoReload", bAutoReload).commit();
-                    prefs.edit().putString("sortChannelMode", sortChannelMode).commit();
-                    prefs.edit().putString("Tuples", tuples).commit();
-                    prefs.edit().putString("privateChannelUUIDs", privateChannelString).commit();
+                    prefs.edit().putString("volkszaehlerURL", url).apply();
+                    prefs.edit().putString("username", uname).apply();
+                    prefs.edit().putString("password", pwd).apply();
+                    prefs.edit().putBoolean("ZeroBasedYAxis", bZeroBased).apply();
+                    prefs.edit().putBoolean("autoReload", bAutoReload).apply();
+                    prefs.edit().putString("sortChannelMode", sortChannelMode).apply();
+                    prefs.edit().putString("Tuples", tuples).apply();
+                    prefs.edit().putString("privateChannelUUIDs", privateChannelString).apply();
+                    prefs.edit().putString(Tools.AllCheckedChannels, allCheckedChannels).apply();
                     // call Channels from VZ installation
                     new GetChannels().execute();
                     return true;
@@ -79,7 +80,7 @@ public class Preferences extends PreferenceActivity {
             });
         }
         // fill PreferenceScreen dynamically with new channels
-        addPreferenceChannels(allCheckedChannels);
+        addPreferenceChannels();
     }
 
     @Override
@@ -90,8 +91,9 @@ public class Preferences extends PreferenceActivity {
         super.onBackPressed();
     }
 
-    private void addPreferenceChannels(String allCheckedChannels) {
+    private void addPreferenceChannels() {
         SharedPreferences prefs = getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
+        String allCheckedChannels = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Tools.AllCheckedChannels, "");
         String JSONChannels = prefs.getString(Tools.JSON_CHANNELS, "");
         Log.d("Preferences", "JSONChannels: " + JSONChannels);
         if (JSONChannels.equals("")) {
@@ -125,11 +127,16 @@ public class Preferences extends PreferenceActivity {
                 checkBoxPreference.setKey(channel.get(Tools.TAG_UUID));
                 checkBoxPreference.setSummary(channel.get(Tools.TAG_DESCRIPTION) + "\n" + channel.get(Tools.TAG_UUID));
                 targetCategory.addPreference(checkBoxPreference);
+                //first load: check all channels
+                if("".equals(allCheckedChannels)) {
+                    checkBoxPreference.setChecked(true);
+                    prefs.edit().putBoolean(channel.get(Tools.TAG_UUID), true).apply();
+                }
                 // check preference
                 for(String checkedChannel : allCheckedChannels.split(",")) {
                     if (channel.get(Tools.TAG_UUID).equals(checkedChannel)) {
                         checkBoxPreference.setChecked(true);
-                        prefs.edit().putBoolean(checkedChannel, true).commit();
+                        prefs.edit().putBoolean(checkedChannel, true).apply();
                     }
                 }
             }
@@ -217,7 +224,7 @@ public class Preferences extends PreferenceActivity {
                     if (jsonStrDefObj.has("capabilities")) {
                         Log.d("Preferences", "jsonStrDef: " + jsonStrDef);
                         // store all definitions stuff in a shared preference
-                        getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, jsonStrDef).commit();
+                        getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_DEFINITIONS, jsonStrDef).apply();
                     }
                 } catch (JSONException e) {
                     JSONFehler = true;
@@ -270,7 +277,7 @@ public class Preferences extends PreferenceActivity {
                 else if (sharedPref.getString("sortChannelMode", "off").equals("plain")) {
                     jsonStr = Tools.sortJSONChannels(jsonStrObj, Tools.TAG_ENTITIES, "plain").toString().replace("\\", "").replace("\"[", "[").replace("]\"","]"); //not sure why the quotes are escaped after put, so remove escaped quotes a.s.o.
                 }
-                getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).commit();
+                getApplicationContext().getSharedPreferences(Tools.JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE).edit().putString(Tools.JSON_CHANNELS, jsonStr).apply();
             }
             return null;
         }
@@ -293,7 +300,7 @@ public class Preferences extends PreferenceActivity {
                     new AlertDialog.Builder(Preferences.this).setTitle(getString(R.string.Error)).setMessage(fehlerAusgabe2).setNeutralButton(getString(R.string.Close), null).show();
                 }
             } else {
-                addPreferenceChannels(allCheckedChannels);
+                addPreferenceChannels();
             }
         }
     }
