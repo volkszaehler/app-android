@@ -175,7 +175,6 @@ public class TableDetails extends Activity {
 
                 long millisNow = System.currentTimeMillis();
                 Calendar c=Calendar.getInstance();
-                long millisNow2 = Calendar.getInstance().getTimeInMillis();
                 c.setTime(new Date());
                 c.setTimeZone(TimeZone.getDefault());
                 long millis3 = c.getTimeInMillis();
@@ -193,25 +192,24 @@ public class TableDetails extends Activity {
                         c.add(Calendar.DATE, -c.get(Calendar.DAY_OF_WEEK));
                         c.add(Calendar.DATE, +c.getFirstDayOfWeek());
                         c.add(Calendar.DATE , -7);
-                        long test = c.getTimeInMillis();
                         nextValue = millisDay;
-                        long l = millisNow - 7 * millisDay;
-                        double v = l / millisDay;
-                        localfrom = (long) Math.floor(v) * millisDay;
-                        localfrom = test;
+                        localfrom = c.getTimeInMillis();
+                        localto = localfrom + nextValue;
+                        durchlaeufe = 7;
+                        break;
+                    case "7days":
+                        c.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DATE),0,0,0);
+                        c.add(Calendar.DATE , -7);
+                        nextValue = millisDay;
+                        localfrom = c.getTimeInMillis();
                         localto = localfrom + nextValue;
                         durchlaeufe = 7;
                         break;
                     case "month":
                         c.add(Calendar.MONTH , -1);
                         c.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DATE),0,0,0);
-                        //c.add(Calendar.DATE, -c.get(Calendar.DAY_OF_WEEK));
-                        //c.add(Calendar.DATE, +c.getFirstDayOfWeek());
-
                         nextValue = millisDay;
-                        long test3 = c.getTimeInMillis();
-                        localfrom = (long) Math.floor((millisNow - 30 * millisDay) / millisDay) * millisDay;
-                        localfrom = test3;
+                        localfrom = c.getTimeInMillis();
                         localto = localfrom + nextValue;
                         durchlaeufe = (int) ((millis3 - localfrom)/millisDay);
                         break;
@@ -220,11 +218,8 @@ public class TableDetails extends Activity {
                         c.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DATE),0,0,0);
                         c.add(Calendar.DATE, -c.get(Calendar.DAY_OF_WEEK));
                         c.add(Calendar.DATE, +c.getFirstDayOfWeek());
-
-                        long test2 = c.getTimeInMillis();
                         nextValue = millisWeek;
-                        localfrom = (long) Math.floor((millisNow - 53 * millisWeek) / millisWeek) * millisWeek;
-                        localfrom = test2;
+                        localfrom = c.getTimeInMillis();
                         localto = localfrom + nextValue;
                         durchlaeufe = 53;
                         break;
