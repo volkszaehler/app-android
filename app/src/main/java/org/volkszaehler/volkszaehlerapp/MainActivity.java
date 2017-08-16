@@ -94,7 +94,6 @@ public class MainActivity<ViewGroup> extends ListActivity {
                         // is preference checked?
                         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(preference, false)) {
                             channelsToRequest = channelsToRequest + "&uuid[]=" + preference;
-
                         }
                     }
                 }

@@ -283,6 +283,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="tableDetailsHandler"
+                android:text="@string/Table7Days"
+                android:id="@+id/buttonViewTable7Days" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="tableDetailsHandler"
                 android:text="@string/TableWeek"
                 android:id="@+id/buttonViewTableWeek" />
 

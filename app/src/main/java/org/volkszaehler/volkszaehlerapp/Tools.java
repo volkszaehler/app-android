@@ -626,34 +626,15 @@ class Tools {
 
     static String getDateTimeString(long localfrom, long localto, String range, Context myContext) {
         String dateTimeString="";
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getDefault());
-        calendar.setTimeInMillis(localfrom);
-        int fromYear = calendar.get(Calendar.YEAR);
-        int fromMonth = calendar.get(Calendar.MONTH);
-        int fromDay = calendar.get(Calendar.DAY_OF_MONTH);
-        int fromHours = calendar.get(Calendar.HOUR_OF_DAY);
-        int fromMinutes = calendar.get(Calendar.MINUTE);
-        int fromSeconds = calendar.get(Calendar.SECOND);
-
-        calendar.setTimeInMillis(localto);
-        int toYear = calendar.get(Calendar.YEAR);
-        int toMonth = calendar.get(Calendar.MONTH);
-        int toDay = calendar.get(Calendar.DAY_OF_MONTH);
-        int toHours = calendar.get(Calendar.HOUR_OF_DAY);
-        int toMinutes = calendar.get(Calendar.MINUTE);
-        int toSeconds = calendar.get(Calendar.SECOND);
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(myContext);
         DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(myContext);
 
         switch (range) {
             case "day":
-                String test = dateFormat.format(localfrom);
-                String tes2 = timeFormat.format(localfrom);
                 dateTimeString = timeFormat.format(localfrom) + " - " + timeFormat.format(localto);
-
-
+                break;
+            case "7days":
+                dateTimeString = dateFormat.format(localfrom) + " - " + dateFormat.format(localto);
                 break;
             case "week":
                 dateTimeString = dateFormat.format(localfrom) + " - " + dateFormat.format(localto);

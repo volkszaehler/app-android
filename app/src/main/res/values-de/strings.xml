@@ -87,7 +87,8 @@
     <string name="TuplesSummary">höhere Werte führen zu detaillierteren, aber langsameren Graphen</string>
     <string name="Tuples">Tuples</string>
     <string name="TableDay">Letzte 24 Stunden</string>
-    <string name="TableWeek">Letzte 7 Tage</string>
+    <string name="Table7Days">Letzte 7 Tage</string>
+    <string name="TableWeek">Letzte Woche</string>
     <string name="TableMonth">Letzte 30 Tage</string>
     <string name="TableYear">Letzte 53 Wochen</string>
     <string name="Table">Tabelle</string>

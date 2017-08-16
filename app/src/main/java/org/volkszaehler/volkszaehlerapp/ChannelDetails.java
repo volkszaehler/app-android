@@ -198,6 +198,9 @@ public class ChannelDetails extends Activity {
             case R.id.buttonViewTableWeek:
                 range = "week";
                 break;
+            case R.id.buttonViewTable7Days:
+                range = "7days";
+                break;
             case R.id.buttonViewTableMonth:
                 range = "month";
                 break;
