@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:scrollbars="none"
     android:layout_weight="1"
+    android:fillViewport="true"
     >
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

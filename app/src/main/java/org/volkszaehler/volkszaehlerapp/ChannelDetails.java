@@ -144,7 +144,7 @@ public class ChannelDetails extends Activity {
 
         String initialConsumption = Tools.getPropertyOfChannel(myContext, mUUID, Tools.TAG_INITIALCONSUMPTION);
         if ("".equals(jsonStrGesamt) && !"".equals(initialConsumption)) {
-            unit = Tools.getUnit(myContext, typeOfChannel, mUUID);
+            unit = Tools.getDefinitionValue(myContext, typeOfChannel, mUUID, Tools.TAG_UNIT);
             if ("gas".equals(typeOfChannel)) {
                 unit = unit.substring(0, 2);
             } else if ("water".equals(typeOfChannel)) {
@@ -207,15 +207,26 @@ public class ChannelDetails extends Activity {
             case R.id.buttonViewTableYear:
                 range = "year";
                 break;
+            case R.id.buttonViewTableCustom:
+                range = "custom";
+                break;
             default:
                 range = "day";
                 break;
         }
-
-        Intent detailTableIntent = new Intent(ChannelDetails.this, TableDetails.class);
-        detailTableIntent.putExtra("MUUID", mUUID);
-        detailTableIntent.putExtra("Range", range);
-        startActivity(detailTableIntent);
+        if("custom".equals(range)) {
+            Intent dateSelector = new Intent(ChannelDetails.this, DateSelector.class);
+            dateSelector.putExtra("From", (long) System.currentTimeMillis() - 86400000);
+            dateSelector.putExtra("To", (long) System.currentTimeMillis());
+            dateSelector.putExtra("MUUID", mUUID);
+            startActivity(dateSelector);
+        }
+        else {
+            Intent detailTableIntent = new Intent(ChannelDetails.this, TableDetails.class);
+            detailTableIntent.putExtra("MUUID", mUUID);
+            detailTableIntent.putExtra("Range", range);
+            startActivity(detailTableIntent);
+        }
     }
 
     private void callChart(String zeitRaum) {
