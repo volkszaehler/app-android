@@ -98,11 +98,21 @@
     <string name="Table">Table</string>
     <string name="timeRange">Time Range</string>
     <string name="ChannelName">ChannelName</string>
-    <string name="please_wait_infinite">Please wait...</string>
+    <string name="please_wait_infinite">Please wait... Touch outside to cancel</string>
     <string name="sortChannelsTitle">Sort Channels</string>
     <string name="sortChannelsSummary">Sort Order of Channels</string>
     <string name="VolkszaehlerCat_titleSortChannels">Sort Settings</string>
     <string name="off">Off</string>
     <string name="groups">groups</string>
+    <string name="Unit">Unit</string>
+    <string name="hour">Hour</string>
+    <string name="day">Day</string>
+    <string name="week">7 Days</string>
+    <string name="month">30 Days</string>
+    <string name="TableCustom">Choose Dates</string>
+    <string name="SelectDate">Select Date</string>
+    <string name="ChoiceText">Select an Interval:</string>
+    <string name="grouping">Use \'Grouping\'</string>
+    <string name="groupHint">\'Grouping\' makes the response much faster if Aggragation is enabled, but the Min and Max Values are smoothed and almost useless.</string>
 
 </resources>

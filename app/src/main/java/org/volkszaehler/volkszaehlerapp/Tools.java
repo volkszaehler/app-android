@@ -27,14 +27,11 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
 class Tools {
 
@@ -67,6 +64,8 @@ class Tools {
     static final DecimalFormat f000 = new DecimalFormat("#0.000");
     static final String TAG_ENTITIES = "entities";
     static final String AllCheckedChannels = "allCheckedChannels";
+    static final String TAG_UNIT = "unit";
+    static final String TAG_SCALE = "scale";
     private static final String TAG_ACTIVE = "active";
     private static final String TAG_FILLSTYLE = "fillstyle";
     private static final String TAG_PUBLIC = "public";
@@ -75,13 +74,13 @@ class Tools {
     private static final String TAG_CHILDREN = "children";
     private static final String BACKUP_FILENAME = "volkszaehler_settings_backup.txt";
     private static final Object TAG_GROUP = "group";
-    private static String unit = "";
+    private static String definitionValue = "";
 
     private static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(JSON_CHANNEL_PREFS, Activity.MODE_PRIVATE);
     }
 
-    static String getUnit(Context context, String type, String uuid) {
+    static String getDefinitionValue(Context context, String type, String uuid, String definitionName) {
 
         SharedPreferences prefs = getPrefs(context);
         if (type != null && !"".equals(type)) {
@@ -99,7 +98,7 @@ class Tools {
                     for (int i = 0; i < entities.length(); i++) {
                         JSONObject entity = (JSONObject) entities.get(i);
                         if (entity.has("name") && entity.getString("name").equals(type)) {
-                            unit = "null".equals(entity.getString("unit")) ? "" : entity.getString("unit");
+                            definitionValue = "null".equals(entity.getString(definitionName)) ? "" : entity.getString(definitionName);
                             break;
                         }
 
@@ -112,10 +111,10 @@ class Tools {
             }
         } else if (uuid != null && !"".equals(uuid)) {
             String rType = getPropertyOfChannel(context, uuid, TAG_TYPE);
-            getUnit(context, rType, null);
+            getDefinitionValue(context, rType, null, definitionName);
         }
 
-        return unit;
+        return definitionValue;
 
     }
 

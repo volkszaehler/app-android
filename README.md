@@ -9,7 +9,7 @@ Download: [https://github.com/volkszaehler/app-android/releases/latest](https://
 ![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200&tok=3e01fa "ScreenShots 3 of VolkszaehlerApp") 
 ![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
-## VolkszählerApp für Android, Version 0.9.5
+## VolkszählerApp für Android, Version 0.9.6
 
 
 Funktionen:  
@@ -37,7 +37,7 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
 ---
 
 English:
-## VolkszaehlerApp for Android, Version 0.9.5
+## VolkszaehlerApp for Android, Version 0.9.6
 
 
 Features:  
@@ -63,6 +63,16 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 
 
 ## Version history:
+### Version 0.9.6
+#### New
+  -  Custom time ranges can be selected now for table view. Please note, the larger the time range the imprecise the values are, especially the Min and Max values. 'Grouping' makes it faster, but increases the imprecision even more.
+
+#### Fixed
+  - Costs are not correctly displayed in table view when type 'water' is used (https://github.com/volkszaehler/app-android/issues/36)
+
+#### Changed
+  - small optimizations
+
 ### Version 0.9.5
   
 #### Changed

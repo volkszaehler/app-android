@@ -40,14 +40,11 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import org.volkszaehler.volkszaehlerapp.Tools;
 
 
 public class ChartDetails extends Activity {
@@ -499,7 +496,7 @@ public class ChartDetails extends Activity {
 
     private void buttonShowInfoHandler(View view, String UUID) {
         try {
-            String unit = Tools.getUnit(myContext, null, UUID);
+            String unit = Tools.getDefinitionValue(myContext, null, UUID, Tools.TAG_UNIT);
             // We need to get the instance of the LayoutInflater, use the context of this activity
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // Inflate the view from a predefined XML layout

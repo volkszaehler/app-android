@@ -394,7 +394,7 @@ public class MainActivity<ViewGroup> extends ListActivity {
                                 HashMap<String, String> currentChannelFromList = channelValueList.get(j);
                                 if (currentChannelFromList.containsValue(id)) {
                                     // add unit
-                                    unit = Tools.getUnit(myContext, currentChannelFromList.get(Tools.TAG_TYPE), null);
+                                    unit = Tools.getDefinitionValue(myContext, currentChannelFromList.get(Tools.TAG_TYPE), null, Tools.TAG_UNIT);
                                     // adding each child node to HashMap key =>
                                     // value
                                     currentChannelFromList.put(Tools.TAG_FROM, from);

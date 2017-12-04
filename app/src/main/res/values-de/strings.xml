@@ -94,7 +94,7 @@
     <string name="Table">Tabelle</string>
     <string name="timeRange">Zeitraum</string>
     <string name="ChannelName">ChannelName</string>
-    <string name="please_wait_infinite">Bitte warten...</string>
+    <string name="please_wait_infinite">Bitte warten... Zum Abbrechen außerhalb tippen</string>
     <string name="sortChannelsTitle">Kanäle Sortieren</string>
     <string name="sortChannelsSummary">Sortierung der Kanäle" </string>
     <string name="VolkszaehlerCat_titleSortChannels">Sortierungseinstellungen</string>
@@ -103,5 +103,15 @@
     <string name="maxWertText">Max.</string>
     <string name="title_activity_table_details">TableDetails</string>
     <string name="off">Off</string>
+    <string name="Unit">Einheit</string>
+    <string name="hour">Stunden</string>
+    <string name="day">Tage</string>
+    <string name="week">7 Tage</string>
+    <string name="month">30 Tage</string>
+    <string name="TableCustom">Zeitraum wählen</string>
+    <string name="SelectDate">Start und Enddatum auswählen</string>
+    <string name="ChoiceText">Intervall wählen:</string>
+    <string name="grouping">\'Group\' nutzen</string>
+    <string name="groupHint">\'Group\' beschleunigt die Antwort, falls Aggragation genutzt wird, allerdings sind die Min und Max-Werte stark geglättet und fast nutzlos.</string>
 
 </resources>

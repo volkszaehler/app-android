@@ -309,6 +309,14 @@
                 android:onClick="tableDetailsHandler"
                 android:text="@string/TableYear"
                 android:id="@+id/buttonViewTableYear" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="tableDetailsHandler"
+                android:text="@string/TableCustom"
+                android:id="@+id/buttonViewTableCustom" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

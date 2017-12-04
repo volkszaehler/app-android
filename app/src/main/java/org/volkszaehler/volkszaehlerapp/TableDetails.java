@@ -42,10 +42,12 @@ public class TableDetails extends Activity {
     private String jsonStr = "";
     private String range = "";
 
-    private double from = 0;
-    private double to = 0;
-    private double keepFrom = 0;
-    private double keepTo = 0;
+    private long from = 0;
+    private long to = 0;
+    private long keepFrom = 0;
+    private long keepTo = 0;
+    private String intervall = "";
+    private boolean groupSet = false;
     private Context myContext = null;
 
     private ProgressDialog pDialog;
@@ -60,6 +62,7 @@ public class TableDetails extends Activity {
     private float maxConsumption = 0f;
     private String cost = "";
     private String resolution = "";
+    private String type = "";
 
     private boolean bConsumption = false;
 
@@ -73,17 +76,24 @@ public class TableDetails extends Activity {
         Intent inte = getIntent();
         mUUID = inte.getStringExtra("MUUID");
         range = inte.getStringExtra("Range");
+        intervall = inte.getStringExtra("Intervall");
+        from = inte.getLongExtra("From",0);
+        to = inte.getLongExtra("To",0);
+        groupSet = inte.getBooleanExtra("Group",false);
+
         myContext = this;
 
         // after OrientationChange
         if (savedInstanceState != null) {
-            from = savedInstanceState.getDouble("From");
-            to = savedInstanceState.getDouble("To");
-            keepFrom = savedInstanceState.getDouble("KeepFrom");
-            keepTo = savedInstanceState.getDouble("KeepTo");
+            from = savedInstanceState.getLong("From");
+            to = savedInstanceState.getLong("To");
+            keepFrom = savedInstanceState.getLong("KeepFrom");
+            keepTo = savedInstanceState.getLong("KeepTo");
             jsonStr = savedInstanceState.getString("JSONStr");
             mUUID = savedInstanceState.getString("mUUID");
             range = savedInstanceState.getString("Range");
+            intervall = savedInstanceState.getString("Intervall");
+            groupSet = savedInstanceState.getBoolean("Group");
             int size = savedInstanceState.getInt("Size");
             for(int i = 0; i<size;i++) {
                 tabellenZeilenHolder.add(savedInstanceState.getStringArray("Tabellenzeile"+i));
@@ -101,6 +111,7 @@ public class TableDetails extends Activity {
 
         cost = getPropertyOfChannel(myContext, mUUID, TAG_COST);
         resolution = getPropertyOfChannel(myContext, mUUID, TAG_RESOLUTION);
+        type = getPropertyOfChannel(myContext, mUUID, TAG_TYPE);
 
         new GetTableValues().execute();
     }
@@ -158,7 +169,7 @@ public class TableDetails extends Activity {
         @Override
         protected String doInBackground(String... arg0) {
             // really a reLoad necessary? or only an orientation change?
-            if (from == 0) {
+            if (from == 0 || range.equals("custom")) {
 
                 // Creating service handler class instance
                 ServiceHandler sh = new ServiceHandler();
@@ -223,6 +234,31 @@ public class TableDetails extends Activity {
                         localto = localfrom + nextValue;
                         durchlaeufe = 53;
                         break;
+                    case "custom":
+                        //for the DateTimeString (Tools.getDateTimeString)
+                        range = "week";
+                        localfrom = from;
+                        switch (intervall) {
+                            case "hour":
+                                localfrom = (long) Math.floor((from - millisDay) / millisHour) * millisHour;
+                                nextValue = millisHour;
+                                //for the DateTimeString (Tools.getDateTimeString)
+                                range = "day";
+                                break;
+                            case "day":
+                                nextValue = millisDay;
+                                break;
+                            case "week":
+                                nextValue = millisWeek;
+                                break;
+                            case "month":
+                                nextValue = millisDay*30;
+                                break;
+                        }
+
+                        localto = localfrom + nextValue;
+                        durchlaeufe = (int) ((to - from)/nextValue);
+                        break;
                     default:
                         Log.e("TableDetails", "Unknown 'Range': " + range);
                 }
@@ -255,7 +291,7 @@ public class TableDetails extends Activity {
                         break;
                     }
 
-                    String urlDef = url + "/data/" + mUUID + ".json?from=" + localfrom + "&to=" + localto + "&tuples=" + tuples;// + "&group=day";
+                    String urlDef = url + "/data/" + mUUID + ".json?from=" + localfrom + "&to=" + localto + "&tuples=" + tuples + (groupSet && !"hour".equals(intervall) ? "&group=day" : "");
 
                     String uname = sharedPref.getString("username", "");
                     String pwd = sharedPref.getString("password", "");
@@ -408,7 +444,8 @@ public class TableDetails extends Activity {
 
             TextView viewByIdCost = (TextView) row.findViewById(R.id.tableColumnCost);
             if(!"".equals((cost))) {
-                viewByIdCost.setText(String.format("%s €", f00.format(Double.valueOf(cost) * Double.valueOf(rowValues[4]) / 1000)));
+                int scale = Integer.valueOf(Tools.getDefinitionValue(myContext, type, null, Tools.TAG_SCALE));
+                viewByIdCost.setText(String.format("%s €", f00.format(Double.valueOf(cost) * Double.valueOf(rowValues[4]) / scale)));
             }
             viewByIdCost.setBackgroundColor(Color.parseColor(colorAverageConsumptionCost));
         } else {
@@ -421,13 +458,15 @@ public class TableDetails extends Activity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putDouble("From", from);
-        outState.putDouble("To", to);
-        outState.putDouble("KeepFrom", keepFrom);
-        outState.putDouble("KeepTo", keepTo);
+        outState.putLong("From", from);
+        outState.putLong("To", to);
+        outState.putLong("KeepFrom", keepFrom);
+        outState.putLong("KeepTo", keepTo);
         outState.putString("JSONStr", jsonStr);
         outState.putString("mUUID", mUUID);
         outState.putString("Range", range);
+        outState.putString("Intervall", intervall);
+        outState.putBoolean("Group", groupSet);
         int size = tabellenZeilenHolder.size();
         outState.putInt("Size", size);
         for(int i = 0; i< size; i++) {
