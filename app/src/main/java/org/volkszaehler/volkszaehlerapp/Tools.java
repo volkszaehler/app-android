@@ -452,8 +452,12 @@ class Tools {
     }
 
     static boolean saveFile(Context context) {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard, BACKUP_FILENAME);
+        //external storage availability check
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            return false;
+        }
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS), BACKUP_FILENAME);
 
         FileWriter fw;
         try {
@@ -493,8 +497,18 @@ class Tools {
 
         BufferedReader br = null;
         try {
-            File sdcard = Environment.getExternalStorageDirectory();
-            File file = new File(sdcard, BACKUP_FILENAME);
+            if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                return false;
+            }
+            File file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), BACKUP_FILENAME);
+
+            //fallback to old file location
+            if(!file.exists())
+            {
+                File sdcard = Environment.getExternalStorageDirectory();
+                file = new File(sdcard, BACKUP_FILENAME);
+            }
 
             br = new BufferedReader(new FileReader(file));
             String line;
