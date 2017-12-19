@@ -10,30 +10,33 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class DateTimeSelector extends CustomMenuActivity implements View.OnClickListener {
+public class DateSelector extends CustomMenuActivity implements View.OnClickListener {
 
     private EditText editDFrom;
-    private EditText editTFrom;
     private EditText editDTo;
-    private EditText editTTo;
+    //private checkGroup;
 
     private Button set;
 
     private long from = 0;
     private long to = 0;
     private String mUUID = "";
+    boolean groupMessageBoxShowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_date_time_selector);
+        setContentView(R.layout.activity_date_selector);
         if (savedInstanceState != null) {
             from = savedInstanceState.getLong("From");
             to = savedInstanceState.getLong("To");
@@ -48,25 +51,16 @@ public class DateTimeSelector extends CustomMenuActivity implements View.OnClick
             mUUID = inte.getStringExtra("MUUID");
         }
 
-        editDFrom = (EditText) findViewById(R.id.fromDatePicker);
+        editDFrom = (EditText) findViewById(R.id.fromDateOnlyPicker);
         editDFrom.setText(DateFormat.getDateInstance().format(from));
         editDFrom.setInputType(InputType.TYPE_NULL);
         editDFrom.setOnClickListener(this);
 
-        editTFrom = (EditText) findViewById(R.id.fromTimePicker);
-        editTFrom.setText(DateFormat.getTimeInstance().format(from));
-        editTFrom.setInputType(InputType.TYPE_NULL);
-        editTFrom.setOnClickListener(this);
 
-        editDTo = (EditText) findViewById(R.id.toDatePicker);
+        editDTo = (EditText) findViewById(R.id.toDateOnlyPicker);
         editDTo.setText(DateFormat.getDateInstance().format(to));
         editDTo.setInputType(InputType.TYPE_NULL);
         editDTo.setOnClickListener(this);
-
-        editTTo = (EditText) findViewById(R.id.toTimePicker);
-        editTTo.setText(DateFormat.getTimeInstance().format(to));
-        editTTo.setInputType(InputType.TYPE_NULL);
-        editTTo.setOnClickListener(this);
 
         // Launch Time Picker Dialog
 
@@ -97,6 +91,7 @@ public class DateTimeSelector extends CustomMenuActivity implements View.OnClick
         final int dayTo = newCalendarTo.get(Calendar.DAY_OF_MONTH);
         final int hourTo = newCalendarTo.get(Calendar.HOUR_OF_DAY);
         final int minuteTo = newCalendarTo.get(Calendar.MINUTE);
+        String intervall;
 
         if (view == editDFrom) {
             DatePickerDialog fromDatePickerDialog = new DatePickerDialog(this, new OnDateSetListener() {
@@ -109,17 +104,6 @@ public class DateTimeSelector extends CustomMenuActivity implements View.OnClick
                 }
             }, yearFrom, monthFrom, dayFrom);
             fromDatePickerDialog.show();
-        } else if (view == editTFrom) {
-            TimePickerDialog fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    Calendar newDate = Calendar.getInstance();
-                    newDate.set(yearFrom, monthFrom, dayFrom, hourOfDay, minute);
-                    editTFrom.setText(DateFormat.getTimeInstance().format(newDate.getTime()));
-                    from = newDate.getTimeInMillis();
-                }
-            }, hourFrom, minuteFrom, false);
-            fromTimePickerDialog.show();
         } else if (view == editDTo) {
             DatePickerDialog toDatePickerDialog = new DatePickerDialog(this, new OnDateSetListener() {
                 @Override
@@ -131,27 +115,47 @@ public class DateTimeSelector extends CustomMenuActivity implements View.OnClick
                 }
             }, yearTo, monthTo, dayTo);
             toDatePickerDialog.show();
-        } else if (view == editTTo) {
-            TimePickerDialog toTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    Calendar newDate = Calendar.getInstance();
-                    newDate.set(yearTo, monthTo, dayTo, hourOfDay, minute);
-                    editTTo.setText(DateFormat.getTimeInstance().format(newDate.getTime()));
-                    to = newDate.getTimeInMillis();
-                }
-            }, hourTo, minuteTo, false);
-            toTimePickerDialog.show();
         } else if (view == set) {
             if (from > to) {
-                new AlertDialog.Builder(DateTimeSelector.this).setTitle(getString(R.string.Error)).setMessage(getString(R.string.FromGreaterTo)).setNeutralButton(getString(R.string.Close), null).show();
+                new AlertDialog.Builder(DateSelector.this).setTitle(getString(R.string.Error)).setMessage(getString(R.string.FromGreaterTo)).setNeutralButton(getString(R.string.Close), null).show();
             } else {
-                Intent detailChartIntent = new Intent(DateTimeSelector.this, ChartDetails.class);
-                detailChartIntent.putExtra("MUUID", mUUID);
-                detailChartIntent.putExtra("From", from);
-                detailChartIntent.putExtra("To", to);
-                startActivity(detailChartIntent);
+                CheckBox groupBox = (CheckBox) findViewById(R.id.group_checkbox);
+                RadioGroup rg = (RadioGroup) findViewById(R.id.radioButtonGroup);
+                String test = (String) ((RadioButton) findViewById(rg.getCheckedRadioButtonId())).getText();
+                switch (rg.getCheckedRadioButtonId()) {
+                    case R.id.radioButtonHour:
+                        intervall = "hour";
+                        break;
+                    case R.id.radioButtonDay:
+                        intervall = "day";
+                        break;
+                    case R.id.radioButtonWeek:
+                        intervall = "week";
+                        break;
+                    case R.id.radioButtonMonth:
+                        intervall = "month";
+                        break;
+                    default:
+                        intervall = "day";
+                        break;
+                }
+
+                Intent detailTableIntent = new Intent(DateSelector.this, TableDetails.class);
+                detailTableIntent.putExtra("MUUID", mUUID);
+                detailTableIntent.putExtra("Range", "custom");
+                detailTableIntent.putExtra("From", from);
+                detailTableIntent.putExtra("To", to);
+                detailTableIntent.putExtra("Intervall", intervall);
+                detailTableIntent.putExtra("Group", groupBox.isChecked());
+                startActivity(detailTableIntent);
             }
+        }
+    }
+
+    public void onGroupCheckboxClicked(View view) {
+        if(!groupMessageBoxShowed) {
+            new AlertDialog.Builder(DateSelector.this).setTitle(getString(R.string.Details)).setMessage(getString(R.string.groupHint)).setNeutralButton(getString(R.string.Close), null).show();
+            groupMessageBoxShowed = true;
         }
     }
 }

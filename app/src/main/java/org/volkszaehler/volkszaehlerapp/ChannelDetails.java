@@ -11,11 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +21,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ChannelDetails extends Activity {
+public class ChannelDetails extends CustomMenuActivity {
 
     private Context myContext;
     private String mUUID = "";
@@ -263,49 +260,6 @@ public class ChannelDetails extends Activity {
         detailChartIntent.putExtra("From", from);
         detailChartIntent.putExtra("To", to);
         startActivity(detailChartIntent);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-
-        switch (itemId) {
-            case R.id.action_settings:
-                startActivity(new Intent(this, Preferences.class));
-                return (true);
-            case R.id.backup_settings:
-                boolean saved = Tools.saveFile(getApplicationContext());
-                if (saved) {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.notsaved, Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-            case R.id.restore_settings:
-
-                boolean restored = Tools.loadFile(getApplicationContext());
-                if (restored) {
-                    Toast.makeText(this, R.string.restored, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.notrestored, Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-
-
-            case R.id.about:
-                return Tools.showAboutDialog(myContext);
-
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
