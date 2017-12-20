@@ -1,7 +1,6 @@
 package org.volkszaehler.volkszaehlerapp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,18 +12,31 @@ import android.widget.Toast;
 
 public class CustomMenuListActivity extends ListActivity {
     private Menu menu;
+    int itemId = 0;
 
 
     boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                //Log.d("Tools Permission check ","Permission is granted");
-                return true;
-            } else {
-                //Log.d("Tools Permission check ","Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
+            if(R.id.backup_settings == itemId) {
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    //Log.d("Tools Permission check ","Permission is granted");
+                    return true;
+                } else {
+                    //Log.d("Tools Permission check ","Permission is revoked");
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    return false;
+                }
+            } else if (R.id.restore_settings == itemId) {
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    //Log.d("Tools Permission check ","Permission is granted");
+                    return true;
+                } else {
+                    //Log.d("Tools Permission check ","Permission is revoked");
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    return false;
+                }
             }
+            return false;
         }
         else { //permission is automatically granted on sdk<23 upon installation
             //Log.d("Tools Permission check ","Permission is granted automatically");
@@ -38,7 +50,7 @@ public class CustomMenuListActivity extends ListActivity {
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             //Log.d("Tools Permission check ","Permission: "+permissions[0]+ " was "+grantResults[0]);
             //resume tasks needing this permission
-            onOptionsItemSelected(menu.findItem(R.id.backup_settings));
+            onOptionsItemSelected(menu.findItem(itemId));
         }
     }
 
@@ -52,7 +64,7 @@ public class CustomMenuListActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
+        itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_settings:
                 startActivityForResult(new Intent(this, Preferences.class), 1);
@@ -68,12 +80,13 @@ public class CustomMenuListActivity extends ListActivity {
                 }
                 return (true);
             case R.id.restore_settings:
-
-                boolean restored = Tools.loadFile(getApplicationContext());
-                if (restored) {
-                    Toast.makeText(this, R.string.restored, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.notrestored, Toast.LENGTH_SHORT).show();
+                if(isStoragePermissionGranted()) {
+                    boolean restored = Tools.loadFile(getApplicationContext());
+                    if (restored) {
+                        Toast.makeText(this, R.string.restored, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, R.string.notrestored, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return (true);
             case R.id.about:
