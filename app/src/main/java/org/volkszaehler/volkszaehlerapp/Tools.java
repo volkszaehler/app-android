@@ -752,14 +752,14 @@ class  MyHashMapComparator implements Comparator<HashMap> {
 }
 
 class  UUIDbyTitleComparator implements Comparator<String> {
-    Context context;
+    private Context context;
     public UUIDbyTitleComparator(Context myContext) {
         context = myContext;
     }
     @Override
     public int compare(String channel1, String channel2) {
         String v1 = Tools.getPropertyOfChannel(context,channel1,Tools.TAG_TITLE);
-        String v2 = Tools.getPropertyOfChannel(context,channel2,Tools.TAG_TITLE);;
+        String v2 = Tools.getPropertyOfChannel(context,channel2,Tools.TAG_TITLE);
         return v1.compareTo(v2);
     }
 }

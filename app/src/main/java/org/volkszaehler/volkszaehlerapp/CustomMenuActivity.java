@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 public class CustomMenuActivity extends Activity {
     private Menu menu;
-    int itemId = 0;
+    private int itemId = 0;
 
 
-    boolean isStoragePermissionGranted() {
+    private boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if(R.id.backup_settings == itemId) {
                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

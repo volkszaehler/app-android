@@ -2,12 +2,10 @@ package org.volkszaehler.volkszaehlerapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -121,9 +119,6 @@ public class MainActivity<ViewGroup> extends CustomMenuListActivity {
     }
 
     private void addValuesToListView() {
-        /**
-         * Updating parsed JSON data into ListView
-         * */
         adapter = new SimpleAdapter(MainActivity.this, channelValueList, R.layout.list_item, new String[]{Tools.TAG_TITLE, Tools.TAG_DESCRIPTION, "tuplesWert"}, new int[]{R.id.channelName,
                 R.id.channelDescription, R.id.channelValue}) {
             @Override

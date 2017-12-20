@@ -114,6 +114,5 @@
     <string name="ChoiceText">Select an Interval:</string>
     <string name="grouping">Use \'Grouping\'</string>
     <string name="groupHint">\'Grouping\' makes the response much faster if Aggragation is enabled, but the Min and Max Values are smoothed and almost useless.</string>
-    <string name="title_activity_custom_menu">CustomMenuActivity</string>
 
 </resources>

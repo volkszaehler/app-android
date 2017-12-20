@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
         applicationId "org.volkszaehler.volkszaehlerapp"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
     }
 
     compileOptions {
@@ -26,5 +26,5 @@ android {
 
 dependencies {
     compile 'com.github.ddanny:achartengine:e49b62b'
-    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:appcompat-v7:27.0.2'
 }

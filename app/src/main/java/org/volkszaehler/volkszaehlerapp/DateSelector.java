@@ -1,10 +1,8 @@
 package org.volkszaehler.volkszaehlerapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -15,7 +13,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TimePicker;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -31,7 +28,7 @@ public class DateSelector extends CustomMenuActivity implements View.OnClickList
     private long from = 0;
     private long to = 0;
     private String mUUID = "";
-    boolean groupMessageBoxShowed;
+    private boolean groupMessageBoxShowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

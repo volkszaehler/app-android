@@ -9,7 +9,7 @@ Download: [https://github.com/volkszaehler/app-android/releases/latest](https://
 ![ScreenShot3](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/grafik.png?w=200&tok=3e01fa "ScreenShots 3 of VolkszaehlerApp") 
 ![ScreenShot4](http://wiki.volkszaehler.org/_media/software/frontends/vz_app/einstellungen.png?w=200&tok=ede86f "ScreenShots 4 of VolkszaehlerApp") 
 
-## VolkszählerApp für Android, Version 0.9.6
+## VolkszählerApp für Android, Version 0.9.7
 
 
 Funktionen:  
@@ -37,7 +37,7 @@ Wenn das Clonen bzw. das Öffnen des Projektes wegen eines ausgegrauten "Use def
 ---
 
 English:
-## VolkszaehlerApp for Android, Version 0.9.6
+## VolkszaehlerApp for Android, Version 0.9.7
 
 
 Features:  
@@ -61,6 +61,17 @@ If the cloning resp. opening of the project fails due to a grayed "Use default g
 - open the Project again as "Open an existing Android Studio project" and clock "OK" in the "Gradle Sync" Dialog  
 - If necessary, choose the "Unregistered Root" in Settings => Version Control and click the green plus "+" 
 
+## Version history:
+### Version 0.9.7
+#### New
+  -  Asks for Permission to store/read backups (starting with Android 6)
+
+#### Fixed
+  -  Backups work also with Android 6 and newer (https://github.com/volkszaehler/app-android/issues/38)
+
+#### Changed
+  - Backup file is stored in download folder now
+  - small optimizations
 
 ## Version history:
 ### Version 0.9.6
