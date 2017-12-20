@@ -14,8 +14,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +22,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -47,7 +44,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class ChartDetails extends Activity {
+public class ChartDetails extends CustomMenuActivity{
 
     private static final int MIN_CLICK_DURATION = 1000;
     private final XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
@@ -547,47 +544,6 @@ public class ChartDetails extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.action_settings:
-                startActivity(new Intent(this, Preferences.class));
-                return (true);
-            case R.id.backup_settings:
-                boolean saved = Tools.saveFile(getApplicationContext());
-                if (saved) {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.notsaved, Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-            case R.id.restore_settings:
-
-                boolean restored = Tools.loadFile(getApplicationContext());
-                if (restored) {
-                    Toast.makeText(this, R.string.restored, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.notrestored, Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-
-            case R.id.about:
-                return Tools.showAboutDialog(myContext);
-
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

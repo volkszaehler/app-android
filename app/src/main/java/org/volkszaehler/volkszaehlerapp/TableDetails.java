@@ -11,17 +11,13 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +32,7 @@ import java.util.TimeZone;
 
 import static org.volkszaehler.volkszaehlerapp.Tools.*;
 
-public class TableDetails extends Activity {
+public class TableDetails extends CustomMenuActivity {
 
     private String mUUID = "";
     private String jsonStr = "";
@@ -412,13 +408,6 @@ public class TableDetails extends Activity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
     private void addRow(String[] rowValues, int anzahlZeilen, TableLayout table) {
 
         TableRow row = (TableRow) LayoutInflater.from(this).inflate(R.layout.table_row, null);
@@ -481,40 +470,6 @@ public class TableDetails extends Activity {
         outState.putFloat("MaxAv", maxAverage);
         outState.putFloat("MinCons", minConsumption);
         outState.putFloat("MaxCons", maxConsumption);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.action_settings:
-                startActivity(new Intent(this, Preferences.class));
-                return (true);
-            case R.id.backup_settings:
-                boolean saved = saveFile(getApplicationContext());
-                if (saved) {
-                    Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.notsaved, Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-            case R.id.restore_settings:
-
-                boolean restored = loadFile(getApplicationContext());
-                if (restored) {
-                    Toast.makeText(this, R.string.restored, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.notrestored, Toast.LENGTH_SHORT).show();
-                }
-                return (true);
-
-            case R.id.about:
-                return showAboutDialog(myContext);
-
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void lockScreenOrientation() {

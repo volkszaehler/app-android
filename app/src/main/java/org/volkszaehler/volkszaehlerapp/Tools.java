@@ -452,8 +452,12 @@ class Tools {
     }
 
     static boolean saveFile(Context context) {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard, BACKUP_FILENAME);
+        //external storage availability check
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            return false;
+        }
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS), BACKUP_FILENAME);
 
         FileWriter fw;
         try {
@@ -493,8 +497,18 @@ class Tools {
 
         BufferedReader br = null;
         try {
-            File sdcard = Environment.getExternalStorageDirectory();
-            File file = new File(sdcard, BACKUP_FILENAME);
+            if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                return false;
+            }
+            File file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), BACKUP_FILENAME);
+
+            //fallback to old file location
+            if(!file.exists())
+            {
+                File sdcard = Environment.getExternalStorageDirectory();
+                file = new File(sdcard, BACKUP_FILENAME);
+            }
 
             br = new BufferedReader(new FileReader(file));
             String line;
@@ -738,14 +752,14 @@ class  MyHashMapComparator implements Comparator<HashMap> {
 }
 
 class  UUIDbyTitleComparator implements Comparator<String> {
-    Context context;
+    private Context context;
     public UUIDbyTitleComparator(Context myContext) {
         context = myContext;
     }
     @Override
     public int compare(String channel1, String channel2) {
         String v1 = Tools.getPropertyOfChannel(context,channel1,Tools.TAG_TITLE);
-        String v2 = Tools.getPropertyOfChannel(context,channel2,Tools.TAG_TITLE);;
+        String v2 = Tools.getPropertyOfChannel(context,channel2,Tools.TAG_TITLE);
         return v1.compareTo(v2);
     }
 }
